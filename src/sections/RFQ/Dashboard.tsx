@@ -1,7 +1,17 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Button, Stack, TextField, Autocomplete, Pagination } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  Autocomplete,
+  Pagination,
+  Chip,
+} from '@mui/material';
+
 import {
   DataGrid,
   GridColDef,
@@ -11,12 +21,13 @@ import {
   GridRenderCellParams,
   useGridApiContext,
 } from '@mui/x-data-grid';
+
 import { alpha, useTheme } from '@mui/material/styles';
+import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import { useRouter } from 'next/navigation';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -51,116 +62,161 @@ function CustomFooter() {
   );
 }
 
-function VendorDashboard() {
+function RFQDashboard() {
   const theme = useTheme();
   const router = useRouter();
+
   const PRIMARY = theme.palette.primary.main;
 
   const columns: GridColDef[] = [
-    { field: 'vendorId', headerName: 'Vendor ID', flex: 1 },
-    { field: 'vendorName', headerName: 'Vendor Name', flex: 1.4 },
-    { field: 'category', headerName: 'Category', flex: 1 },
-    { field: 'contactPerson', headerName: 'Contact Person', flex: 1 },
-    { field: 'location', headerName: 'Location', flex: 1 },
+    {
+      field: 'rfqNo',
+      headerName: 'RFQ No',
+      flex: 1,
+    },
+
+    {
+      field: 'title',
+      headerName: 'RFQ Title',
+      flex: 1.6,
+    },
+
+    {
+      field: 'category',
+      headerName: 'Category',
+      flex: 1,
+    },
+
+    {
+      field: 'issueDate',
+      headerName: 'Issue Date',
+      flex: 1,
+    },
+
+    {
+      field: 'dueDate',
+      headerName: 'Due Date',
+      flex: 1,
+    },
+
+    {
+      field: 'buyer',
+      headerName: 'Buyer',
+      flex: 1,
+    },
+
     {
       field: 'status',
       headerName: 'Status',
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
-        let color = 'text.primary';
+        let color = 'default';
 
-        if (params.value === 'Active') color = 'success.main';
-        if (params.value === 'Pending') color = 'warning.main';
-        if (params.value === 'Inactive') color = 'error.main';
+        if (params.value === 'Open') color = 'success';
+        if (params.value === 'Submitted') color = 'info';
+        if (params.value === 'Under Review') color = 'warning';
+        if (params.value === 'Rejected') color = 'error';
 
         return (
-          <Typography variant="caption" sx={{ color, fontWeight: 600 }}>
-            {params.value}
-          </Typography>
+          <Chip
+            label={params.value}
+            sx={{ fontSize: 12 }}
+            color={color as any}
+            size="small"
+            variant="soft"
+          />
         );
       },
     },
-    { field: 'rating', headerName: 'Rating', flex: 0.8 },
   ];
 
   const rows = [
     {
       id: 1,
-      vendorId: 'VEN-1001',
-      vendorName: 'TechNova Solutions',
-      category: 'IT Services',
-      contactPerson: 'Arun Kumar',
-      location: 'Kochi',
-      status: 'Active',
-      rating: '4.8',
+      rfqNo: 'RFQ-2026-1001',
+      title: 'Laptop Procurement for Head Office',
+      category: 'IT Equipment',
+      issueDate: '01 May 2026',
+      dueDate: '10 May 2026',
+      buyer: 'Procurement Team',
+      status: 'Open',
     },
+
     {
       id: 2,
-      vendorId: 'VEN-1002',
-      vendorName: 'Prime Industrial Supplies',
-      category: 'Manufacturing',
-      contactPerson: 'Sneha Raj',
-      location: 'Chennai',
-      status: 'Active',
-      rating: '4.5',
+      rfqNo: 'RFQ-2026-1002',
+      title: 'Office Furniture Supply',
+      category: 'Furniture',
+      issueDate: '28 Apr 2026',
+      dueDate: '08 May 2026',
+      buyer: 'Admin Department',
+      status: 'Submitted',
     },
+
     {
       id: 3,
-      vendorId: 'VEN-1003',
-      vendorName: 'GreenLeaf Traders',
-      category: 'Office Supplies',
-      contactPerson: 'Rahul Nair',
-      location: 'Bengaluru',
-      status: 'Inactive',
-      rating: '4.2',
+      rfqNo: 'RFQ-2026-1003',
+      title: 'Warehouse Logistics Services',
+      category: 'Logistics',
+      issueDate: '26 Apr 2026',
+      dueDate: '06 May 2026',
+      buyer: 'Supply Chain',
+      status: 'Under Review',
     },
+
     {
       id: 4,
-      vendorId: 'VEN-1004',
-      vendorName: 'Skyline Logistics',
-      category: 'Logistics',
-      contactPerson: 'Anjali Menon',
-      location: 'Mumbai',
-      status: 'Active',
-      rating: '4.9',
+      rfqNo: 'RFQ-2026-1004',
+      title: 'Industrial Safety Equipment',
+      category: 'Safety',
+      issueDate: '24 Apr 2026',
+      dueDate: '04 May 2026',
+      buyer: 'Operations',
+      status: 'Rejected',
     },
   ];
 
   return (
     <Box>
+      {/* Breadcrumbs */}
+
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Vendor Management"
+          title="Request for Quotations"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor Dashboard', href: '/products' },
+            { label: 'RFQ Dashboard', href: '/rfq' },
           ]}
-          action={
-            <Button
-              variant="outlined"
-              onClick={() => {
-                router.push(paths.vendor.management);
-              }}
-            >
-              Add Vendor
-            </Button>
-          }
         />
       </Box>
 
       <Box mb={2} sx={{ borderTop: '1px dashed #d1d5db' }} />
 
-      <Box>
+      {/* Filters */}
+
+      <Box mb={-1}>
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
           alignItems={{ xs: 'stretch', sm: 'center' }}
         >
-          <TextField size="small" label="Search Vendor" fullWidth />
+          <TextField
+            size="small"
+            label="Search RFQ"
+            placeholder="Search by RFQ number or title"
+            fullWidth
+          />
 
           <Autocomplete
             size="small"
-            options={['IT Services', 'Manufacturing', 'Logistics']}
+            options={['Open', 'Submitted', 'Under Review', 'Rejected']}
+            sx={{ minWidth: 220 }}
+            renderInput={(params) => <TextField {...params} label="Status" />}
+          />
+
+          <Autocomplete
+            size="small"
+            options={['IT Equipment', 'Furniture', 'Logistics', 'Safety']}
             sx={{ minWidth: 220 }}
             renderInput={(params) => <TextField {...params} label="Category" />}
           />
@@ -189,11 +245,14 @@ function VendorDashboard() {
         </Stack>
       </Box>
 
+      {/* Table */}
+
       <Box sx={{ borderRadius: 1 }}>
         <Box
           sx={{
             borderRadius: 2,
             overflow: 'hidden',
+
             '& .MuiDataGrid-root': {
               border: 'none',
               bgcolor: 'transparent',
@@ -209,7 +268,13 @@ function VendorDashboard() {
             disableRowSelectionOnClick
             disableColumnMenu
             disableColumnSelector
-            slots={{ toolbar: GridToolbar, footer: CustomFooter }}
+            slots={{
+              toolbar: GridToolbar,
+              footer: CustomFooter,
+            }}
+            onRowClick={(params) => {
+              router.push(`/quotations/view`);
+            }}
             slotProps={{
               toolbar: {
                 showQuickFilter: false,
@@ -218,15 +283,20 @@ function VendorDashboard() {
               },
             }}
             initialState={{
-              pagination: { paginationModel: { page: 0, pageSize: 5 } },
+              pagination: {
+                paginationModel: {
+                  page: 0,
+                  pageSize: 5,
+                },
+              },
             }}
             sx={{
               fontSize: 13,
 
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor: 'transparent',
-                minHeight: 36,
-                maxHeight: 36,
+                minHeight: 40,
+                maxHeight: 40,
               },
 
               '& .MuiDataGrid-columnHeader': {
@@ -240,12 +310,13 @@ function VendorDashboard() {
               },
 
               '& .MuiDataGrid-cell': {
-                fontSize: 12,
+                fontSize: 13,
+                alignItems: 'center',
               },
 
               '& .MuiDataGrid-row': {
-                minHeight: 34,
-                maxHeight: 34,
+                minHeight: 42,
+                maxHeight: 42,
               },
             }}
           />
@@ -255,4 +326,4 @@ function VendorDashboard() {
   );
 }
 
-export default VendorDashboard;
+export default RFQDashboard;

@@ -1,7 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Button, Stack, TextField, Autocomplete, Pagination } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  Autocomplete,
+  Pagination,
+  Chip,
+} from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -51,36 +60,72 @@ function CustomFooter() {
   );
 }
 
-function VendorDashboard() {
+function VendorProducts() {
   const theme = useTheme();
   const router = useRouter();
   const PRIMARY = theme.palette.primary.main;
 
   const columns: GridColDef[] = [
-    { field: 'vendorId', headerName: 'Vendor ID', flex: 1 },
-    { field: 'vendorName', headerName: 'Vendor Name', flex: 1.4 },
-    { field: 'category', headerName: 'Category', flex: 1 },
-    { field: 'contactPerson', headerName: 'Contact Person', flex: 1 },
-    { field: 'location', headerName: 'Location', flex: 1 },
+    {
+      field: 'vendorId',
+      headerName: 'Vendor ID',
+      flex: 1,
+    },
+    {
+      field: 'vendorName',
+      headerName: 'Vendor Name',
+      flex: 1.4,
+    },
+    {
+      field: 'productCode',
+      headerName: 'Product Code',
+      flex: 1,
+    },
+    {
+      field: 'productName',
+      headerName: 'Product Name',
+      flex: 1.5,
+    },
+    {
+      field: 'category',
+      headerName: 'Category',
+      flex: 1,
+    },
+    {
+      field: 'unitPrice',
+      headerName: 'Unit Price',
+      flex: 1,
+    },
+    {
+      field: 'stock',
+      headerName: 'Available Qty',
+      flex: 1,
+    },
     {
       field: 'status',
       headerName: 'Status',
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
-        let color = 'text.primary';
+        let color: any = 'default';
 
-        if (params.value === 'Active') color = 'success.main';
-        if (params.value === 'Pending') color = 'warning.main';
-        if (params.value === 'Inactive') color = 'error.main';
+        if (params.value === 'Available') color = 'success';
+        if (params.value === 'Low Stock') color = 'warning';
+        if (params.value === 'Out of Stock') color = 'error';
 
         return (
-          <Typography variant="caption" sx={{ color, fontWeight: 600 }}>
-            {params.value}
-          </Typography>
+          <Chip
+            label={params.value}
+            color={color}
+            size="small"
+            variant="soft"
+            sx={{
+              fontWeight: 600,
+              borderRadius: 1,
+            }}
+          />
         );
       },
     },
-    { field: 'rating', headerName: 'Rating', flex: 0.8 },
   ];
 
   const rows = [
@@ -88,41 +133,45 @@ function VendorDashboard() {
       id: 1,
       vendorId: 'VEN-1001',
       vendorName: 'TechNova Solutions',
-      category: 'IT Services',
-      contactPerson: 'Arun Kumar',
-      location: 'Kochi',
-      status: 'Active',
-      rating: '4.8',
+      productCode: 'PRD-501',
+      productName: 'Dell Latitude 5440',
+      category: 'Laptops',
+      unitPrice: '₹78,000',
+      stock: '42',
+      status: 'Available',
     },
     {
       id: 2,
-      vendorId: 'VEN-1002',
-      vendorName: 'Prime Industrial Supplies',
-      category: 'Manufacturing',
-      contactPerson: 'Sneha Raj',
-      location: 'Chennai',
-      status: 'Active',
-      rating: '4.5',
+      vendorId: 'VEN-1001',
+      vendorName: 'TechNova Solutions',
+      productCode: 'PRD-502',
+      productName: 'HP LaserJet Pro Printer',
+      category: 'Printers',
+      unitPrice: '₹24,500',
+      stock: '8',
+      status: 'Low Stock',
     },
     {
       id: 3,
-      vendorId: 'VEN-1003',
-      vendorName: 'GreenLeaf Traders',
-      category: 'Office Supplies',
-      contactPerson: 'Rahul Nair',
-      location: 'Bengaluru',
-      status: 'Inactive',
-      rating: '4.2',
+      vendorId: 'VEN-1002',
+      vendorName: 'Prime Industrial Supplies',
+      productCode: 'PRD-503',
+      productName: 'Safety Hand Gloves',
+      category: 'Safety Equipment',
+      unitPrice: '₹450',
+      stock: '120',
+      status: 'Available',
     },
     {
       id: 4,
-      vendorId: 'VEN-1004',
-      vendorName: 'Skyline Logistics',
-      category: 'Logistics',
-      contactPerson: 'Anjali Menon',
-      location: 'Mumbai',
-      status: 'Active',
-      rating: '4.9',
+      vendorId: 'VEN-1003',
+      vendorName: 'GreenLeaf Traders',
+      productCode: 'PRD-504',
+      productName: 'A4 Printing Paper Bundle',
+      category: 'Office Supplies',
+      unitPrice: '₹320',
+      stock: '0',
+      status: 'Out of Stock',
     },
   ];
 
@@ -130,19 +179,19 @@ function VendorDashboard() {
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Vendor Management"
+          title="Vendor Products"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor Dashboard', href: '/products' },
+            { label: 'Vendor Products', href: '/vendor-products' },
           ]}
           action={
             <Button
               variant="outlined"
               onClick={() => {
-                router.push(paths.vendor.management);
+                router.push(paths.products.products);
               }}
             >
-              Add Vendor
+              Add Product
             </Button>
           }
         />
@@ -150,19 +199,28 @@ function VendorDashboard() {
 
       <Box mb={2} sx={{ borderTop: '1px dashed #d1d5db' }} />
 
-      <Box>
+      {/* Filters */}
+
+      <Box >
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={2}
           alignItems={{ xs: 'stretch', sm: 'center' }}
         >
-          <TextField size="small" label="Search Vendor" fullWidth />
+          <TextField size="small" label="Search Vendor ID / Vendor Name" fullWidth />
 
           <Autocomplete
             size="small"
-            options={['IT Services', 'Manufacturing', 'Logistics']}
+            options={['Laptops', 'Office Supplies', 'Safety Equipment', 'Warehouse Devices']}
             sx={{ minWidth: 220 }}
-            renderInput={(params) => <TextField {...params} label="Category" />}
+            renderInput={(params) => <TextField {...params} label="Product Category" />}
+          />
+
+          <Autocomplete
+            size="small"
+            options={['Available', 'Low Stock', 'Out of Stock']}
+            sx={{ minWidth: 180 }}
+            renderInput={(params) => <TextField {...params} label="Product Status" />}
           />
 
           <Stack direction="row" spacing={1}>
@@ -189,11 +247,14 @@ function VendorDashboard() {
         </Stack>
       </Box>
 
+      {/* Table */}
+
       <Box sx={{ borderRadius: 1 }}>
         <Box
           sx={{
             borderRadius: 2,
             overflow: 'hidden',
+
             '& .MuiDataGrid-root': {
               border: 'none',
               bgcolor: 'transparent',
@@ -209,7 +270,10 @@ function VendorDashboard() {
             disableRowSelectionOnClick
             disableColumnMenu
             disableColumnSelector
-            slots={{ toolbar: GridToolbar, footer: CustomFooter }}
+            slots={{
+              toolbar: GridToolbar,
+              footer: CustomFooter,
+            }}
             slotProps={{
               toolbar: {
                 showQuickFilter: false,
@@ -218,15 +282,20 @@ function VendorDashboard() {
               },
             }}
             initialState={{
-              pagination: { paginationModel: { page: 0, pageSize: 5 } },
+              pagination: {
+                paginationModel: {
+                  page: 0,
+                  pageSize: 5,
+                },
+              },
             }}
             sx={{
               fontSize: 13,
 
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor: 'transparent',
-                minHeight: 36,
-                maxHeight: 36,
+                minHeight: 42,
+                maxHeight: 42,
               },
 
               '& .MuiDataGrid-columnHeader': {
@@ -241,11 +310,13 @@ function VendorDashboard() {
 
               '& .MuiDataGrid-cell': {
                 fontSize: 12,
+                display: 'flex',
+                alignItems: 'center',
               },
 
               '& .MuiDataGrid-row': {
-                minHeight: 34,
-                maxHeight: 34,
+                minHeight: 42,
+                maxHeight: 42,
               },
             }}
           />
@@ -255,4 +326,4 @@ function VendorDashboard() {
   );
 }
 
-export default VendorDashboard;
+export default VendorProducts;

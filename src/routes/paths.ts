@@ -1,10 +1,15 @@
 // ----------------------------------------------------------------------
 
+import { r } from 'node_modules/framer-motion/dist/types.d-CtuPurYT';
+
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
   REQUEST: '/request',
   VENDOR: '/vendor',
+  PRODUCTS: '/products',
+  QUOTATIONS: '/quotations',
+  PURCHASE_ORDERS: '/purchase_orders',
 };
 
 // ----------------------------------------------------------------------
@@ -60,5 +65,17 @@ export const paths = {
   vendor: {
     root: ROOTS.VENDOR,
     management: `${ROOTS.VENDOR}/management`,
+  },
+  products: {
+    root: ROOTS.PRODUCTS,
+    products: `${ROOTS.PRODUCTS}/details`,
+  },
+  quotations: {
+    root: ROOTS.QUOTATIONS,
+    submit: `${ROOTS.QUOTATIONS}/submit_quotation`,
+  },
+  purchaseOrders: {
+    root: ROOTS.PURCHASE_ORDERS,
+    details: `${ROOTS.PURCHASE_ORDERS}/details`,
   },
 };

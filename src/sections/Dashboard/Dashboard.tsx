@@ -81,7 +81,7 @@ function Dashboard() {
                     fontWeight: 700,
                   }}
                 >
-                  OPTIMA PROCURE-TO-PAY
+                  OPTIMA VENDOR PORTAL
                 </Typography>
 
                 <Typography variant="h2" sx={{ fontWeight: 800, lineHeight: 1.2 }}>

@@ -60,7 +60,7 @@ export default function HeroSection() {
               fontWeight: 700,
             }}
           >
-            Optima Procure-to-Pay
+            Optima Vendor Portal
           </Typography>
 
           <Typography
@@ -74,9 +74,9 @@ export default function HeroSection() {
               color: 'text.primary',
             }}
           >
-            From Purchase Request to Payment —{' '}
+            Welcome back !{' '}
             <Box component="span" sx={{ color: 'primary.main' }}>
-              All in One
+              Mr. John
             </Box>
           </Typography>
 
@@ -88,8 +88,7 @@ export default function HeroSection() {
               fontWeight: 500,
             }}
           >
-            Manage purchase requests, approvals, invoices, and payments in one simple platform with
-            faster workflows and better visibility.
+            Hello , Mr John. Your current performance rating is 4.5{' '}
           </Typography>
         </Stack>
       </Box>

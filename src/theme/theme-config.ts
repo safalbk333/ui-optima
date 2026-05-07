@@ -45,22 +45,22 @@ export const themeConfig: ThemeConfig = {
    * Palette
    *************************************** */
   palette: {
+    // primary: {
+    //   lighter: '#C8FAD6',
+    //   light: '#5BE49B',
+    //   main: '#00A76F',
+    //   dark: '#007867',
+    //   darker: '#004B50',
+    //   contrastText: '#FFFFFF',
+    // },
     primary: {
-      lighter: '#C8FAD6',
-      light: '#5BE49B',
-      main: '#00A76F',
-      dark: '#007867',
-      darker: '#004B50',
+      lighter: '#D6E9FF',
+      light: '#6FB3F2',
+      main: '#406AAF',
+      dark: '#2F528A',
+      darker: '#1D3560',
       contrastText: '#FFFFFF',
     },
-    // primary: {
-    //   lighter: '#FFF5CC',
-    //   light: '#FFD666',
-    //   main: '#FFAB00',
-    //   dark: '#B76E00',
-    //   darker: '#7A4100',
-    //   contrastText: '#1A1A1A',
-    // },
     secondary: {
       lighter: '#EFD6FF',
       light: '#C684FF',

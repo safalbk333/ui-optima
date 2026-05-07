@@ -15,7 +15,7 @@ const BreadcrumbContainer = styled(Box)({
 const TopRow = styled(Box)({
   display: 'flex',
   alignItems: 'center',
-  height: 40,
+  height: 34,
   position: 'relative',
 });
 
@@ -23,7 +23,7 @@ const TopRow = styled(Box)({
 const TitleWrapper = styled(Box)({
   display: 'flex',
   alignItems: 'center',
-  gap: 6,
+  gap: 4,
 });
 
 // Action container
@@ -37,21 +37,22 @@ const ActionWrapper = styled(Box)({
 // Breadcrumb link
 const BreadcrumbLink = styled(Typography)({
   fontWeight: 500,
-  color: '#555',
+  color: '#6b7280',
   cursor: 'pointer',
+  fontSize: 11,
   transition: 'all 0.2s ease',
+
   '&:hover': {
-    color: '#000000',
-    textDecoration: 'none',
+    color: '#111827',
   },
 });
 
 // Separator
 const Separator = styled(Typography)({
-  color: '#aaa',
-  fontSize: 14,
-  marginLeft: 4,
-  marginRight: 4,
+  color: '#9ca3af',
+  fontSize: 10,
+  marginLeft: 2,
+  marginRight: 2,
 });
 
 interface PremiumBreadcrumbsProps {
@@ -60,7 +61,11 @@ interface PremiumBreadcrumbsProps {
   action?: React.ReactNode;
 }
 
-const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({ title, paths = [], action }) => {
+const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
+  title,
+  paths = [],
+  action,
+}) => {
   const router = useRouter();
 
   return (
@@ -68,7 +73,11 @@ const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({ title, paths = 
       {/* Top row */}
       <TopRow>
         <TitleWrapper>
-          <Typography variant="h6" fontWeight={600} color="primary">
+          <Typography
+            fontSize={17}
+            fontWeight={600}
+            color="primary.main"
+          >
             {title}
           </Typography>
         </TitleWrapper>
@@ -77,10 +86,16 @@ const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({ title, paths = 
       </TopRow>
 
       {/* Breadcrumbs */}
-      <Box mt={0.5}>
-        <Breadcrumbs separator={<Separator>/</Separator>} aria-label="breadcrumb">
+      <Box mt={0.2}>
+        <Breadcrumbs
+          separator={<Separator>/</Separator>}
+          aria-label="breadcrumb"
+        >
           {paths.map((path, idx) => (
-            <BreadcrumbLink key={idx} variant="body2" onClick={() => router.push(path.href)}>
+            <BreadcrumbLink
+              key={idx}
+              onClick={() => router.push(path.href)}
+            >
               {path.label}
             </BreadcrumbLink>
           ))}

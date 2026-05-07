@@ -57,7 +57,10 @@ export const navData: NavSectionProps['data'] = [
       },
       // { title: 'Request', path: paths.request.root, icon: ICONS.product },
 
-      { title: 'Vendor', path: paths.vendor.root, icon: <BusinessIcon /> },
+      // { title: 'Vendor', path: paths.vendor.root, icon: <BusinessIcon /> },
+      // { title: 'Products', path: paths.products.root, icon: ICONS.product },
+      { title: 'RFQs', path: paths.quotations.root, icon: ICONS.product },
+      { title: 'Purchase Orders', path: paths.purchaseOrders.root, icon: ICONS.product },
     ],
   },
 ];
