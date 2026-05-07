@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Grid, Paper, Typography, Stack, alpha, useTheme } from '@mui/material';
+import { Box, Grid, Paper, Stack, alpha, useTheme, Typography } from '@mui/material';
 
 const cards = [
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -15,12 +15,9 @@ import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 
 import TrendingTeams from './Files';
 import AppStoreCards from './StoreCard';
-import SupportBanner from './MainCard';
 import RecentActivityCard from './RecentActivity';
 import FeatureCards from './Ext';
-import DeploymentCard from './DeploymentCard';
 import HeroSection from './DeploymentCard';
-import ProcureToPayHero from './En';
 
 /* ─────────────────────────────────────────────
    TYPES

@@ -5,15 +5,15 @@ import {
   Box,
   Grid,
   Card,
-  CardContent,
-  Typography,
   Stack,
-  LinearProgress,
-  useTheme,
   alpha,
+  useTheme,
+  Typography,
+  CardContent,
+  LinearProgress,
 } from '@mui/material';
 
-import { ResponsiveContainer, AreaChart, Area, LineChart, Line, BarChart, Bar } from 'recharts';
+import { Bar, Area, Line, BarChart, AreaChart, LineChart, ResponsiveContainer } from 'recharts';
 
 const kpis = [
   {

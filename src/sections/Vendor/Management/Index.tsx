@@ -4,20 +4,16 @@ import React from 'react';
 import {
   Box,
   Grid,
-  Stack,
   Card,
-  Button,
-  MenuItem,
+  Stack,
+  Switch,
+  Avatar,
+  Divider,
   TextField,
   Typography,
+  IconButton,
   Autocomplete,
   FormControlLabel,
-  Switch,
-  Divider,
-  Avatar,
-  IconButton,
-  InputAdornment,
-  Chip,
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -26,6 +22,7 @@ import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+
 function VendorForm() {
   const theme = useTheme();
 

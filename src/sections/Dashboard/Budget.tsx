@@ -5,10 +5,9 @@ import {
   Box,
   Card,
   Stack,
-  Typography,
-  LinearProgress,
-  TextField,
   Button,
+  TextField,
+  Typography,
   IconButton,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';

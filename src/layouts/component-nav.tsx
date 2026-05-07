@@ -1,12 +1,8 @@
-import type { Theme, SxProps } from '@mui/material/styles';
 import type { NavItemData } from '../layouts/nav-config-components';
 
-import { isEqualPath, mergeClasses } from 'minimal-shared/utils';
+import { mergeClasses } from 'minimal-shared/utils';
 
 import { styled } from '@mui/material/styles';
-import ListSubheader from '@mui/material/ListSubheader';
-
-import { usePathname } from 'src/routes/hooks';
 
 import { NavItem } from './component-nav-item';
 import { componentLayoutClasses } from '../layouts/classes';
@@ -64,71 +60,6 @@ export function PrimaryNav({ sx, navData, className, ...other }: PrimaryNavProps
 
 
     </NavRoot>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-type NavListProps = {
-  subheader: string;
-  items: NavItemData[];
-};
-
-function PrimaryNavList({ subheader, items }: NavListProps) {
-  const pathname = usePathname();
-
-  const borderStyles: SxProps<Theme> = {
-    top: 0,
-    left: 3,
-    bottom: 0,
-    my: 'auto',
-    width: '1px',
-    content: '""',
-    bgcolor: 'divider',
-    position: 'absolute',
-    height: 'calc(100% - 12px)',
-  };
-
-  return (
-    <NavLi>
-      <ListSubheader
-        component="h6"
-        sx={{
-          px: 0,
-          pb: 0.5,
-          mt: 0,
-          mx: 0,
-          mb: 0.5,
-          width: 1,
-          color: 'text.primary',
-          typography: 'overline',
-          bgcolor: 'background.default',
-        }}
-      >
-        {subheader}
-      </ListSubheader>
-
-      <NavUl
-        sx={{
-          pl: '21px',
-          position: 'relative',
-          gap: 'var(--primary-nav-item-gap)',
-          '&::before': borderStyles,
-        }}
-      >
-        {items.map((item) => (
-          <NavLi key={item.name}>
-            <NavItem
-              href={item.href}
-              isActive={isEqualPath(item.href, pathname)}
-              autoFocus={isEqualPath(item.href, pathname)}
-            >
-              {item.name} {item.packageType === 'MUI X' && <>(MUI X)</>}
-            </NavItem>
-          </NavLi>
-        ))}
-      </NavUl>
-    </NavLi>
   );
 }
 

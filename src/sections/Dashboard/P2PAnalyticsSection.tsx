@@ -19,10 +19,10 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArticleIcon from '@mui/icons-material/ArticleOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmberOutlined';
 import RecentNotifications, {
-  ContractExpiryTracker,
-  DepartmentWiseSpend,
   PendingApprovals,
+  DepartmentWiseSpend,
   TopSuppliersBySpend,
+  ContractExpiryTracker,
 } from './Flow';
 
 const feedItems = [

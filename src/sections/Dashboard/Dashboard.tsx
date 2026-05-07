@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import Box from '@mui/material/Box';
@@ -9,47 +8,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import PaymentsIcon from '@mui/icons-material/Payments';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 import P2PAnalyticsSection from './P2PAnalyticsSection';
-import { useTheme } from '@mui/material/styles';
 import P2PFlowGraph from './Visual';
 
-// ---- Slide Data ----
-const slides = [
-  {
-    title: 'Smart Purchase Requests',
-    desc: 'Create and track PRs with approval workflows.',
-    icon: <ShoppingCartIcon fontSize="large" />,
-  },
-  {
-    title: 'Invoice Management',
-    desc: 'Automate invoice matching and validation.',
-    icon: <ReceiptLongIcon fontSize="large" />,
-  },
-  {
-    title: 'Fast Payments',
-    desc: 'Seamless vendor payments with full visibility.',
-    icon: <PaymentsIcon fontSize="large" />,
-  },
-];
-
 function Dashboard() {
-  const [active, setActive] = useState(0);
-  const theme = useTheme();
-  // Auto slide
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActive((prev) => (prev + 1) % slides.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <Box component="main" sx={{ minHeight: '100vh' }}>
       <Container maxWidth="lg" sx={{ mb: { xs: 4, md: 6 } }}>
@@ -81,7 +44,7 @@ function Dashboard() {
                     fontWeight: 700,
                   }}
                 >
-                  OPTIMA PROCURE-TO-PAY
+                  OPTIMA VENDOR PORTAL
                 </Typography>
 
                 <Typography variant="h2" sx={{ fontWeight: 800, lineHeight: 1.2 }}>

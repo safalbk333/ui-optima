@@ -1,20 +1,22 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Typography, Button, Stack, TextField, Autocomplete, Pagination } from '@mui/material';
+import { Box, Stack, Button, TextField, Typography, Pagination, Autocomplete } from '@mui/material';
+import type {
+  GridColDef,
+  GridRenderCellParams} from '@mui/x-data-grid';
 import {
   DataGrid,
-  GridColDef,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  GridRenderCellParams,
-  useGridApiContext,
 } from '@mui/x-data-grid';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+
 function CustomFooter() {
   const apiRef = useGridApiContext();
 

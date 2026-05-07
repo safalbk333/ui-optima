@@ -1,24 +1,26 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+
+import { useRef, useState, useEffect } from 'react';
 import {
   Box,
-  Container,
-  Typography,
-  Button,
   Grid,
   Card,
-  CardContent,
   Chip,
   Stack,
-  AppBar,
-  Toolbar,
-  Avatar,
-  Divider,
   Paper,
+  Button,
+  AppBar,
+  Avatar,
+  Toolbar,
+  Divider,
+  Container,
+  Typography,
+  CardContent,
   LinearProgress,
 } from '@mui/material';
-import { createTheme, ThemeProvider, alpha } from '@mui/material/styles';
+import { alpha, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
 type RevealProps = {
   children: React.ReactNode;
   delay?: number;
@@ -133,7 +135,7 @@ function CountUp({ target, suffix = '', prefix = '' }: any) {
   const [count, setCount] = useState(0);
   const [ref, visible] = useReveal(0.5);
   useEffect(() => {
-    if (!visible) return;
+    if (!visible) return undefined;
     let start = 0;
     const step = target / 60;
     const timer = setInterval(() => {

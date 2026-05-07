@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Button, Stack, Grid, Paper, useTheme, alpha } from '@mui/material';
+import { Box, Grid, Stack, Paper, alpha, Button, useTheme, Typography } from '@mui/material';
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
@@ -11,32 +11,32 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 const apps = [
   {
     id: 1,
-    title: 'Purchase Requisition',
-    company: 'ProcureFlow Solutions',
+    title: 'RFQs',
+    company: 'View RFQs',
     action: 'Open',
     color: '#2D2D35',
     icon: <ShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />,
   },
   {
     id: 2,
-    title: 'Vendor Management',
-    company: 'SupplySphere Technologies',
+    title: 'Purchase Order Management',
+    company: 'View Purchase Order',
     action: 'Open',
     color: '#635BFF',
     icon: <BusinessOutlinedIcon sx={{ fontSize: 20 }} />,
   },
   {
     id: 3,
-    title: 'Invoice Processing',
-    company: 'FinEdge Systems',
+    title: 'Shipment / Delivery Module',
+    company: 'View Shipment Tracking',
     action: 'Open',
     color: '#0094FF',
     icon: <ReceiptLongOutlinedIcon sx={{ fontSize: 20 }} />,
   },
   {
     id: 4,
-    title: 'Purchase Orders',
-    company: 'Enterprise Procurement Suite',
+    title: 'Invoice Management',
+    company: 'View Invoices',
     action: 'Open',
     color: '#7B1FA2',
     icon: <Inventory2OutlinedIcon sx={{ fontSize: 20 }} />,
