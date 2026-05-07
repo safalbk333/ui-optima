@@ -4,15 +4,13 @@ import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import PrintIcon from '@mui/icons-material/Print';
 import LineItemsTable from './Table';
 import ContactCard from './ContactCards';
-const PurchaseOrderCard = () => {
-  return (
+
+const PurchaseOrderCard = () => (
     <Box
       display="flex"
       alignItems="center"
@@ -121,7 +119,6 @@ const PurchaseOrderCard = () => {
       </Box>
     </Box>
   );
-};
 function DetailedView() {
   return (
     <Box>

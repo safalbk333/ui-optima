@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------
 
-import { r } from 'node_modules/framer-motion/dist/types.d-CtuPurYT';
 
 const ROOTS = {
   AUTH: '/auth',

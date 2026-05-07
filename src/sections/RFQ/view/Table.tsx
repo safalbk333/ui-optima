@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Paper, Typography, Chip } from '@mui/material';
+import { Box, Chip, Paper, Typography } from '@mui/material';
 
 const rows = [
   {

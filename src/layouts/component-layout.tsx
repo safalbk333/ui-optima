@@ -20,8 +20,7 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
 import { componentLayoutClasses } from './classes';
 import { useScroll, useHashScroll } from './hooks';
-import { allComponents } from './nav-config-components';
-import { PrimaryNav, SecondaryNav } from './component-nav';
+import { SecondaryNav } from './component-nav';
 
 // ----------------------------------------------------------------------
 
@@ -85,8 +84,6 @@ export function ComponentLayout({
     },
     [queryClassName, scrollToHash]
   );
-
-  const renderPrimaryNav = () => <PrimaryNav navData={allComponents} />;
 
   const renderSecondaryNav = () =>
     !!sectionData?.length && (

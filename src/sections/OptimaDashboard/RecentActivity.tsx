@@ -3,16 +3,14 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Typography,
   Stack,
-  Dialog,
-  DialogContent,
-  IconButton,
   alpha,
-  CardContent,
-  Card,
   Paper,
+  Dialog,
   Button,
+  Typography,
+  IconButton,
+  DialogContent,
 } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';

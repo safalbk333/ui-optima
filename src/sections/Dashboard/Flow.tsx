@@ -1,29 +1,38 @@
 'use client';
 
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useTheme } from '@mui/material/styles';
 import {
-  LinearProgress,
+  Box,
+  List,
+  Chip,
   alpha,
   Stack,
+  Paper,
+  Table,
+  Badge,
   Avatar,
-  List,
+ Button, Divider, Tooltip ,
   ListItem,
+  TableRow,
+  TableBody,
+  TableCell,
+  TableHead,
+  Typography,
+  IconButton,
   ListItemText,
-  Button,
-  Divider,
-} from '@mui/material';
+  LinearProgress, TableContainer, ListItemAvatar } from '@mui/material';
 import {
   Timeline,
+  TimelineDot,
   TimelineItem,
+  TimelineContent,
   TimelineSeparator,
   TimelineConnector,
-  TimelineContent,
-  TimelineDot,
   TimelineOppositeContent,
 } from '@mui/lab';
-import { Paper, Typography, Box } from '@mui/material';
-import { CheckCircle, LocalShipping, Receipt, Payment, Edit } from '@mui/icons-material';
+
+import { Event, Receipt, Payment, Refresh , Visibility, CheckCircle, LocalShipping } from '@mui/icons-material';
 
 // -------------------- DATA --------------------
 const topSuppliers = [
@@ -392,19 +401,9 @@ export const DepartmentWiseSpend = () => {
   );
 };
 
-import React from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
-import { WarningAmber, Event, Refresh, Visibility } from '@mui/icons-material';
+
+
+
 
 interface Contract {
   id: string;
@@ -628,12 +627,10 @@ export const ContractExpiryTracker: React.FC = () => {
   );
 };
 
-import { ListItemAvatar, Badge } from '@mui/material';
 
-import NotificationsIcon from '@mui/icons-material/Notifications';
+
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 

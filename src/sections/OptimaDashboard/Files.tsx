@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Button, Stack, Grid, Paper, useTheme, alpha } from '@mui/material';
+import { Box, Grid, Stack, Paper, alpha, Button, useTheme, Typography } from '@mui/material';
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';

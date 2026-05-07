@@ -1,24 +1,22 @@
 import React from "react";
 import {
   Box,
-  Typography,
-  Chip,
-  Button,
   Link,
   Stack,
+  Button,
+  Typography,
 } from "@mui/material";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LayersIcon from "@mui/icons-material/Layers";
 
 const codeLines = [
-  [<><span style={{color:"#7c5af0"}}>{"{"}</span></>, null],
-  [null, <><span style={{color:"#1d9e75"}}>"vendor"</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>"Acme Supplies Ltd"</span><span style={{color:"#5a5a7a"}}>,</span></>],
-  [null, <><span style={{color:"#1d9e75"}}>"po_number"</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>"PO-2024-0391"</span><span style={{color:"#5a5a7a"}}>,</span></>],
-  [null, <><span style={{color:"#1d9e75"}}>"amount"</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>48500.00</span><span style={{color:"#5a5a7a"}}>,</span></>],
-  [null, <><span style={{color:"#1d9e75"}}>"currency"</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>"USD"</span><span style={{color:"#5a5a7a"}}>,</span></>],
-  [null, <><span style={{color:"#1d9e75"}}>"status"</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>"pending_approval"</span></>],
-  [<><span style={{color:"#7c5af0"}}>{"}"}</span></>, null],
+  [<span style={{color:"#7c5af0"}}>{"{"}</span>, null],
+  [null, <><span style={{color:"#1d9e75"}}>&quot;vendor&quot;</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>&quot;Acme Supplies Ltd&quot;</span><span style={{color:"#5a5a7a"}}>,</span></>],
+  [null, <><span style={{color:"#1d9e75"}}>&quot;po_number&quot;</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>&quot;PO-2024-0391&quot;</span><span style={{color:"#5a5a7a"}}>,</span></>],
+  [null, <><span style={{color:"#1d9e75"}}>&quot;amount&quot;</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>48500.00</span><span style={{color:"#5a5a7a"}}>,</span></>],
+  [null, <><span style={{color:"#1d9e75"}}>&quot;currency&quot;</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>&quot;USD&quot;</span><span style={{color:"#5a5a7a"}}>,</span></>],
+  [null, <><span style={{color:"#1d9e75"}}>&quot;status&quot;</span><span style={{color:"#5a5a7a"}}>: </span><span style={{color:"#e8985e"}}>&quot;pending_approval&quot;</span></>],
+  [<span style={{color:"#7c5af0"}}>{"}"}</span>, null],
 ];
 
 export default function ProcureToPayHero() {

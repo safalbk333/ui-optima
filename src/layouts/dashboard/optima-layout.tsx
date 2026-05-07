@@ -1,11 +1,10 @@
 'use client';
 
 import type { Breakpoint } from '@mui/material/styles';
-import type { NavItemProps, NavSectionProps } from 'src/components/nav-section';
+import type { NavSectionProps } from 'src/components/nav-section';
 import type { MainSectionProps, LayoutSectionProps, HeaderSectionProps } from '../core';
 
 import { merge } from 'es-toolkit';
-import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -15,14 +14,10 @@ import { _contacts, _notifications } from 'src/_mock';
 
 import { Logo } from 'src/components/logo';
 import { useSettingsContext } from 'src/components/settings';
-import { useMockedUser } from 'src/auth/hooks';
 
-import { NavMobile } from './nav-mobile';
-import { NavHorizontal } from './nav-horizontal';
 
 import { _account } from '../nav-config-account';
 import { Searchbar } from '../components/searchbar';
-import { MenuButton } from '../components/menu-button';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { LanguagePopover } from '../components/language-popover';
@@ -56,17 +51,11 @@ export function TopNavLayout({
   layoutQuery = 'lg',
 }: TopNavLayoutProps) {
   const theme = useTheme();
-  const { user } = useMockedUser();
   const settings = useSettingsContext();
 
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, 'horizontal');
 
-  const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();
-
   const navData = slotProps?.nav?.data ?? dashboardNavData;
-
-  const canDisplayItemByRole = (allowedRoles: NavItemProps['allowedRoles']): boolean =>
-    !allowedRoles?.includes(user?.role);
 
   // ---------------- HEADER ----------------
   const renderHeader = () => {

@@ -1,14 +1,13 @@
 import React from 'react';
 import {
   Box,
+  Chip,
   Paper,
   Stack,
   Typography,
   IconButton,
-  Chip,
 } from '@mui/material';
 
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 

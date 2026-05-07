@@ -65,8 +65,6 @@ function verticalVars(theme: Theme) {
 // ----------------------------------------------------------------------
 
 function miniVars(theme: Theme) {
-  const { shape } = theme;
-
   return {
     ...colorVars(theme, 'mini'),
     '--nav-item-gap': '4px',

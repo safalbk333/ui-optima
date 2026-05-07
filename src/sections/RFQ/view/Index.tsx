@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { Avatar, Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, Avatar, Button, Divider, Typography } from '@mui/material';
 import RFQHeaderCard from './RFQSummaryCard';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import BusinessIcon from '@mui/icons-material/Business';
-import ModernItemList from './Table';
 import ModernItemsTable from './Table';
 import AttachmentsSection from './Attachment';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks/use-router';
+
 function BuyingOrganizationCard() {
   return (
     <Paper

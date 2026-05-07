@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, Grid, Stack, Paper, Chip } from '@mui/material';
+import { Box, Grid, Chip, Stack, Paper, Typography } from '@mui/material';
 import { keyframes } from '@mui/system';
 
 const integrations = [

@@ -1,21 +1,5 @@
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import { alpha, keyframes, useTheme } from '@mui/material/styles';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import GitHubIcon from '@mui/icons-material/GitHub';
-
-const floatAnim = keyframes`
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-`;
-
-const cardIn = keyframes`
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
-
-const features = ['Free domain for 1 year', 'Free business email for 1 year', 'Free managed SSLs'];
+import { Box, Stack, Typography } from '@mui/material';
+import { alpha, useTheme } from '@mui/material/styles';
 
 export default function HeroSection() {
   const theme = useTheme();

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import {
-  Paper,
-  Typography,
   Box,
-  Button,
+  Paper,
   Stack,
+  Button,
+  Typography,
 } from '@mui/material';
 
 export default function QuoteSummaryCard() {

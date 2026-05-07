@@ -3,12 +3,12 @@ import {
   Box,
   Paper,
   Table,
+  TableRow,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
-  TableRow,
   Typography,
+  TableContainer,
 } from '@mui/material';
 
 const rows = [
@@ -41,8 +41,7 @@ const rows = [
   },
 ];
 
-const LineItemsTable = () => {
-  return (
+const LineItemsTable = () => (
     <Paper
       elevation={0}
       sx={{
@@ -288,6 +287,5 @@ const LineItemsTable = () => {
       </TableContainer>
     </Paper>
   );
-};
 
 export default LineItemsTable;

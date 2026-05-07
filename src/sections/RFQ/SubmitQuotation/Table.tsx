@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { Box, Paper, Typography, Button, TextField, IconButton, Divider } from '@mui/material';
+import { Box, Paper, Button, Divider, TextField, Typography, IconButton } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -69,9 +69,7 @@ export default function CompactLineItemPricing() {
     return subtotal + taxAmount - discountAmount;
   };
 
-  const grandTotal = useMemo(() => {
-    return items.reduce((sum, item) => sum + calculateTotal(item), 0);
-  }, [items]);
+  const grandTotal = useMemo(() => items.reduce((sum, item) => sum + calculateTotal(item), 0), [items]);
 
   return (
     <Paper

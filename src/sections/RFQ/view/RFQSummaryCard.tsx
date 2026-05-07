@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Paper, Typography, Divider } from '@mui/material';
+import { Box, Paper, Divider, Typography } from '@mui/material';
 
 function RFQHeaderCard() {
   return (

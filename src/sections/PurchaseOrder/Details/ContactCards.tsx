@@ -1,16 +1,15 @@
 import React from 'react';
 import {
   Box,
+  Divider,
   Typography,
   IconButton,
-  Divider,
 } from '@mui/material';
 
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
-const ContactCard = () => {
-  return (
+const ContactCard = () => (
     <Box
       display="flex"
       flexDirection="column"
@@ -112,6 +111,5 @@ const ContactCard = () => {
       </Box>
     </Box>
   );
-};
 
 export default ContactCard;

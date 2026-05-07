@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import React from 'react';
-import PurchaseOrderDashboard from 'src/sections/PurchaseOrder/Dashboard';import Dashboard from 'src/sections/PurchaseOrder/Dashboard';
+import PurchaseOrderDashboard from 'src/sections/PurchaseOrder/Dashboard';
 
 function page() {
   return (

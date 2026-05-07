@@ -3,23 +3,24 @@
 import React from 'react';
 import {
   Box,
-  Typography,
-  Button,
-  Stack,
-  TextField,
-  Autocomplete,
-  Pagination,
   Chip,
+  Stack,
+  Button,
+  TextField,
+  Typography,
+  Pagination,
+  Autocomplete,
 } from '@mui/material';
 
+import type {
+  GridColDef,
+  GridRenderCellParams} from '@mui/x-data-grid';
 import {
   DataGrid,
-  GridColDef,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  GridRenderCellParams,
-  useGridApiContext,
 } from '@mui/x-data-grid';
 
 import { alpha, useTheme } from '@mui/material/styles';

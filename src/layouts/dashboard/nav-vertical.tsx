@@ -2,9 +2,9 @@ import type { Breakpoint } from '@mui/material/styles';
 import type { NavSectionProps } from 'src/components/nav-section';
 
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
-import { useTheme } from '@mui/material/styles';
+import { styled , useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+
 
 import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
