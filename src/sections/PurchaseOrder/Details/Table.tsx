@@ -117,7 +117,7 @@ const LineItemsTable = () => (
                   fontSize: 13,
                   fontWeight: 600,
                   color: '#6f6f78',
-                  py: 1.2,
+                  py: 1,
                   width: 90,
                 }}
               >

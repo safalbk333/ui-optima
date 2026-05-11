@@ -136,33 +136,54 @@ function DetailedView() {
       </Box>
       <Box mb={2} sx={{ borderTop: '1px dashed #d1d5db' }} />
 
-      {/* 2 Side Flex Layout */}
+      {/* 2 Column Layout */}
       <Box
         sx={{
           display: 'flex',
           gap: 2,
           alignItems: 'flex-start',
+          flexDirection: {
+            xs: 'column',
+            lg: 'row',
+          },
         }}
       >
-        {/* Left Side */}
+        {/* Left Section */}
         <Box
           sx={{
-            flex: 1,
+            flex: {
+              lg: '0 0 70%',
+            },
+            width: '100%',
+            minWidth: 0,
           }}
         >
           <PurchaseOrderCard />
-          <LineItemsTable />
+
+          <Box mt={2}>
+            <LineItemsTable />
+          </Box>
+
           {/* <VendorAttestationCard /> */}
         </Box>
 
-        {/* Right Side */}
+        {/* Right Sidebar */}
         <Box
           sx={{
-            width: 320,
+            flex: {
+              lg: '0 0 30%',
+            },
+            width: '100%',
+            minWidth: 280,
+            position: 'sticky',
+            top: 20,
           }}
         >
           <ContactCard />
-          <CompanyDetailsSidebar />
+
+          <Box mt={2}>
+            <CompanyDetailsSidebar />
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -1,15 +1,10 @@
 'use client';
+
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { useRouter } from 'next/navigation';
-import React from 'react';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { paths } from 'src/routes/paths';
-import Index from 'src/sections/Vendor/Management/Index';
 import UploadDocumentForm from './Upload';
 
 function Upload() {
-  const router = useRouter();
   return (
     <div>
       <Box mb={2}>

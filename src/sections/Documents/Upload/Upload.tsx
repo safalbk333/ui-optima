@@ -384,7 +384,7 @@ function SuccessState({
           {count} document{count > 1 ? 's' : ''} submitted successfully
         </Typography>
         <Typography fontSize={13} color="text.secondary" maxWidth={360} mx="auto">
-          Your documents have been uploaded and queued for review. You'll be notified once each is
+          Your documents have been uploaded and queued for review. You&apos;ll be notified once each is
           processed.
         </Typography>
       </Box>
@@ -791,7 +791,7 @@ export default function UploadDocumentForm() {
                 sx={{ fontSize: 16, color: theme.palette.primary.main, mt: 0.1, flexShrink: 0 }}
               />
               <Typography fontSize={12} color="primary.main" lineHeight={1.6}>
-                Uploaded documents will be reviewed within 2–3 business days. You'll receive an
+                Uploaded documents will be reviewed within 2–3 business days. You&apos;ll receive an
                 email once the status is updated. Ensure files are clearly named and valid before
                 submitting.
               </Typography>
