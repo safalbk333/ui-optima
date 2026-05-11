@@ -42,250 +42,247 @@ const rows = [
 ];
 
 const LineItemsTable = () => (
-    <Paper
-      elevation={0}
+  <Paper
+    elevation={0}
+    sx={{
+      border: '1px solid #dcdce3',
+      borderRadius: 1,
+      overflow: 'hidden',
+      width: '100%',
+      mb: 2,
+    }}
+  >
+    {/* Header */}
+    <Box
+      display="flex"
+      alignItems="center"
+      px={2}
+      py={1.2}
       sx={{
-        border: '1px solid #dcdce3',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        width: '100%',
+        borderBottom: '1px solid #ececf2',
       }}
     >
-      {/* Header */}
-      <Box
-        display="flex"
-        alignItems="center"
-        px={2}
-        py={1.2}
+      <Typography
         sx={{
-          borderBottom: '1px solid #ececf2',
+          fontSize: 13,
+          fontWeight: 700,
+          color: '#333',
         }}
       >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: '#333',
-          }}
-        >
-          Line Items Detail
-        </Typography>
-      </Box>
+        Line Items Detail
+      </Typography>
+    </Box>
 
-      {/* Table */}
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow
-              sx={{
-                backgroundColor: '#f4f4f7',
-              }}
-            >
-              {['CODE', 'PRODUCT NAME', 'ORDERED', 'UNIT PRICE', 'TAX', 'TOTAL'].map((head) => (
-                <TableCell
-                  key={head}
-                  sx={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: '#7b7b88',
-                    py: 1,
-                    borderBottom: '1px solid #e4e4ea',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {head}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow
-                key={index}
-                hover
+    {/* Table */}
+    <TableContainer>
+      <Table size="small">
+        <TableHead>
+          <TableRow
+            sx={{
+              backgroundColor: '#f4f4f7',
+            }}
+          >
+            {['CODE', 'PRODUCT NAME', 'ORDERED', 'UNIT PRICE', 'TAX', 'TOTAL'].map((head) => (
+              <TableCell
+                key={head}
                 sx={{
-                  '& td': {
-                    borderBottom: '1px solid #f0f0f4',
-                  },
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: '#7b7b88',
+                  py: 1,
+                  borderBottom: '1px solid #e4e4ea',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {/* CODE */}
-                <TableCell
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: '#6f6f78',
-                    py: 1.2,
-                    width: 90,
-                  }}
-                >
-                  {row.code}
-                </TableCell>
-
-                {/* PRODUCT */}
-                <TableCell
-                  sx={{
-                    py: 1.2,
-                    minWidth: 260,
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: '#2d2d2d',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {row.product}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      color: '#7b7b88',
-                      lineHeight: 1.35,
-                      mt: 0.3,
-                    }}
-                  >
-                    {row.desc}
-                  </Typography>
-                </TableCell>
-
-                {/* ORDERED */}
-                <TableCell
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: '#444',
-                    py: 1.2,
-                  }}
-                >
-                  {row.ordered}
-                </TableCell>
-
-                {/* UNIT PRICE */}
-                <TableCell
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: '#444',
-                    py: 1.2,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {row.unitPrice}
-                </TableCell>
-
-                {/* TAX */}
-                <TableCell
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: '#444',
-                    py: 1.2,
-                  }}
-                >
-                  {row.tax}
-                </TableCell>
-
-                {/* TOTAL */}
-                <TableCell
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: '#222',
-                    py: 1.2,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {row.total}
-                </TableCell>
-              </TableRow>
+                {head}
+              </TableCell>
             ))}
+          </TableRow>
+        </TableHead>
 
-            {/* Footer */}
+        <TableBody>
+          {rows.map((row, index) => (
             <TableRow
+              key={index}
+              hover
               sx={{
-                backgroundColor: '#f7f7fb',
+                '& td': {
+                  borderBottom: '1px solid #f0f0f4',
+                },
               }}
             >
-              <TableCell colSpan={3} />
+              {/* CODE */}
+              <TableCell
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#6f6f78',
+                  py: 1,
+                  width: 90,
+                }}
+              >
+                {row.code}
+              </TableCell>
 
-              {/* Subtotal */}
-              <TableCell sx={{ py: 1.5 }}>
+              {/* PRODUCT */}
+              <TableCell
+                sx={{
+                  py: 1.2,
+                  minWidth: 260,
+                }}
+              >
                 <Typography
                   sx={{
-                    fontSize: 11,
-                    color: '#7b7b88',
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: '#2d2d2d',
+                    lineHeight: 1.2,
                   }}
                 >
-                  Subtotal
+                  {row.product}
                 </Typography>
 
                 <Typography
                   sx={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: '#222',
+                    fontSize: 12,
+                    color: '#7b7b88',
+                    lineHeight: 1.35,
+                    mt: 0.3,
                   }}
                 >
-                  $12,016.00
+                  {row.desc}
                 </Typography>
               </TableCell>
 
-              {/* Tax */}
-              <TableCell sx={{ py: 1.5 }}>
-                <Typography
-                  sx={{
-                    fontSize: 11,
-                    color: '#7b7b88',
-                  }}
-                >
-                  Tax Total
-                </Typography>
-
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: '#222',
-                  }}
-                >
-                  $384.00
-                </Typography>
+              {/* ORDERED */}
+              <TableCell
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#444',
+                  py: 1.2,
+                }}
+              >
+                {row.ordered}
               </TableCell>
 
-              {/* Grand Total */}
-              <TableCell sx={{ py: 1.5 }}>
-                <Typography
-                  sx={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: '#4d5bd1',
-                    letterSpacing: 0.3,
-                  }}
-                >
-                  GRAND TOTAL
-                </Typography>
+              {/* UNIT PRICE */}
+              <TableCell
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#444',
+                  py: 1.2,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {row.unitPrice}
+              </TableCell>
 
-                <Typography
-                  sx={{
-                    fontSize: 24,
-                    fontWeight: 800,
-                    color: '#3559d9',
-                    lineHeight: 1.1,
-                  }}
-                >
-                  $12,400.00
-                </Typography>
+              {/* TAX */}
+              <TableCell
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#444',
+                  py: 1.2,
+                }}
+              >
+                {row.tax}
+              </TableCell>
+
+              {/* TOTAL */}
+              <TableCell
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: '#222',
+                  py: 1.2,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {row.total}
               </TableCell>
             </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  );
+          ))}
+
+          {/* Footer */}
+          <TableRow>
+            <TableCell colSpan={3} />
+
+            {/* Subtotal */}
+            <TableCell sx={{ py: 1.5 }}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: '#7b7b88',
+                }}
+              >
+                Subtotal
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: '#222',
+                }}
+              >
+                $12,016.00
+              </Typography>
+            </TableCell>
+
+            {/* Tax */}
+            <TableCell sx={{ py: 1.5 }}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: '#7b7b88',
+                }}
+              >
+                Tax Total
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: '#222',
+                }}
+              >
+                $384.00
+              </Typography>
+            </TableCell>
+
+            {/* Grand Total */}
+            <TableCell sx={{ py: 1.5 }}>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: '#4d5bd1',
+                  letterSpacing: 0.3,
+                }}
+              >
+                GRAND TOTAL
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: '#3559d9',
+                  lineHeight: 1.1,
+                }}
+              >
+                $12,400.00
+              </Typography>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Paper>
+);
 
 export default LineItemsTable;

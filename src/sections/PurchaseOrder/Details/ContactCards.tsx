@@ -14,6 +14,7 @@ const ContactCard = () => (
       display="flex"
       flexDirection="column"
       gap={2}
+      mb={2}
       sx={{
         border: '1px solid #e2e2e8',
         borderRadius: 1,
