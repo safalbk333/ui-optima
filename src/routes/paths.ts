@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import { a } from "node_modules/framer-motion/dist/types.d-CtuPurYT";
+
 
 const ROOTS = {
   AUTH: '/auth',
@@ -92,5 +94,11 @@ export const paths = {
    contract: {
     root: ROOTS.CONTRACT,
     management: `${ROOTS.CONTRACT}/management`,
+    details: `${ROOTS.CONTRACT}/contract-details`,
+    add: `${ROOTS.CONTRACT}/add-contract`,
+    edit: `${ROOTS.CONTRACT}/add-contract`,
+    approval: `${ROOTS.CONTRACT}/contract-approval`,
+    renewal: `${ROOTS.CONTRACT}/contract-renewal`,
+    termination: `${ROOTS.CONTRACT}/contract-termination`,
   }
 };
