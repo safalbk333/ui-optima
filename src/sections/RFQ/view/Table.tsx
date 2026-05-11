@@ -95,8 +95,8 @@ export default function CompactModernTable() {
           {/* Description */}
           <Typography
             sx={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: '13px',
+              fontWeight: 500,
               color: '#111827',
               lineHeight: 1.4,
               pr: 2,
@@ -108,8 +108,8 @@ export default function CompactModernTable() {
           {/* Qty */}
           <Typography
             sx={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: '13px',
+              fontWeight: 500,
               color: '#111827',
             }}
           >
@@ -119,8 +119,8 @@ export default function CompactModernTable() {
           {/* Unit */}
           <Typography
             sx={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: '13px',
+              fontWeight: 500,
               color: '#4B5563',
             }}
           >

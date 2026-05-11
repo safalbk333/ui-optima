@@ -47,7 +47,6 @@ function RFQHeaderCard() {
             sx={{
               fontSize: '20px',
               fontWeight: 700,
-              color: '#111827',
               lineHeight: 1.25,
               maxWidth: 500,
             }}

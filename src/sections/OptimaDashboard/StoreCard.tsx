@@ -18,8 +18,8 @@ import { Bar, Area, Line, BarChart, AreaChart, LineChart, ResponsiveContainer } 
 const kpis = [
   {
     type: 'line',
-    label: 'Touchless invoice rate',
-    value: '87%',
+    label: 'Pending RFQs',
+    value: '16',
     detail: 'Straight-through processing, no manual touch',
     data: [
       { value: 20 },
@@ -33,22 +33,22 @@ const kpis = [
   },
   {
     type: 'bar',
-    label: 'Avg. requisition-to-PO cycle',
-    value: '4.1 days',
+    label: 'Open POs',
+    value: '4',
     detail: 'End-to-end within policy thresholds',
     data: [{ value: 9 }, { value: 7 }, { value: 6 }, { value: 5 }, { value: 4.1 }],
   },
   {
     type: 'progress',
-    label: 'First-pass 3-way match',
-    value: '96.2%',
+    label: 'Pending Invoices',
+    value: '23',
     detail: 'PO, receipt, and invoice aligned first time',
     progress: 96,
   },
   {
     type: 'area',
-    label: 'Suppliers on platform',
-    value: '1,240',
+    label: 'Payments Processed',
+    value: '1.2K',
     detail: 'Onboarded with catalog & contract rates',
     data: [
       { value: 120 },

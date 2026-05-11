@@ -64,7 +64,7 @@ export default function HeroSection() {
             </Box>
           </Typography>
 
-          <Typography
+          {/* <Typography
             fontSize={14}
             sx={{
               maxWidth: 500,
@@ -73,7 +73,7 @@ export default function HeroSection() {
             }}
           >
             Hello , Mr John. Your current performance rating is 4.5{' '}
-          </Typography>
+          </Typography> */}
         </Stack>
       </Box>
 

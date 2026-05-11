@@ -69,7 +69,7 @@ function AttachmentItem({ file }:any) {
         <Box>
           <Typography
             sx={{
-              fontSize: '12px',
+              fontSize: '13px',
               fontWeight: 600,
               color: '#111827',
               lineHeight: 1.3,
@@ -81,7 +81,7 @@ function AttachmentItem({ file }:any) {
           <Stack direction="row" spacing={0.8} mt={0.3}>
             <Typography
               sx={{
-                fontSize: '10px',
+                fontSize: '11px',
                 color: '#6B7280',
               }}
             >

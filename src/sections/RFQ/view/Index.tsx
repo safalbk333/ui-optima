@@ -47,7 +47,7 @@ function BuyingOrganizationCard() {
 
           <Typography
             sx={{
-              fontSize: '11px',
+              fontSize: '12px',
               color: '#6B7280',
             }}
           >
@@ -63,7 +63,7 @@ function BuyingOrganizationCard() {
         <Box display="flex" justifyContent="space-between" gap={2}>
           <Typography
             sx={{
-              fontSize: '11px',
+              fontSize: '13px',
               color: '#6B7280',
             }}
           >
@@ -72,8 +72,8 @@ function BuyingOrganizationCard() {
 
           <Typography
             sx={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: '13px',
+              fontWeight: 500,
               color: '#111827',
             }}
           >
@@ -84,7 +84,7 @@ function BuyingOrganizationCard() {
         <Box display="flex" justifyContent="space-between" gap={2}>
           <Typography
             sx={{
-              fontSize: '11px',
+              fontSize: '12px',
               color: '#6B7280',
             }}
           >
@@ -93,8 +93,8 @@ function BuyingOrganizationCard() {
 
           <Typography
             sx={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: '13px',
+              fontWeight: 500,
               color: '#111827',
             }}
           >
@@ -105,7 +105,7 @@ function BuyingOrganizationCard() {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography
             sx={{
-              fontSize: '11px',
+              fontSize: '13px',
               color: '#6B7280',
             }}
           >
@@ -117,7 +117,7 @@ function BuyingOrganizationCard() {
             size="small"
             sx={{
               height: 22,
-              fontSize: '10px',
+              fontSize: '13px',
               bgcolor: '#ECFDF5',
               color: '#047857',
               fontWeight: 700,
