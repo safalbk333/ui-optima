@@ -1,18 +1,10 @@
-import React from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Divider,
-  Chip,
-  IconButton,
-} from '@mui/material';
+import { Box, Chip, Paper, Button, Divider, IconButton, Typography } from '@mui/material';
 
-import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import React from 'react';
+import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 
 const documents = [
   {

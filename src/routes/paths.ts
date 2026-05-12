@@ -1,6 +1,3 @@
-// ----------------------------------------------------------------------
-
-
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
@@ -11,7 +8,8 @@ const ROOTS = {
   PURCHASE_ORDERS: '/purchase_orders',
   DOCUMENTS: '/documents',
   DELIVERY: '/delivery',
-  CONTRACT: '/contract'
+  CONTRACT: '/contract',
+  PROFILE: '/profile',
 };
 
 // ----------------------------------------------------------------------
@@ -89,8 +87,17 @@ export const paths = {
     root: ROOTS.DELIVERY,
     asn: `${ROOTS.DELIVERY}/asn`,
   },
-   contract: {
+  contract: {
     root: ROOTS.CONTRACT,
     management: `${ROOTS.CONTRACT}/management`,
-  }
+    details: `${ROOTS.CONTRACT}/contract-details`,
+    add: `${ROOTS.CONTRACT}/add-contract`,
+    edit: `${ROOTS.CONTRACT}/add-contract`,
+    approval: `${ROOTS.CONTRACT}/contract-approval`,
+    renewal: `${ROOTS.CONTRACT}/contract-renewal`,
+    termination: `${ROOTS.CONTRACT}/contract-termination`,
+  },
+  profile: {
+    root: ROOTS.PROFILE,
+  },
 };
