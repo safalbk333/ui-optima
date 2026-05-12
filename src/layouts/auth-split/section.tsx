@@ -1,14 +1,9 @@
+import Box from '@mui/material/Box';
 import type { BoxProps } from '@mui/material/Box';
 import type { Breakpoint } from '@mui/material/styles';
-
-import { varAlpha } from 'minimal-shared/utils';
-
-import Box from '@mui/material/Box';
-
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-
-import { CONFIG } from 'src/global-config';
+import { alpha } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -27,61 +22,109 @@ export type AuthSplitSectionProps = BoxProps & {
 
 export function AuthSplitSection({
   sx,
-  method,
-  methods,
   layoutQuery = 'md',
-  title = 'Manage the job',
-  imgUrl = `${CONFIG.assetsDir}/assets/illustrations/illustration-dashboard.webp`,
-  subtitle = 'More effectively with optimized workflows.',
+  title = 'OPTIMA P2P',
+  subtitle = 'Streamline procurement, vendor collaboration, RFQ management, approvals, and payment workflows in one unified Procure-to-Pay platform.',
   ...other
 }: AuthSplitSectionProps) {
   return (
     <Box
       sx={[
         (theme) => ({
-          ...theme.mixins.bgGradient({
-            images: [
-              `linear-gradient(0deg, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)}, ${varAlpha(theme.vars.palette.background.defaultChannel, 0.92)})`,
-              `url(${CONFIG.assetsDir}/assets/background/background-3-blur.webp)`,
-            ],
-          }),
-          px: 3,
-          pb: 3,
-          width: 1,
-          maxWidth: 480,
-          display: 'none',
           position: 'relative',
-          pt: 'var(--layout-header-desktop-height)',
+          overflow: 'hidden',
+          width: 1,
+          maxWidth: 520,
+          display: 'none',
+          px: 6,
+          py: 8,
+
+          background: `
+            linear-gradient(
+              135deg,
+              #071B2A 0%,
+              #0B2440 35%,
+              #12385B 100%
+            )
+          `,
+
           [theme.breakpoints.up(layoutQuery)]: {
-            gap: 8,
             display: 'flex',
-            alignItems: 'center',
             flexDirection: 'column',
             justifyContent: 'center',
+          },
+
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            width: 420,
+            height: 420,
+            borderRadius: '50%',
+            top: -180,
+            right: -120,
+            background: alpha('#3B82F6', 0.18),
+            filter: 'blur(20px)',
+          },
+
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            width: 300,
+            height: 300,
+            borderRadius: '50%',
+            bottom: -140,
+            left: -100,
+            background: alpha('#06B6D4', 0.14),
+            filter: 'blur(20px)',
           },
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...other}
     >
-      <div>
-        <Typography variant="h3" sx={{ textAlign: 'center' }}>
-          {title}
-        </Typography>
+      <Stack
+        spacing={5}
+        sx={{
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
+        {/* Logo / Brand */}
+        <Stack spacing={2}>
+          <Typography
+            variant="overline"
+            sx={{
+              color: '#38BDF8',
+              letterSpacing: 3,
+              fontWeight: 700,
+            }}
+          >
+            PROCUREMENT PLATFORM
+          </Typography>
 
-        {subtitle && (
-          <Typography sx={{ color: 'text.secondary', textAlign: 'center', mt: 2 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              color: 'common.white',
+              fontWeight: 800,
+              lineHeight: 1.1,
+            }}
+          >
+            {title}
+          </Typography>
+
+          <Typography
+            sx={{
+              color: 'rgba(255,255,255,0.72)',
+              fontSize: 16,
+              lineHeight: 1.8,
+              maxWidth: 420,
+            }}
+          >
             {subtitle}
           </Typography>
-        )}
-      </div>
-
-      {/* <Box
-        component="img"
-        alt="Dashboard illustration"
-        src={imgUrl}
-        sx={{ width: 1, aspectRatio: '4/3', objectFit: 'cover' }}
-      /> */}
+        </Stack>
+      </Stack>
     </Box>
   );
 }
