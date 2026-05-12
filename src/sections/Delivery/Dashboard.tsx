@@ -1,30 +1,28 @@
 'use client';
 
-import React from 'react';
 import {
+  Autocomplete,
   Box,
-  Chip,
-  Stack,
   Button,
+  Chip,
+  Pagination,
+  Stack,
   TextField,
   Typography,
-  Pagination,
-  Autocomplete,
 } from '@mui/material';
-import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
-
+import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
@@ -100,7 +98,7 @@ function VendorShipmentDetails() {
     {
       field: 'trackingNo',
       headerName: 'Tracking No',
-      flex: 1.2,
+      flex: 1.1,
     },
     {
       field: 'quantity',
