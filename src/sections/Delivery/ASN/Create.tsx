@@ -1,10 +1,10 @@
-import React from 'react';
-import { Box, InputAdornment, Paper, TextField, Typography } from '@mui/material';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import { Box, Paper, TextField, Typography, InputAdornment } from '@mui/material';
+
+import DocumentsSection from './Document';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MaterialLineItems from './MaterialTable';
-import DocumentsSection from './Document';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import React from 'react';
 
 function Create() {
   return (

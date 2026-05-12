@@ -1,17 +1,14 @@
 'use client';
 
+import { Box, Chip, Stack, Button, Divider, IconButton, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import { Box, Chip, Stack, Button, Divider, Typography, IconButton } from '@mui/material';
-
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import ZoomInOutlinedIcon from '@mui/icons-material/ZoomInOutlined';
 import ZoomOutOutlinedIcon from '@mui/icons-material/ZoomOutOutlined';
-import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 export default function InvoiceDetailView() {
   const [zoom, setZoom] = useState(100);

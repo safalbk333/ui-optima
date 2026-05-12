@@ -1,16 +1,15 @@
-import type { NavSectionProps } from 'src/components/nav-section';
-
-import { paths } from 'src/routes/paths';
-
 import { CONFIG } from 'src/global-config';
-
-import { SvgColor } from 'src/components/svg-color';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import type { NavSectionProps } from 'src/components/nav-section';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FolderCopyIcon from '@mui/icons-material/FolderCopy';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import HandshakeIcon from '@mui/icons-material/Handshake';
+import { SvgColor } from 'src/components/svg-color';
+import UserIcon from '@mui/icons-material/Person';
+import { paths } from 'src/routes/paths';
+
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
@@ -56,6 +55,7 @@ const ICONS = {
   FolderCopyIcon: <FolderCopyIcon fontSize="small" />,
   delivery: <LocalShippingIcon fontSize="small" />,
   contract: <HandshakeIcon fontSize="small" />,
+  user: <UserIcon fontSize="small" />,
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -89,6 +89,11 @@ export const navData: NavSectionProps['data'] = [
         title: 'Contracts',
         path: paths.contract.root,
         icon: ICONS.contract,
+      },
+      {
+        title: 'My Profile / KYC',
+        path: paths.profile.root,
+        icon: ICONS.user,
       },
     ],
   },

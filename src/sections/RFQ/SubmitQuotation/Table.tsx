@@ -1,58 +1,70 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
-import { Box, Paper, Button, Divider, TextField, Typography, IconButton } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Paper,
+  Stack,
+  Button,
+  Divider,
+  TextField,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
 
-import AddIcon from '@mui/icons-material/Add';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 type LineItem = {
   id: number;
-  description: string;
+  title: string;
   sku: string;
-  qty: number;
-  unitPrice: number;
-  tax: number;
-  discount: number;
+  price: number;
+  attachments: string[];
 };
 
-export default function CompactLineItemPricing() {
+export default function RFQPricingModern() {
   const [items, setItems] = useState<LineItem[]>([
     {
       id: 1,
-      description: 'Cloud Compute Nodes',
-      sku: 'CP-HP-001',
-      qty: 1,
-      unitPrice: 1250,
-      tax: 15,
-      discount: 5,
+      title: 'Cloud Compute Nodes',
+      sku: 'CCN-HP-001',
+      price: 2400,
+      attachments: ['Technical-Spec.pdf', 'Commercial-Proposal.xlsx'],
+    },
+    {
+      id: 2,
+      title: 'Storage Backup Unit',
+      sku: 'SBU-447',
+      price: 980,
+      attachments: ['Datasheet.pdf'],
     },
   ]);
 
-  const handleChange = (id: number, field: keyof LineItem, value: string) => {
+  const updateItem = (id: number, field: keyof LineItem, value: string | number) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === id
           ? {
               ...item,
-              [field]: field === 'description' || field === 'sku' ? value : Number(value),
+              [field]: value,
             }
           : item
       )
     );
   };
 
-  const addLineItem = () => {
+  const addItem = () => {
     setItems((prev) => [
       ...prev,
       {
         id: Date.now(),
-        description: '',
+        title: '',
         sku: '',
-        qty: 1,
-        unitPrice: 0,
-        tax: 0,
-        discount: 0,
+        price: 0,
+        attachments: [],
       },
     ]);
   };
@@ -61,265 +73,333 @@ export default function CompactLineItemPricing() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const calculateTotal = (item: LineItem) => {
-    const subtotal = item.qty * item.unitPrice;
-    const taxAmount = subtotal * (item.tax / 100);
-    const discountAmount = subtotal * (item.discount / 100);
-
-    return subtotal + taxAmount - discountAmount;
-  };
-
-  const grandTotal = useMemo(() => items.reduce((sum, item) => sum + calculateTotal(item), 0), [items]);
-
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        mb: 2,
-        border: '1px solid #E5E7EB',
-        borderRadius: 1,
-        overflow: 'hidden',
-      }}
-    >
-      {/* Header */}
-      <Box
+    <Box>
+      {/* HEADER */}
+      <Paper
+        elevation={0}
         sx={{
-          px: 1.5,
-          py: 1,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #E5E7EB',
+          borderRadius: 1,
+          border: '1px solid #E2E8F0',
+          p: 2,
+          mb: 2,
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontSize: 13,
-            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
           }}
         >
-          Line Item Pricing
-        </Typography>
-
-        <Button
-          size="small"
-          startIcon={<AddIcon sx={{ fontSize: 14 }} />}
-          onClick={addLineItem}
-          sx={{
-            minWidth: 0,
-            p: 0.5,
-            fontSize: 13,
-            textTransform: 'none',
-            fontWeight: 600,
-          }}
-        >
-          Add Item
-        </Button>
-      </Box>
-
-      {/* Table Header */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 55px 90px 65px 65px 90px 35px',
-          gap: 1,
-          px: 1.5,
-          py: 0.8,
-          bgcolor: '#F9FAFB',
-          borderBottom: '1px solid #E5E7EB',
-        }}
-      >
-        {['Description', 'Qty', 'Price', 'Tax', 'Disc', 'Total', ''].map((head) => (
-          <Typography
-            key={head}
-            sx={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: '#6B7280',
-            }}
-          >
-            {head}
-          </Typography>
-        ))}
-      </Box>
-
-      {/* Rows */}
-      {items.map((item, index) => (
-        <Box key={item.id}>
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: '2fr 55px 90px 65px 65px 90px 35px',
-              gap: 1,
-              px: 1.5,
-              py: 1,
-              alignItems: 'center',
-            }}
-          >
-            {/* Description */}
+          <Box sx={{ display: 'flex', gap: 1.5 }}>
             <Box>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Description"
-                value={item.description}
-                onChange={(e) => handleChange(item.id, 'description', e.target.value)}
+              <Typography
                 sx={{
-                  mb: 0.5,
-                  '& .MuiInputBase-input': {
-                    fontSize: 13,
-                    py: 0.7,
-                    px: 1,
-                  },
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: '#0F172A',
                 }}
-              />
+              >
+                Pricing & Commercials
+              </Typography>
 
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="SKU"
-                value={item.sku}
-                onChange={(e) => handleChange(item.id, 'sku', e.target.value)}
+              <Typography
                 sx={{
-                  '& .MuiInputBase-input': {
-                    fontSize: 13,
-                    py: 0.7,
-                    px: 1,
-                  },
+                  fontSize: 13,
+                  color: '#64748B',
+                  mt: 0.3,
                 }}
-              />
+              >
+                Manage vendor pricing, SKU references and attachments
+              </Typography>
             </Box>
-
-            {/* Qty */}
-            <TextField
-              size="small"
-              type="number"
-              value={item.qty}
-              onChange={(e) => handleChange(item.id, 'qty', e.target.value)}
-              sx={{
-                '& .MuiInputBase-input': {
-                  fontSize: 13,
-                  py: 0.7,
-                  px: 1,
-                },
-              }}
-            />
-
-            {/* Price */}
-            <TextField
-              size="small"
-              type="number"
-              value={item.unitPrice}
-              onChange={(e) => handleChange(item.id, 'unitPrice', e.target.value)}
-              sx={{
-                '& .MuiInputBase-input': {
-                  fontSize: 13,
-                  py: 0.7,
-                  px: 1,
-                },
-              }}
-            />
-
-            {/* Tax */}
-            <TextField
-              size="small"
-              type="number"
-              value={item.tax}
-              onChange={(e) => handleChange(item.id, 'tax', e.target.value)}
-              sx={{
-                '& .MuiInputBase-input': {
-                  fontSize: 13,
-                  py: 0.7,
-                  px: 1,
-                },
-              }}
-            />
-
-            {/* Discount */}
-            <TextField
-              size="small"
-              type="number"
-              value={item.discount}
-              onChange={(e) => handleChange(item.id, 'discount', e.target.value)}
-              sx={{
-                '& .MuiInputBase-input': {
-                  fontSize: 13,
-                  py: 0.7,
-                  px: 1,
-                },
-              }}
-            />
-
-            {/* Total */}
-            <Typography
-              sx={{
-                fontSize: 13,
-                fontWeight: 700,
-                color: '#111827',
-              }}
-            >
-              $
-              {calculateTotal(item).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Typography>
-
-            {/* Delete */}
-            <IconButton
-              size="small"
-              onClick={() => removeItem(item.id)}
-              sx={{
-                p: 0.4,
-              }}
-            >
-              <DeleteOutlineIcon
-                sx={{
-                  fontSize: 16,
-                  color: '#EF4444',
-                }}
-              />
-            </IconButton>
           </Box>
 
-          {index !== items.length - 1 && <Divider />}
+          <Button
+            variant="contained"
+            disableElevation
+            color="primary"
+            startIcon={<AddRoundedIcon />}
+            onClick={addItem}
+            sx={{
+              borderRadius: 3,
+              textTransform: 'none',
+              fontWeight: 700,
+              px: 2,
+              minHeight: 40,
+              boxShadow: 'none',
+            }}
+          >
+            Add Line Item
+          </Button>
         </Box>
-      ))}
+      </Paper>
 
-      {/* Footer */}
-      <Box
-        sx={{
-          px: 1.5,
-          py: 1,
-          borderTop: '1px solid #E5E7EB',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          bgcolor: '#FAFAFA',
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            color: '#6B7280',
-          }}
-        >
-          {items.length} Items
-        </Typography>
+      {/* ITEMS */}
+      <Stack spacing={0}>
+        {items.map((item, index) => (
+          <Paper
+            key={item.id}
+            elevation={0}
+            sx={{
+              borderRadius: 1,
+              border: '1px solid #E2E8F0',
+              overflow: 'hidden',
+              transition: 'all .2s ease',
+              mb: 2,
+              '&:hover': {
+                borderColor: '#CBD5E1',
+              },
+            }}
+          >
+            {/* TOP BAR */}
+            <Box
+              sx={{
+                px: 2,
+                py: 1.2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderBottom: '1px solid #EEF2F7',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Chip
+                  label={`ITEM ${index + 1}`}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontWeight: 700,
+                    fontSize: 10,
+                    borderRadius: 2,
+                    bgcolor: '#EEF2FF',
+                    color: '#4338CA',
+                  }}
+                />
 
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: 700,
-          }}
-        >
-          Total: $
-          {grandTotal.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </Typography>
-      </Box>
-    </Paper>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#334155',
+                  }}
+                >
+                  Commercial Details
+                </Typography>
+              </Box>
+
+              <IconButton
+                size="small"
+                onClick={() => removeItem(item.id)}
+                sx={{
+                  bgcolor: '#FEF2F2',
+                  borderRadius: 2,
+                  '&:hover': {
+                    bgcolor: '#FEE2E2',
+                  },
+                }}
+              >
+                <DeleteOutlineRoundedIcon
+                  sx={{
+                    color: '#DC2626',
+                    fontSize: 18,
+                  }}
+                />
+              </IconButton>
+            </Box>
+
+            {/* BODY */}
+            <Box
+              sx={{
+                p: 2,
+                display: 'grid',
+                gridTemplateColumns: '1.5fr 180px 180px',
+                gap: 2,
+              }}
+            >
+              {/* DESCRIPTION */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#64748B',
+                    mb: 0.8,
+                  }}
+                >
+                  Item Description
+                </Typography>
+
+                <TextField
+                  fullWidth
+                  size="small"
+                  placeholder="Enter product or service name"
+                  value={item.title}
+                  onChange={(e) => updateItem(item.id, 'title', e.target.value)}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      bgcolor: '#FCFCFD',
+                    },
+                    '& .MuiInputBase-input': {
+                      fontSize: 14,
+                      py: 1.2,
+                    },
+                  }}
+                />
+              </Box>
+
+              {/* SKU */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#64748B',
+                    mb: 0.8,
+                  }}
+                >
+                  SKU / Ref
+                </Typography>
+
+                <TextField
+                  fullWidth
+                  size="small"
+                  placeholder="SKU"
+                  value={item.sku}
+                  onChange={(e) => updateItem(item.id, 'sku', e.target.value)}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      bgcolor: '#FCFCFD',
+                    },
+                    '& .MuiInputBase-input': {
+                      fontSize: 14,
+                      py: 1.2,
+                    },
+                  }}
+                />
+              </Box>
+
+              {/* PRICE */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#64748B',
+                    mb: 0.8,
+                  }}
+                >
+                  Unit Price
+                </Typography>
+
+                <TextField
+                  fullWidth
+                  size="small"
+                  type="number"
+                  placeholder="$0.00"
+                  value={item.price}
+                  onChange={(e) => updateItem(item.id, 'price', Number(e.target.value))}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 1,
+                      bgcolor: '#FCFCFD',
+                    },
+                    '& .MuiInputBase-input': {
+                      fontSize: 14,
+                      py: 1.2,
+                      fontWeight: 600,
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+
+            <Divider />
+
+            {/* ATTACHMENTS */}
+            <Box
+              sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: 2,
+              }}
+            >
+              <Box sx={{ flex: 1 }}>
+                <Typography
+                  sx={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: '#64748B',
+                    mb: 1,
+                  }}
+                >
+                  Attachments
+                </Typography>
+
+                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                  {item.attachments.map((file) => (
+                    <Paper
+                      key={file}
+                      elevation={0}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        px: 1.2,
+                        py: 0.8,
+                        borderRadius: 3,
+                        border: '1px solid #E2E8F0',
+                        bgcolor: '#FFFFFF',
+                      }}
+                    >
+                      <DescriptionOutlinedIcon
+                        sx={{
+                          fontSize: 16,
+                          color: '#6366F1',
+                        }}
+                      />
+
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          color: '#334155',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {file}
+                      </Typography>
+                    </Paper>
+                  ))}
+                </Stack>
+              </Box>
+
+              <Button
+                component="label"
+                variant="outlined"
+                sx={{
+                  borderRadius: 3,
+                  textTransform: 'none',
+                  minWidth: 140,
+                  height: 38,
+                  fontWeight: 600,
+                  borderColor: '#CBD5E1',
+                  color: '#334155',
+                  bgcolor: '#FFFFFF',
+                }}
+              >
+                Upload Files
+                <input hidden type="file" multiple />
+              </Button>
+            </Box>
+          </Paper>
+        ))}
+      </Stack>
+    </Box>
   );
 }

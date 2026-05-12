@@ -1,16 +1,15 @@
-import React from 'react';
 import Box from '@mui/material/Box';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import PrintIcon from '@mui/icons-material/Print';
-import LineItemsTable from './Table';
-import ContactCard from './ContactCards';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CompanyDetailsSidebar from './CompanyDetails';
-import VendorAttestationCard from './Acknowledgement';
+import ContactCard from './ContactCards';
+import Divider from '@mui/material/Divider';
+import LineItemsTable from './Table';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import PrintIcon from '@mui/icons-material/Print';
+import React from 'react';
+import Typography from '@mui/material/Typography';
 
 const PurchaseOrderCard = () => (
   <Box

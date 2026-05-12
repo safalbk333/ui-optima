@@ -1,20 +1,17 @@
 import 'src/global.css';
 
 import type { Metadata, Viewport } from 'next';
-
-import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-
-import { CONFIG } from 'src/global-config';
-import { primary } from 'src/theme/core/palette';
+import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
 import { themeConfig, ThemeProvider } from 'src/theme';
 
-import { ProgressBar } from 'src/components/progress-bar';
-import { MotionLazy } from 'src/components/animate/motion-lazy';
-import { detectSettings } from 'src/components/settings/server';
-import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
-
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { AuthProvider } from 'src/auth/context/jwt';
+import { CONFIG } from 'src/global-config';
+import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
+import { MotionLazy } from 'src/components/animate/motion-lazy';
+import { ProgressBar } from 'src/components/progress-bar';
+import { detectSettings } from 'src/components/settings/server';
+import { primary } from 'src/theme/core/palette';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +25,9 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: 'icon',
-      url: `${CONFIG.assetsDir}/favicon.ico`,
+      url: `${CONFIG.assetsDir}/C.png`,
+      sizes: '16x16',
+      type: 'image/png',
     },
   ],
 };
