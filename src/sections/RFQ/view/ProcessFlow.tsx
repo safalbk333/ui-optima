@@ -16,7 +16,7 @@ const steps = [
     id: '01',
     title: 'RFQ Published',
     description: 'Buyer publishes RFQ with scope, BOM, attachments, and deadlines.',
-    icon: <DescriptionRoundedIcon fontSize="small" />,
+    icon: <DescriptionRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#2563EB',
     status: 'Completed',
   },
@@ -24,7 +24,7 @@ const steps = [
     id: '02',
     title: 'Vendor Review',
     description: 'Vendor reviews technical requirements, documents, and timelines.',
-    icon: <VisibilityRoundedIcon fontSize="small" />,
+    icon: <VisibilityRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#7C3AED',
     status: 'Completed',
   },
@@ -32,7 +32,7 @@ const steps = [
     id: '03',
     title: 'Clarifications',
     description: 'Questions and responses are exchanged through the portal.',
-    icon: <QuizRoundedIcon fontSize="small" />,
+    icon: <QuizRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#EA580C',
     status: 'In Progress',
   },
@@ -40,7 +40,7 @@ const steps = [
     id: '04',
     title: 'Quote Preparation',
     description: 'Vendor prepares pricing, lead time, taxes, and compliance.',
-    icon: <RequestQuoteRoundedIcon fontSize="small" />,
+    icon: <RequestQuoteRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#0F766E',
     status: 'Pending',
   },
@@ -48,7 +48,7 @@ const steps = [
     id: '05',
     title: 'Quotation Submission',
     description: 'Final quotation and attachments are submitted digitally.',
-    icon: <UploadFileRoundedIcon fontSize="small" />,
+    icon: <UploadFileRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#DC2626',
     status: 'Pending',
   },
@@ -56,7 +56,7 @@ const steps = [
     id: '06',
     title: 'Evaluation & Award',
     description: 'Buyer evaluates offers and awards the RFQ to selected vendor.',
-    icon: <FactCheckRoundedIcon fontSize="small" />,
+    icon: <FactCheckRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#0891B2',
     status: 'Pending',
   },
@@ -64,7 +64,7 @@ const steps = [
     id: '07',
     title: 'PO & Delivery',
     description: 'Purchase order is issued and delivery execution begins.',
-    icon: <LocalShippingRoundedIcon fontSize="small" />,
+    icon: <LocalShippingRoundedIcon sx={{ fontSize: 16 }} />,
     color: '#16A34A',
     status: 'Pending',
   },
@@ -73,15 +73,15 @@ const steps = [
 function StatusChip({ status }: { status: string }) {
   const styles: Record<string, any> = {
     Completed: {
-      bgcolor: 'rgba(34,197,94,0.12)',
+      bgcolor: 'rgba(34,197,94,0.10)',
       color: '#15803D',
     },
     'In Progress': {
-      bgcolor: 'rgba(249,115,22,0.12)',
+      bgcolor: 'rgba(249,115,22,0.10)',
       color: '#C2410C',
     },
     Pending: {
-      bgcolor: 'rgba(148,163,184,0.12)',
+      bgcolor: 'rgba(148,163,184,0.10)',
       color: '#475569',
     },
   };
@@ -91,9 +91,14 @@ function StatusChip({ status }: { status: string }) {
       label={status}
       size="small"
       sx={{
+        height: 22,
+        fontSize: 10,
         fontWeight: 700,
         borderRadius: '999px',
         ...styles[status],
+        '& .MuiChip-label': {
+          px: 1,
+        },
       }}
     />
   );
@@ -105,8 +110,8 @@ export default function RFQProcessFlow() {
       <Paper
         elevation={0}
         sx={{
-          mt: 2,
-          borderRadius: 1,
+          mt: 1.5,
+          borderRadius: 1.5,
           border: '1px solid #E2E8F0',
           overflow: 'hidden',
         }}
@@ -114,27 +119,27 @@ export default function RFQProcessFlow() {
         {/* Header */}
         <Box
           sx={{
-            px: 2.5,
-            py: 2,
+            px: 2,
+            py: 1.5,
             borderBottom: '1px solid #E2E8F0',
           }}
         >
           <Typography
             sx={{
-              fontsize: 15,
+              fontSize: 13,
               fontWeight: 700,
               color: '#0F172A',
-              mb: 0.5,
+              mb: 0.3,
             }}
           >
             Track RFQ
           </Typography>
 
           <Typography
-            variant="body2"
             sx={{
               color: '#64748B',
-              lineHeight: 1.6,
+              lineHeight: 1.5,
+              fontSize: 11.5,
             }}
           >
             Vendor quotation lifecycle and submission process.
@@ -142,15 +147,15 @@ export default function RFQProcessFlow() {
         </Box>
 
         {/* Vertical Flow */}
-        <Stack spacing={0} sx={{ px: 2, py: 2 }}>
+        <Stack spacing={0} sx={{ px: 1.5, py: 1.5 }}>
           {steps.map((step, index) => (
             <Box
               key={step.id}
               sx={{
                 display: 'flex',
-                gap: 2,
+                gap: 1.5,
                 position: 'relative',
-                pb: index !== steps.length - 1 ? 2.5 : 0,
+                pb: index !== steps.length - 1 ? 1.8 : 0,
               }}
             >
               {/* Timeline */}
@@ -163,11 +168,11 @@ export default function RFQProcessFlow() {
               >
                 <Avatar
                   sx={{
-                    width: 42,
-                    height: 42,
-                    bgcolor: `${step.color}15`,
+                    width: 32,
+                    height: 32,
+                    bgcolor: `${step.color}12`,
                     color: step.color,
-                    border: `1px solid ${step.color}30`,
+                    border: `1px solid ${step.color}25`,
                   }}
                 >
                   {step.icon}
@@ -178,9 +183,9 @@ export default function RFQProcessFlow() {
                     sx={{
                       width: 2,
                       flex: 1,
-                      minHeight: 48,
+                      minHeight: 36,
                       bgcolor: '#E2E8F0',
-                      mt: 1,
+                      mt: 0.8,
                     }}
                   />
                 )}
@@ -191,13 +196,12 @@ export default function RFQProcessFlow() {
                 elevation={0}
                 sx={{
                   flex: 1,
-                  p: 2,
-                  borderRadius: 2,
+                  p: 1.5,
+                  borderRadius: 1.5,
                   border: '1px solid #E2E8F0',
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    boxShadow: '0 8px 20px rgba(15,23,42,0.06)',
-                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 16px rgba(15,23,42,0.05)',
                   },
                 }}
               >
@@ -205,25 +209,26 @@ export default function RFQProcessFlow() {
                   direction="row"
                   justifyContent="space-between"
                   alignItems="flex-start"
-                  mb={1}
+                  mb={0.7}
                 >
                   <Box>
                     <Typography
                       sx={{
                         fontWeight: 700,
-                        fontSize: 15,
+                        fontSize: 13,
                         color: '#0F172A',
-                        mb: 0.5,
+                        mb: 0.2,
                       }}
                     >
                       {step.title}
                     </Typography>
 
                     <Typography
-                      variant="caption"
                       sx={{
                         color: '#94A3B8',
                         fontWeight: 700,
+                        fontSize: 10,
+                        letterSpacing: 0.3,
                       }}
                     >
                       STEP {step.id}
@@ -234,11 +239,10 @@ export default function RFQProcessFlow() {
                 </Stack>
 
                 <Typography
-                  variant="body2"
                   sx={{
                     color: '#64748B',
-                    lineHeight: 1.7,
-                    fontSize: 13,
+                    lineHeight: 1.5,
+                    fontSize: 11.5,
                   }}
                 >
                   {step.description}

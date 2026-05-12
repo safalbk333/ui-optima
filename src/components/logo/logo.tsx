@@ -177,7 +177,6 @@ export function Logo({
   //     />
   //   </svg>
   // );
-
   return (
     <LogoRoot
       component={RouterLink}
@@ -191,18 +190,17 @@ export function Logo({
           justifyContent: 'center',
           alignItems: 'center',
 
-          // Increased size
-          width: 200,
-          height: 84,
+          // Extra large logo
+          width: { xs: 320, md: 460 },
+          height: { xs: 140, md: 180 },
 
           ...(!isSingle && {
-            width: 220,
-            height: 72,
+            width: { xs: 360, md: 520 },
+            height: { xs: 150, md: 200 },
           }),
 
           ...(disabled && { pointerEvents: 'none' }),
 
-          // Makes image scale properly
           '& img': {
             width: '100%',
             height: '100%',

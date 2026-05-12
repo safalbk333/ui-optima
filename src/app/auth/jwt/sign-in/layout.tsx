@@ -1,5 +1,4 @@
 import { AuthSplitLayout } from 'src/layouts/auth-split';
-
 import { GuestGuard } from 'src/auth/guard';
 
 // ----------------------------------------------------------------------
@@ -13,7 +12,11 @@ export default function Layout({ children }: Props) {
     <GuestGuard>
       <AuthSplitLayout
         slotProps={{
-          section: { title: 'Hi, Welcome back' },
+          section: {
+            title: 'OPTIMA SUITE',
+            subtitle:
+              'Streamline procurement, vendor collaboration, RFQ management, approvals, and payment workflows in one unified Procure-to-Pay platform.',
+          },
         }}
       >
         {children}
