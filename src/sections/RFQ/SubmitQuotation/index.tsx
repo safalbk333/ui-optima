@@ -130,17 +130,6 @@ function Index() {
             { label: 'View RFQ', href: '/quotations/view' },
             { label: 'Submit Quotation', href: '/quotations/submit_quotation' },
           ]}
-          action={
-            <Button
-              onClick={() => {
-                router.push(paths.quotations.submit);
-              }}
-              sx={{ fontWeight: 600, borderRadius: 0.3 }}
-              variant="outlined"
-            >
-              Submit Quotation
-            </Button>
-          }
         />
       </Box>
       <Box mb={2.5} sx={{ borderTop: '1px dashed #d1d5db' }} />

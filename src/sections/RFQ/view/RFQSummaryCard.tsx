@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Paper, Divider, Typography } from '@mui/material';
+import { Box, Paper, Divider, Typography, Button } from '@mui/material';
 
 function RFQHeaderCard() {
   return (
@@ -51,9 +51,18 @@ function RFQHeaderCard() {
               maxWidth: 500,
             }}
           >
-            High-Precision Industrial Centrifuges
+            Office Furniture Supply
           </Typography>
         </Box>
+        <Button
+          sx={{ borderRadius: 0.5 }}
+          variant="outlined"
+          color="primary"
+          size="small"
+          href="/quotations/clarifications"
+        >
+          Ask Clarification
+        </Button>
       </Box>
 
       <Divider sx={{ mb: 2 }} />

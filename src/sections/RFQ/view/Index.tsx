@@ -1,7 +1,18 @@
 'use client';
 
-import React from 'react';
-import { Box, Chip, Paper, Stack, Avatar, Button, Divider, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Box,
+  Chip,
+  Paper,
+  Stack,
+  Avatar,
+  Button,
+  Divider,
+  Typography,
+  IconButton,
+  Drawer,
+} from '@mui/material';
 import RFQHeaderCard from './RFQSummaryCard';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -9,7 +20,9 @@ import ModernItemsTable from './Table';
 import AttachmentsSection from './Attachment';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks/use-router';
-
+import RFQProcessFlow from './ProcessFlow';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 function BuyingOrganizationCard() {
   return (
     <Paper
@@ -130,6 +143,7 @@ function BuyingOrganizationCard() {
 }
 function DetailedView() {
   const router = useRouter();
+  const [openFlow, setOpenFlow] = useState(false);
   return (
     <Box>
       <Box mb={2}>
@@ -141,15 +155,27 @@ function DetailedView() {
             { label: 'View RFQ', href: '/quotations/view' },
           ]}
           action={
-            <Button
-              onClick={() => {
-                router.push(paths.quotations.submit);
-              }}
-              sx={{ fontWeight: 600, borderRadius: 0.3 }}
-              variant="outlined"
-            >
-              Submit Quotation
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Button
+                onClick={() => setOpenFlow(true)}
+                startIcon={<AccountTreeRoundedIcon />}
+                sx={{ fontWeight: 600, borderRadius: 0.3 }}
+                variant="contained"
+                color="primary"
+              >
+                RFQ Flow
+              </Button>
+
+              <Button
+                onClick={() => {
+                  router.push(paths.quotations.submit);
+                }}
+                sx={{ fontWeight: 600, borderRadius: 0.3 }}
+                variant="outlined"
+              >
+                Submit Quotation
+              </Button>
+            </Stack>
           }
         />
       </Box>
@@ -188,6 +214,70 @@ function DetailedView() {
           {/* Sidebar / summary / actions */}
         </Paper>
       </Box>
+      <Drawer
+        anchor="right"
+        open={openFlow}
+        onClose={() => setOpenFlow(false)}
+        PaperProps={{
+          sx: {
+            width: 480,
+            bgcolor: '#F8FAFC',
+            borderLeft: '1px solid #E2E8F0',
+          },
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            px: 2.5,
+            py: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid #E2E8F0',
+            position: 'sticky',
+            top: 0,
+            zIndex: 10,
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: 18,
+                color: '#0F172A',
+              }}
+            >
+              RFQ Workflow
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: 13,
+                color: '#64748B',
+                mt: 0.3,
+              }}
+            >
+              Vendor quotation lifecycle tracking
+            </Typography>
+          </Box>
+
+          <IconButton onClick={() => setOpenFlow(false)}>
+            <CloseRoundedIcon />
+          </IconButton>
+        </Box>
+
+        {/* Content */}
+        <Box
+          sx={{
+            p: 2,
+            overflow: 'auto',
+            flex: 1,
+          }}
+        >
+          <RFQProcessFlow />
+        </Box>
+      </Drawer>
     </Box>
   );
 }

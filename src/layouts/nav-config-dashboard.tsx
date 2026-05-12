@@ -11,6 +11,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import HandshakeIcon from '@mui/icons-material/Handshake';
+import UserIcon from '@mui/icons-material/Person';
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
@@ -56,6 +57,7 @@ const ICONS = {
   FolderCopyIcon: <FolderCopyIcon fontSize="small" />,
   delivery: <LocalShippingIcon fontSize="small" />,
   contract: <HandshakeIcon fontSize="small" />,
+  user: <UserIcon fontSize="small" />,  
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -90,6 +92,11 @@ export const navData: NavSectionProps['data'] = [
         path: paths.contract.root,
         icon: ICONS.contract,
       },
+      {
+        title:'My Profile / KYC',
+        path: paths.profile.root,
+        icon: ICONS.user,
+      }
     ],
   },
 ];

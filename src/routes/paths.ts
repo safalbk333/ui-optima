@@ -11,7 +11,8 @@ const ROOTS = {
   PURCHASE_ORDERS: '/purchase_orders',
   DOCUMENTS: '/documents',
   DELIVERY: '/delivery',
-  CONTRACT: '/contract'
+  CONTRACT: '/contract',
+  PROFILE: '/profile',
 };
 
 // ----------------------------------------------------------------------
@@ -92,5 +93,8 @@ export const paths = {
    contract: {
     root: ROOTS.CONTRACT,
     management: `${ROOTS.CONTRACT}/management`,
+  },
+  profile: {
+    root: ROOTS.PROFILE,
   }
 };
