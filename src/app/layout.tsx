@@ -25,8 +25,9 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: 'icon',
-      url: `${CONFIG.assetsDir}C.png`,
+      url: `${CONFIG.assetsDir}/C.png`,
       sizes: '16x16',
+      type: 'image/png',
     },
   ],
 };
