@@ -1,7 +1,3 @@
-// ----------------------------------------------------------------------
-
-import { a } from "node_modules/framer-motion/dist/types.d-CtuPurYT";
-
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
@@ -91,7 +87,7 @@ export const paths = {
     root: ROOTS.DELIVERY,
     asn: `${ROOTS.DELIVERY}/asn`,
   },
-   contract: {
+  contract: {
     root: ROOTS.CONTRACT,
     management: `${ROOTS.CONTRACT}/management`,
     details: `${ROOTS.CONTRACT}/contract-details`,
@@ -100,5 +96,8 @@ export const paths = {
     approval: `${ROOTS.CONTRACT}/contract-approval`,
     renewal: `${ROOTS.CONTRACT}/contract-renewal`,
     termination: `${ROOTS.CONTRACT}/contract-termination`,
-  }
+  },
+  profile: {
+    root: ROOTS.PROFILE,
+  },
 };

@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
-import { Box, Grid, Paper, Button, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Grid, Paper, MenuItem, TextField, Typography } from '@mui/material';
+
 import LineItemPricing from './Table';
-import QuoteSummaryCard from './QuoteSummary';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { useRouter } from 'src/routes/hooks/use-router';
-import { paths } from 'src/routes/paths';
+import QuoteSummaryCard from './QuoteSummary';
+import React from 'react';
 
 function QuotationTerms() {
   return (
@@ -117,8 +116,6 @@ function QuotationTerms() {
   );
 }
 function Index() {
-  const router = useRouter();
-
   return (
     <Box>
       <Box mb={2}>

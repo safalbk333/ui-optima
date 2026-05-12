@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
-
-import { Box, Stack, Avatar, Typography, Divider } from '@mui/material';
+import { Box, Stack, Avatar, Divider, Typography } from '@mui/material';
 
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import React from 'react';
 
 const company = {
   name: 'ABC Manufacturing Ltd',

@@ -1,28 +1,26 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
-  Avatar,
   Box,
+  Tab,
   Chip,
-  Divider,
   Grid,
-  LinearProgress,
+  Tabs,
   Paper,
   Stack,
-  Tab,
-  Tabs,
+  Avatar,
+  Divider,
   Typography,
+  LinearProgress,
 } from '@mui/material';
+import React, { useState } from 'react';
 
-import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
-import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
-import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
+import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
+import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 const documents = [

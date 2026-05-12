@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
-import { Avatar, Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, Avatar, Typography } from '@mui/material';
 
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import QuizRoundedIcon from '@mui/icons-material/QuizRounded';
-import RequestQuoteRoundedIcon from '@mui/icons-material/RequestQuoteRounded';
-import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
 import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 import LocalShippingRoundedIcon from '@mui/icons-material/LocalShippingRounded';
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import QuizRoundedIcon from '@mui/icons-material/QuizRounded';
+import React from 'react';
+import RequestQuoteRoundedIcon from '@mui/icons-material/RequestQuoteRounded';
+import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 
 const steps = [
   {

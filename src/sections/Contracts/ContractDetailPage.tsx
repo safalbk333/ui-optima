@@ -1,26 +1,26 @@
 'use client';
 
-import React, { useCallback, useEffect, useReducer } from 'react';
 import {
-  Alert,
   Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Divider,
-  Grid,
-  IconButton,
-  Paper,
-  Skeleton,
-  Stack,
   Tab,
+  Card,
+  Chip,
+  Grid,
   Tabs,
+  Alert,
+  Paper,
+  Stack,
+  Button,
+  Divider,
   Tooltip,
+  Skeleton,
+  IconButton,
   Typography,
+  CardContent,
 } from '@mui/material';
+import React, { useEffect, useReducer, useCallback } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
+
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
@@ -34,7 +34,6 @@ import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
@@ -52,7 +51,14 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 type ContractStatus = 'Draft' | 'Under Review' | 'Approved' | 'Active' | 'Expired' | 'Terminated';
 type DocumentStatus = 'Pending' | 'Approved' | 'Rejected' | 'Expired';
 type ApprovalAction = 'Approved' | 'Rejected' | 'Submitted' | 'Returned';
-type AuditAction = 'Created' | 'Updated' | 'Renewed' | 'Terminated' | 'Uploaded' | 'Approved' | 'Rejected';
+type AuditAction =
+  | 'Created'
+  | 'Updated'
+  | 'Renewed'
+  | 'Terminated'
+  | 'Uploaded'
+  | 'Approved'
+  | 'Rejected';
 
 interface ContractDocument {
   id: number;
@@ -298,15 +304,14 @@ function fetchContractDetailMock(_contractId: string): Promise<ContractDetail> {
 
 const EXPIRY_WARNING_DAYS = 30;
 
-const STATUS_COLOR: Record<ContractStatus, 'default' | 'warning' | 'info' | 'success' | 'error'> =
-  {
-    Draft: 'default',
-    'Under Review': 'warning',
-    Approved: 'info',
-    Active: 'success',
-    Expired: 'error',
-    Terminated: 'error',
-  };
+const STATUS_COLOR: Record<ContractStatus, 'default' | 'warning' | 'info' | 'success' | 'error'> = {
+  Draft: 'default',
+  'Under Review': 'warning',
+  Approved: 'info',
+  Active: 'success',
+  Expired: 'error',
+  Terminated: 'error',
+};
 
 const DOC_STATUS_COLOR: Record<DocumentStatus, 'default' | 'warning' | 'success' | 'error'> = {
   Pending: 'warning',
@@ -512,10 +517,7 @@ function DatesFinancialSection({ data }: DatesFinancialSectionProps) {
           <InfoRow label="Start Date" value={data.startDate} />
           <InfoRow label="End Date" value={data.endDate} />
           <InfoRow label="Renewal Date" value={data.renewalDate} />
-          <InfoRow
-            label="Expiry Status"
-            value={<ExpiryBadge daysToExpiry={data.daysToExpiry} />}
-          />
+          <InfoRow label="Expiry Status" value={<ExpiryBadge daysToExpiry={data.daysToExpiry} />} />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <InfoRow label="Contract Value" value={data.contractValue} />
@@ -635,7 +637,9 @@ function DocumentsSection({
                 </Tooltip>
 
                 {/* Replace — enabled for non-Expired docs */}
-                <Tooltip title={doc.status !== 'Expired' ? 'Replace' : 'Cannot replace expired document'}>
+                <Tooltip
+                  title={doc.status !== 'Expired' ? 'Replace' : 'Cannot replace expired document'}
+                >
                   <span>
                     <IconButton
                       size="small"
@@ -1049,8 +1053,7 @@ function ContractDetailPage({ contractId = 'CON-2401' }: ContractDetailPageProps
   }
 
   // ── expiry warning — spec §4-F ────────────────────────────────────────────────
-  const showExpiryWarning =
-    data.daysToExpiry >= 0 && data.daysToExpiry <= EXPIRY_WARNING_DAYS;
+  const showExpiryWarning = data.daysToExpiry >= 0 && data.daysToExpiry <= EXPIRY_WARNING_DAYS;
 
   // ── action button visibility by status — spec §4-B / §4-F / §4-G ─────────────
   const canEdit = data.status === 'Draft' || data.status === 'Under Review';

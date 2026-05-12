@@ -1,19 +1,18 @@
-import React from 'react';
-
 import {
-  Avatar,
   Box,
+  Stack,
+  Avatar,
   Button,
   Divider,
-  IconButton,
-  Stack,
   TextField,
+  IconButton,
   Typography,
 } from '@mui/material';
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import ImageIcon from '@mui/icons-material/Image';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import React from 'react';
 
 function Chat() {
   const messages = [

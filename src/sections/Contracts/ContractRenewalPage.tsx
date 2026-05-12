@@ -1,53 +1,53 @@
 'use client';
 
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
-  Alert,
   Box,
-  Button,
   Card,
-  CardContent,
   Chip,
-  CircularProgress,
+  Alert,
+  Stack,
+  Button,
   Dialog,
+  Divider,
+  Tooltip,
+  Skeleton,
+  TextField,
+  IconButton,
+  Typography,
+  CardContent,
+  DialogTitle,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  Divider,
-  IconButton,
   LinearProgress,
-  Skeleton,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
+  CircularProgress,
 } from '@mui/material';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
 
-// ── Icons ──────────────────────────────────────────────────────────────────────
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import type { Dayjs } from 'dayjs';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import { Router } from 'next/router';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import dayjs from 'dayjs';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
+
+// ── Icons ──────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -86,8 +86,8 @@ interface RenewalPageData {
   contractType: string;
   category: string;
   startDate: string;
-  endDate: string;         // original end date
-  renewalDate: string;     // last renewal date (if any)
+  endDate: string; // original end date
+  renewalDate: string; // last renewal date (if any)
   contractValue: string;
   currency: string;
   daysToExpiry: number;
@@ -351,7 +351,13 @@ function SectionCard({
 function InfoField({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <Box>
-      <Typography variant="caption" color="text.secondary" fontWeight={500} display="block" mb={0.3}>
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        fontWeight={500}
+        display="block"
+        mb={0.3}
+      >
         {label}
       </Typography>
       <Typography variant="body2" fontWeight={600} color="text.primary">
@@ -375,7 +381,10 @@ function ExpiryBanner({ data }: { data: RenewalPageData }) {
   // Progress bar: how much of the 30-day window has elapsed
   const progressPct = isExpired
     ? 100
-    : Math.max(0, Math.min(100, ((EXPIRY_WARNING_DAYS - daysToExpiry) / EXPIRY_WARNING_DAYS) * 100));
+    : Math.max(
+        0,
+        Math.min(100, ((EXPIRY_WARNING_DAYS - daysToExpiry) / EXPIRY_WARNING_DAYS) * 100)
+      );
 
   return (
     <Card
@@ -385,8 +394,8 @@ function ExpiryBanner({ data }: { data: RenewalPageData }) {
           isExpired
             ? theme.palette.error.main
             : isCritical
-            ? theme.palette.error.main
-            : theme.palette.warning.main,
+              ? theme.palette.error.main
+              : theme.palette.warning.main,
           0.4
         )}`,
         borderRadius: 2,
@@ -395,15 +404,21 @@ function ExpiryBanner({ data }: { data: RenewalPageData }) {
           isExpired
             ? theme.palette.error.main
             : isCritical
-            ? theme.palette.error.main
-            : theme.palette.warning.main,
+              ? theme.palette.error.main
+              : theme.palette.warning.main,
           0.04
         ),
         overflow: 'hidden',
       })}
     >
       <CardContent sx={{ pb: '12px !important' }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" spacing={1} mb={1.5}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          alignItems={{ sm: 'center' }}
+          justifyContent="space-between"
+          spacing={1}
+          mb={1.5}
+        >
           <Stack direction="row" spacing={1.5} alignItems="center">
             <Box
               sx={(theme) => ({
@@ -428,12 +443,16 @@ function ExpiryBanner({ data }: { data: RenewalPageData }) {
               )}
             </Box>
             <Box>
-              <Typography variant="subtitle2" fontWeight={700} color={isExpired || isCritical ? 'error.main' : 'warning.main'}>
+              <Typography
+                variant="subtitle2"
+                fontWeight={700}
+                color={isExpired || isCritical ? 'error.main' : 'warning.main'}
+              >
                 {isExpired
                   ? 'Contract Expired'
                   : isCritical
-                  ? `Expires in ${daysToExpiry} day${daysToExpiry === 1 ? '' : 's'} — Action Required`
-                  : `Expiry Reminder — ${daysToExpiry} days remaining`}
+                    ? `Expires in ${daysToExpiry} day${daysToExpiry === 1 ? '' : 's'} — Action Required`
+                    : `Expiry Reminder — ${daysToExpiry} days remaining`}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {isExpired
@@ -484,7 +503,11 @@ function ExpiryBanner({ data }: { data: RenewalPageData }) {
             <Typography variant="caption" color="text.disabled">
               30-day renewal window
             </Typography>
-            <Typography variant="caption" color={isExpired || isCritical ? 'error.main' : 'warning.main'} fontWeight={600}>
+            <Typography
+              variant="caption"
+              color={isExpired || isCritical ? 'error.main' : 'warning.main'}
+              fontWeight={600}
+            >
               {isExpired ? 'Expired' : `${Math.round(progressPct)}% elapsed`}
             </Typography>
           </Stack>
@@ -543,10 +566,10 @@ function ContractSummarySection({ data }: { data: RenewalPageData }) {
                   data.daysToExpiry < 0
                     ? 'error.main'
                     : data.daysToExpiry <= EXPIRY_CRITICAL_DAYS
-                    ? 'error.main'
-                    : data.daysToExpiry <= EXPIRY_WARNING_DAYS
-                    ? 'warning.main'
-                    : 'text.primary'
+                      ? 'error.main'
+                      : data.daysToExpiry <= EXPIRY_WARNING_DAYS
+                        ? 'warning.main'
+                        : 'text.primary'
                 }
               >
                 {data.endDate}
@@ -672,12 +695,15 @@ function DocumentsSection({ documents }: { documents: RenewalPageData['documents
 // ─────────────────────────────────────────────────────────────────────────────
 function RenewalHistorySection({ history }: { history: RenewalRecord[] }) {
   return (
-    <SectionCard
-      title="Renewal History"
-      icon={<HistoryOutlinedIcon sx={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Renewal History" icon={<HistoryOutlinedIcon sx={{ fontSize: 16 }} />}>
       {history.length === 0 ? (
-        <Typography variant="caption" color="text.secondary" display="block" textAlign="center" py={2}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          display="block"
+          textAlign="center"
+          py={2}
+        >
           No renewals recorded for this contract.
         </Typography>
       ) : (
@@ -765,7 +791,13 @@ interface RenewalFormProps {
   onSubmit: (payload: { newEndDate: string; newValue: string; reason: string }) => void;
 }
 
-function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubmit }: RenewalFormProps) {
+function RenewalFormPanel({
+  data,
+  submitting,
+  submitError,
+  submitSuccess,
+  onSubmit,
+}: RenewalFormProps) {
   const [newEndDate, setNewEndDate] = useState<Dayjs | null>(null);
   const [newValue, setNewValue] = useState('');
   const [reason, setReason] = useState('');
@@ -774,8 +806,7 @@ function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubm
   // Validation
   const [errors, setErrors] = useState<{ newEndDate?: string; reason?: string }>({});
 
-  const canRenew =
-    data.currentUserRole === 'Procurement Head' || data.currentUserRole === 'Admin';
+  const canRenew = data.currentUserRole === 'Procurement Head' || data.currentUserRole === 'Admin';
 
   const validate = (): boolean => {
     const newErrors: { newEndDate?: string; reason?: string } = {};
@@ -818,8 +849,8 @@ function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubm
                 Renewal submitted successfully
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                The renewal has been submitted for approval. You can track status in Renewal
-                History below.
+                The renewal has been submitted for approval. You can track status in Renewal History
+                below.
               </Typography>
             </Box>
           </Stack>
@@ -939,7 +970,9 @@ function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubm
               onChange={(e) => setNewValue(e.target.value)}
               InputProps={{
                 startAdornment: (
-                  <AttachMoneyOutlinedIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
+                  <AttachMoneyOutlinedIcon
+                    sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }}
+                  />
                 ),
               }}
             />
@@ -983,7 +1016,13 @@ function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubm
             </Button>
           </Box>
 
-          <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mt={1.5}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            textAlign="center"
+            mt={1.5}
+          >
             Renewal will be submitted for approval as per the configured workflow.
           </Typography>
         </CardContent>
@@ -1018,19 +1057,29 @@ function RenewalFormPanel({ data, submitting, submitError, submitSuccess, onSubm
           </Alert>
           <Stack spacing={1}>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="caption" color="text.secondary">Previous End Date</Typography>
-              <Typography variant="caption" fontWeight={600}>{data.endDate}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                Previous End Date
+              </Typography>
+              <Typography variant="caption" fontWeight={600}>
+                {data.endDate}
+              </Typography>
             </Stack>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="caption" color="text.secondary">New End Date</Typography>
+              <Typography variant="caption" color="text.secondary">
+                New End Date
+              </Typography>
               <Typography variant="caption" fontWeight={700} color="primary.main">
                 {newEndDate?.format('DD MMM YYYY')}
               </Typography>
             </Stack>
             {newValue && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="caption" color="text.secondary">Updated Value</Typography>
-                <Typography variant="caption" fontWeight={700} color="primary.main">{newValue}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  Updated Value
+                </Typography>
+                <Typography variant="caption" fontWeight={700} color="primary.main">
+                  {newValue}
+                </Typography>
               </Stack>
             )}
           </Stack>
@@ -1093,7 +1142,6 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
 
   const router = useRouter();
 
-
   const loadData = useCallback(() => {
     dispatch({ type: 'renewal/fetchPending' });
     fetchRenewalDataMock(contractId)
@@ -1155,8 +1203,9 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
     );
   }
 
-  const pendingRenewals = data.renewalHistory.filter((r) => r.status === 'Submitted' || r.status === 'Pending').length;
-  const approvedRenewals = data.renewalHistory.filter((r) => r.status === 'Approved').length;
+  const pendingRenewals = data.renewalHistory.filter(
+    (r) => r.status === 'Submitted' || r.status === 'Pending'
+  ).length;
 
   return (
     <Box>
@@ -1173,8 +1222,8 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
                 <ArrowBackIcon fontSize="small" />
               </IconButton>
               <Typography variant="body2" color="text.secondary">
-                Home &rsaquo; Contract Dashboard &rsaquo;{' '}
-                <strong>{data.contractId}</strong> &rsaquo; Renewal
+                Home &rsaquo; Contract Dashboard &rsaquo; <strong>{data.contractId}</strong>{' '}
+                &rsaquo; Renewal
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1.5} alignItems="center" pl={0.5}>
@@ -1194,7 +1243,11 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
             size="small"
             variant="outlined"
             startIcon={<DownloadOutlinedIcon />}
-            sx={{ borderColor: alpha(theme.palette.text.primary, 0.2), fontSize: 12, flexShrink: 0 }}
+            sx={{
+              borderColor: alpha(theme.palette.text.primary, 0.2),
+              fontSize: 12,
+              flexShrink: 0,
+            }}
             onClick={() => console.info('[ContractRenewal] Download:', data.contractId)}
           >
             Download Contract
@@ -1221,10 +1274,7 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
           { label: 'Contract Value', value: data.contractValue },
           {
             label: 'Days to Expiry',
-            value:
-              data.daysToExpiry < 0
-                ? 'Expired'
-                : `${data.daysToExpiry}d`,
+            value: data.daysToExpiry < 0 ? 'Expired' : `${data.daysToExpiry}d`,
           },
           { label: 'Total Renewals', value: `${data.renewalHistory.length}` },
           {
@@ -1256,7 +1306,6 @@ function ContractRenewalPage({ contractId = 'CON-2402' }: ContractRenewalPagePro
 
       {/* ── Main two-column layout ───────────────────────────────────────── */}
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
-
         {/* Left column: contract details + documents */}
         <Box flex={1.4} minWidth={0}>
           <ContractSummarySection data={data} />

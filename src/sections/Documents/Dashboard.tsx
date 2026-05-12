@@ -1,22 +1,18 @@
 'use client';
 
-import React from 'react';
 import {
   Box,
   Chip,
   Stack,
   Button,
+  Tooltip,
   TextField,
-  Typography,
+  IconButton,
   Pagination,
+  Typography,
   Autocomplete,
   LinearProgress,
-  Tooltip,
-  IconButton,
 } from '@mui/material';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-
 import {
   DataGrid,
   useGridApiContext,
@@ -24,13 +20,15 @@ import {
   gridPageCountSelector,
   gridPaginationModelSelector,
 } from '@mui/x-data-grid';
-
-import { alpha, useTheme } from '@mui/material/styles';
+import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
-import { useRouter } from 'next/navigation';
+import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import React from 'react';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();

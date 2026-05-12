@@ -1,10 +1,8 @@
-import React from 'react';
 import { Box } from '@mui/material';
-
-import RFQThreads from './RFQThreads';
 import Chat from './Chat';
-import ActivityPanel from './ActivityPanel';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import RFQThreads from './RFQThreads';
+import React from 'react';
 
 function Clarifications() {
   return (
@@ -20,7 +18,7 @@ function Clarifications() {
         />
       </Box>
 
-      <Box  sx={{ borderTop: '1px dashed #d1d5db' }} />
+      <Box sx={{ borderTop: '1px dashed #d1d5db' }} />
 
       <Box
         sx={{

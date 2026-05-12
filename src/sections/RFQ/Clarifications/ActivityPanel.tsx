@@ -1,10 +1,9 @@
-import React from 'react';
+import { Box, Chip, Stack, Avatar, Divider, Typography, LinearProgress } from '@mui/material';
 
-import { Avatar, Box, Chip, Divider, LinearProgress, Stack, Typography } from '@mui/material';
-
-import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import React from 'react';
 
 function ActivityPanel() {
   const files = ['Original_RFQ.pdf', 'Site_Diagrams.zip', 'Commercial_Terms.docx'];
@@ -49,7 +48,7 @@ function ActivityPanel() {
       <Box
         sx={{
           p: 2,
-          borderRadius:1,
+          borderRadius: 1,
           border: '1px solid #e2e8f0',
         }}
       >
@@ -112,7 +111,7 @@ function ActivityPanel() {
                 bgcolor: '#eff6ff',
                 color: '#2563eb',
                 fontWeight: 700,
-                borderRadius: 1
+                borderRadius: 1,
               }}
             />
           </Stack>

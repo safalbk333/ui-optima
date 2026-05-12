@@ -1,37 +1,32 @@
 'use client';
 
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
-  Alert,
-  Avatar,
   Box,
-  Button,
   Card,
-  CardContent,
   Chip,
-  CircularProgress,
+  Alert,
+  Stack,
+  Avatar,
+  Button,
   Dialog,
+  Divider,
+  Tooltip,
+  Skeleton,
+  TextField,
+  IconButton,
+  Typography,
+  CardContent,
+  DialogTitle,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Skeleton,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
+  CircularProgress,
 } from '@mui/material';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -40,10 +35,12 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined';
+
+// ── Icons ─────────────────────────────────────────────────────────────────────
 
 // ── replace these with your actual project imports ────────────────────────────
 // import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
@@ -65,7 +62,7 @@ interface ApprovalStep {
   id: number;
   stepNo: number;
   role: string;
-  approverName: string | null;   // null = pending assignment
+  approverName: string | null; // null = pending assignment
   status: ApprovalStatus;
   comments: string | null;
   actedAt: string | null;
@@ -121,7 +118,7 @@ interface ApprovalPageState {
   data: ApprovalPageData | null;
   loading: boolean;
   error: string | null;
-  acting: boolean;       // true while approve/reject API call is in flight
+  acting: boolean; // true while approve/reject API call is in flight
   actionError: string | null;
 }
 
@@ -134,10 +131,7 @@ const initialApprovalState: ApprovalPageState = {
 };
 
 /** Local reducer — mirrors the shape of a real RTK createSlice reducer */
-function approvalReducer(
-  state: ApprovalPageState,
-  action: ApprovalPageAction
-): ApprovalPageState {
+function approvalReducer(state: ApprovalPageState, action: ApprovalPageAction): ApprovalPageState {
   switch (action.type) {
     case 'approval/fetchPending':
       return { ...state, loading: true, error: null };
@@ -278,8 +272,8 @@ function submitApprovalActionMock(
                 action === 'approve'
                   ? 'Approved'
                   : action === 'reject'
-                  ? 'Rejected'
-                  : 'Under Review',
+                    ? 'Rejected'
+                    : 'Under Review',
               comments,
               actedAt: new Date().toLocaleString('en-IN', {
                 day: '2-digit',
@@ -398,7 +392,13 @@ function SectionCard({
 function InfoField({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <Box>
-      <Typography variant="caption" color="text.secondary" fontWeight={500} display="block" mb={0.3}>
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        fontWeight={500}
+        display="block"
+        mb={0.3}
+      >
         {label}
       </Typography>
       <Typography variant="body2" fontWeight={600} color="text.primary">
@@ -446,7 +446,9 @@ function ContractSummarySection({ data }: { data: ApprovalPageData }) {
           label="Days to Expiry"
           value={
             data.daysToExpiry < 0 ? (
-              <Typography variant="body2" fontWeight={700} color="error.main">Expired</Typography>
+              <Typography variant="body2" fontWeight={700} color="error.main">
+                Expired
+              </Typography>
             ) : data.daysToExpiry <= EXPIRY_WARNING_DAYS ? (
               <Stack direction="row" alignItems="center" spacing={0.5}>
                 <WarningAmberIcon sx={{ fontSize: 14, color: 'warning.main' }} />
@@ -455,7 +457,9 @@ function ContractSummarySection({ data }: { data: ApprovalPageData }) {
                 </Typography>
               </Stack>
             ) : (
-              <Typography variant="body2" fontWeight={600}>{data.daysToExpiry}d</Typography>
+              <Typography variant="body2" fontWeight={600}>
+                {data.daysToExpiry}d
+              </Typography>
             )
           }
         />
@@ -482,9 +486,18 @@ function DocumentsSection({ documents }: { documents: ApprovalPageData['document
   };
 
   return (
-    <SectionCard title="Contract Documents" icon={<DescriptionOutlinedIcon sx={{ fontSize: 16 }} />}>
+    <SectionCard
+      title="Contract Documents"
+      icon={<DescriptionOutlinedIcon sx={{ fontSize: 16 }} />}
+    >
       {documents.length === 0 ? (
-        <Typography variant="caption" color="text.secondary" display="block" textAlign="center" py={2}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          display="block"
+          textAlign="center"
+          py={2}
+        >
           No documents attached to this contract.
         </Typography>
       ) : (
@@ -579,7 +592,6 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
         {steps.map((step, idx) => {
           const isLast = idx === steps.length - 1;
           const isDone = step.status === 'Approved' || step.status === 'Rejected';
-          const isPending = step.status === 'Draft';
 
           return (
             <Box key={step.id} sx={{ position: 'relative', pl: 5, pb: isLast ? 0 : 3 }}>
@@ -619,27 +631,27 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
                     step.status === 'Approved'
                       ? theme.palette.success.main
                       : step.status === 'Rejected'
-                      ? theme.palette.error.main
-                      : step.isCurrent
-                      ? theme.palette.warning.main
-                      : alpha(theme.palette.text.primary, 0.15)
+                        ? theme.palette.error.main
+                        : step.isCurrent
+                          ? theme.palette.warning.main
+                          : alpha(theme.palette.text.primary, 0.15)
                   }`,
                   bgcolor:
                     step.status === 'Approved'
                       ? alpha(theme.palette.success.main, 0.1)
                       : step.status === 'Rejected'
-                      ? alpha(theme.palette.error.main, 0.1)
-                      : step.isCurrent
-                      ? alpha(theme.palette.warning.main, 0.1)
-                      : alpha(theme.palette.text.primary, 0.04),
+                        ? alpha(theme.palette.error.main, 0.1)
+                        : step.isCurrent
+                          ? alpha(theme.palette.warning.main, 0.1)
+                          : alpha(theme.palette.text.primary, 0.04),
                   color:
                     step.status === 'Approved'
                       ? 'success.main'
                       : step.status === 'Rejected'
-                      ? 'error.main'
-                      : step.isCurrent
-                      ? 'warning.main'
-                      : 'text.disabled',
+                        ? 'error.main'
+                        : step.isCurrent
+                          ? 'warning.main'
+                          : 'text.disabled',
                   transition: 'all 0.2s',
                 })}
               >
@@ -664,9 +676,7 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
                   border: step.isCurrent
                     ? `1px solid ${alpha(theme.palette.warning.main, 0.4)}`
                     : `1px solid ${alpha(theme.palette.text.primary, 0.07)}`,
-                  bgcolor: step.isCurrent
-                    ? alpha(theme.palette.warning.main, 0.03)
-                    : 'transparent',
+                  bgcolor: step.isCurrent ? alpha(theme.palette.warning.main, 0.03) : 'transparent',
                 })}
               >
                 <Stack
@@ -703,7 +713,12 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
                   )}
                 </Stack>
 
-                <Stack direction="row" spacing={0.5} alignItems="center" mb={step.comments ? 0.5 : 0}>
+                <Stack
+                  direction="row"
+                  spacing={0.5}
+                  alignItems="center"
+                  mb={step.comments ? 0.5 : 0}
+                >
                   <Avatar
                     sx={(theme) => ({
                       width: 18,
@@ -718,7 +733,10 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
                   >
                     {step.approverName ? step.approverName.charAt(0) : '?'}
                   </Avatar>
-                  <Typography variant="caption" color={step.approverName ? 'text.primary' : 'text.disabled'}>
+                  <Typography
+                    variant="caption"
+                    color={step.approverName ? 'text.primary' : 'text.disabled'}
+                  >
                     {step.approverName ?? 'Approver not yet assigned'}
                   </Typography>
                 </Stack>
@@ -735,7 +753,7 @@ function ApprovalTimeline({ steps }: { steps: ApprovalStep[] }) {
                     })}
                   >
                     <Typography variant="caption" color="text.secondary" fontStyle="italic">
-                    {step.comments}
+                      {step.comments}
                     </Typography>
                   </Box>
                 )}
@@ -765,7 +783,13 @@ interface ActionDialogProps {
 
 const ACTION_META: Record<
   ActionType,
-  { title: string; color: 'success' | 'error' | 'warning'; icon: React.ReactNode; requireComments: boolean; confirmLabel: string }
+  {
+    title: string;
+    color: 'success' | 'error' | 'warning';
+    icon: React.ReactNode;
+    requireComments: boolean;
+    confirmLabel: string;
+  }
 > = {
   approve: {
     title: 'Approve Contract',
@@ -836,7 +860,9 @@ function ActionDialog({ open, actionType, acting, onClose, onConfirm }: ActionDi
       <DialogContent>
         {/* Contextual guidance */}
         <Alert
-          severity={meta.color === 'success' ? 'success' : meta.color === 'error' ? 'error' : 'warning'}
+          severity={
+            meta.color === 'success' ? 'success' : meta.color === 'error' ? 'error' : 'warning'
+          }
           sx={{ mb: 2, fontSize: 12 }}
         >
           {actionType === 'approve' &&
@@ -862,8 +888,8 @@ function ActionDialog({ open, actionType, acting, onClose, onConfirm }: ActionDi
             actionType === 'approve'
               ? 'Add any notes for the next approver…'
               : actionType === 'reject'
-              ? 'Describe why this contract is being rejected…'
-              : 'Describe the changes required before re-submission…'
+                ? 'Describe why this contract is being rejected…'
+                : 'Describe the changes required before re-submission…'
           }
           value={comments}
           onChange={(e) => {
@@ -907,7 +933,6 @@ interface ApprovalActionPanelProps {
 }
 
 function ApprovalActionPanel({ data, acting, actionError, onAction }: ApprovalActionPanelProps) {
-  const theme = useTheme();
   const [dialogAction, setDialogAction] = useState<ActionType | null>(null);
 
   // ── RBAC check — only the active step's approver can act ──────────────────
@@ -1004,7 +1029,9 @@ function ApprovalActionPanel({ data, acting, actionError, onAction }: ApprovalAc
               variant="contained"
               color="success"
               size="small"
-              startIcon={acting ? <CircularProgress size={14} color="inherit" /> : <ThumbUpOutlinedIcon />}
+              startIcon={
+                acting ? <CircularProgress size={14} color="inherit" /> : <ThumbUpOutlinedIcon />
+              }
               disabled={acting}
               onClick={() => setDialogAction('approve')}
               sx={{ fontWeight: 700, py: 1 }}
@@ -1042,7 +1069,13 @@ function ApprovalActionPanel({ data, acting, actionError, onAction }: ApprovalAc
           </Stack>
 
           {/* Guidance note */}
-          <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mt={1.5}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            textAlign="center"
+            mt={1.5}
+          >
             Your action will be recorded in the audit trail. Approval logic is configured by your
             system administrator.
           </Typography>
@@ -1164,8 +1197,12 @@ function ContractApprovalPage({ contractId = 'CON-2402' }: ContractApprovalPageP
     return (
       <Box textAlign="center" py={6}>
         <ErrorOutlineIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
-        <Typography color="error" mb={2}>Failed to load approval data: {error}</Typography>
-        <Button variant="outlined" onClick={loadData}>Retry</Button>
+        <Typography color="error" mb={2}>
+          Failed to load approval data: {error}
+        </Typography>
+        <Button variant="outlined" onClick={loadData}>
+          Retry
+        </Button>
       </Box>
     );
   }
@@ -1216,8 +1253,8 @@ function ContractApprovalPage({ contractId = 'CON-2402' }: ContractApprovalPageP
                 <ArrowBackIcon fontSize="small" />
               </IconButton>
               <Typography variant="body2" color="text.secondary">
-                Home &rsaquo; Contract Dashboard &rsaquo;{' '}
-                <strong>{data.contractId}</strong> &rsaquo; Approval
+                Home &rsaquo; Contract Dashboard &rsaquo; <strong>{data.contractId}</strong>{' '}
+                &rsaquo; Approval
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1.5} alignItems="center" pl={0.5}>
@@ -1239,7 +1276,11 @@ function ContractApprovalPage({ contractId = 'CON-2402' }: ContractApprovalPageP
             size="small"
             variant="outlined"
             startIcon={<DownloadOutlinedIcon />}
-            sx={{ borderColor: alpha(theme.palette.text.primary, 0.2), fontSize: 12, flexShrink: 0 }}
+            sx={{
+              borderColor: alpha(theme.palette.text.primary, 0.2),
+              fontSize: 12,
+              flexShrink: 0,
+            }}
             onClick={() => console.info('[ContractApproval] Download:', data.contractId)}
           >
             Download Contract
@@ -1274,7 +1315,16 @@ function ContractApprovalPage({ contractId = 'CON-2402' }: ContractApprovalPageP
           { label: 'Vendor', value: data.vendor },
           { label: 'Value', value: data.contractValue },
           { label: 'Submitted By', value: data.submittedBy },
-          { label: 'Pending Step', value: pendingStep ? `Step ${pendingStep.stepNo} — ${pendingStep.role}` : allApproved ? 'All done' : anyRejected ? 'Rejected' : '—' },
+          {
+            label: 'Pending Step',
+            value: pendingStep
+              ? `Step ${pendingStep.stepNo} — ${pendingStep.role}`
+              : allApproved
+                ? 'All done'
+                : anyRejected
+                  ? 'Rejected'
+                  : '—',
+          },
         ].map(({ label, value }) => (
           <Box
             key={label}
@@ -1288,15 +1338,18 @@ function ContractApprovalPage({ contractId = 'CON-2402' }: ContractApprovalPageP
               minWidth: 130,
             })}
           >
-            <Typography variant="caption" color="text.secondary" display="block">{label}</Typography>
-            <Typography variant="body2" fontWeight={700} noWrap>{value}</Typography>
+            <Typography variant="caption" color="text.secondary" display="block">
+              {label}
+            </Typography>
+            <Typography variant="body2" fontWeight={700} noWrap>
+              {value}
+            </Typography>
           </Box>
         ))}
       </Stack>
 
       {/* ── Main two-column layout ────────────────────────────────────────────── */}
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
-
         {/* ── Left column: Contract details ─────────────────────────────────── */}
         <Box flex={1.4} minWidth={0}>
           <ContractSummarySection data={data} />

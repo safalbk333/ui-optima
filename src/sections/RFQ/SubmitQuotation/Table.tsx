@@ -1,25 +1,21 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
-
 import {
-  Avatar,
   Box,
-  Button,
   Chip,
-  Divider,
-  IconButton,
   Paper,
   Stack,
+  Button,
+  Divider,
   TextField,
+  IconButton,
   Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import AttachFileRoundedIcon from '@mui/icons-material/AttachFileRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 
 type LineItem = {
   id: number;

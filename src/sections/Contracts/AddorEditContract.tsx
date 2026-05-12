@@ -1,39 +1,36 @@
 'use client';
 
-import React, { useCallback, useReducer, useRef, useState } from 'react';
 import {
-  Alert,
-  Autocomplete,
   Box,
-  Button,
   Card,
-  CardContent,
   Chip,
-  CircularProgress,
+  Step,
+  Alert,
+  Stack,
+  Button,
   Dialog,
+  Divider,
+  Stepper,
+  Tooltip,
+  StepLabel,
+  TextField,
+  IconButton,
+  Typography,
+  CardContent,
+  Autocomplete,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  FormHelperText,
-  IconButton,
-  LinearProgress,
-  Skeleton,
-  Stack,
-  Step,
   StepConnector,
-  StepLabel,
-  Stepper,
-  TextField,
-  Tooltip,
-  Typography,
+  FormHelperText,
+  LinearProgress,
+  CircularProgress,
 } from '@mui/material';
+import React, { useRef, useState, useReducer, useCallback } from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
+
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
@@ -43,18 +40,15 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 // ── replace these with your actual project imports ────────────────────────────
 // import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'next/navigation';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
 // ─────────────────────────────────────────────────────────────────────────────
-
-type ContractStatus = 'Draft' | 'Under Review' | 'Approved' | 'Active' | 'Expired' | 'Terminated';
 
 /** Shape of the contract creation form */
 interface ContractFormValues {
@@ -349,14 +343,14 @@ function FileItem({ entry, onRemove }: FileItemProps) {
           entry.error
             ? theme.palette.error.main
             : entry.done
-            ? alpha(theme.palette.success.main, 0.4)
-            : alpha(theme.palette.text.primary, 0.1)
+              ? alpha(theme.palette.success.main, 0.4)
+              : alpha(theme.palette.text.primary, 0.1)
         }`,
         bgcolor: entry.error
           ? alpha(theme.palette.error.main, 0.03)
           : entry.done
-          ? alpha(theme.palette.success.main, 0.03)
-          : 'transparent',
+            ? alpha(theme.palette.success.main, 0.03)
+            : 'transparent',
         transition: 'border-color 0.2s',
       })}
     >
@@ -446,11 +440,7 @@ interface StepBasicInfoProps {
 function StepBasicInfo({ values, errors, onChange }: StepBasicInfoProps) {
   return (
     <SectionCard title="Basic Information" icon={<InfoOutlinedIcon sx={{ fontSize: 16 }} />}>
-      <Box
-        display="grid"
-        gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)' }}
-        gap={2.5}
-      >
+      <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: 'repeat(2, 1fr)' }} gap={2.5}>
         {/* Contract Title — mandatory per spec §4-D */}
         <Box sx={{ gridColumn: { xs: '1', sm: '1 / -1' } }}>
           <TextField
@@ -670,10 +660,7 @@ function StepDocuments({ files, fileError, onAddFiles, onRemoveFile }: StepDocum
   };
 
   return (
-    <SectionCard
-      title="Contract Documents"
-      icon={<ArticleOutlinedIcon sx={{ fontSize: 16 }} />}
-    >
+    <SectionCard title="Contract Documents" icon={<ArticleOutlinedIcon sx={{ fontSize: 16 }} />}>
       {/* Hidden file input — spec §4-D: Allow PDF, DOCX */}
       <input
         ref={fileInputRef}
@@ -803,9 +790,7 @@ function StepReview({ values, files, errors }: StepReviewProps) {
           <Stack spacing={0.8}>
             {files.map((f) => (
               <Stack key={f.id} direction="row" spacing={1} alignItems="center">
-                <DescriptionOutlinedIcon
-                  sx={{ fontSize: 14, color: 'text.secondary' }}
-                />
+                <DescriptionOutlinedIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
                 <Typography variant="caption" fontWeight={600}>
                   {f.file.name}
                 </Typography>
@@ -813,10 +798,22 @@ function StepReview({ values, files, errors }: StepReviewProps) {
                   ({(f.file.size / 1024 / 1024).toFixed(2)} MB)
                 </Typography>
                 {f.done && !f.error && (
-                  <Chip label="Ready" size="small" color="success" variant="outlined" sx={{ fontSize: 10, height: 18 }} />
+                  <Chip
+                    label="Ready"
+                    size="small"
+                    color="success"
+                    variant="outlined"
+                    sx={{ fontSize: 10, height: 18 }}
+                  />
                 )}
                 {f.error && (
-                  <Chip label="Upload failed" size="small" color="error" variant="outlined" sx={{ fontSize: 10, height: 18 }} />
+                  <Chip
+                    label="Upload failed"
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    sx={{ fontSize: 10, height: 18 }}
+                  />
                 )}
               </Stack>
             ))}
@@ -909,7 +906,7 @@ function AddorEditContract() {
   const PRIMARY = theme.palette.primary.main;
 
   // ── replace these with your actual project imports ─────────────────────────
-  const router   = useRouter();
+  const router = useRouter();
   // const dispatch = useAppDispatch();
   // const { submitting, createdId, error } = useAppSelector((s) => s.contractCreate);
 
@@ -1072,7 +1069,7 @@ function AddorEditContract() {
   };
 
   const handleBackToList = () => {
-    router.push(paths.contract.root)
+    router.push(paths.contract.root);
     console.info('[ContractCreate] Navigate back to list');
     setSuccessOpen(false);
   };
@@ -1162,11 +1159,7 @@ function AddorEditContract() {
         }}
       >
         <CardContent sx={{ pb: '12px !important' }}>
-          <Stepper
-            activeStep={activeStep}
-            connector={<StyledStepConnector />}
-            alternativeLabel
-          >
+          <Stepper activeStep={activeStep} connector={<StyledStepConnector />} alternativeLabel>
             {STEPS.map((step, idx) => (
               <Step key={step.label} completed={idx < activeStep}>
                 <StepLabel
@@ -1183,14 +1176,14 @@ function AddorEditContract() {
                           idx < activeStep
                             ? t.palette.primary.main
                             : idx === activeStep
-                            ? alpha(t.palette.primary.main, 0.12)
-                            : alpha(t.palette.text.primary, 0.06),
+                              ? alpha(t.palette.primary.main, 0.12)
+                              : alpha(t.palette.text.primary, 0.06),
                         color:
                           idx < activeStep
                             ? '#fff'
                             : idx === activeStep
-                            ? t.palette.primary.main
-                            : t.palette.text.disabled,
+                              ? t.palette.primary.main
+                              : t.palette.text.disabled,
                         border:
                           idx === activeStep
                             ? `1.5px solid ${t.palette.primary.main}`
@@ -1284,7 +1277,9 @@ function AddorEditContract() {
             <Button
               variant="contained"
               size="small"
-              startIcon={submitting ? <CircularProgress size={14} color="inherit" /> : <SendOutlinedIcon />}
+              startIcon={
+                submitting ? <CircularProgress size={14} color="inherit" /> : <SendOutlinedIcon />
+              }
               disabled={submitting || Object.keys(reviewErrors).length > 0}
               onClick={() => handleSubmit('review')}
               sx={{ background: PRIMARY, color: 'white' }}

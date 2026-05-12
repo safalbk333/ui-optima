@@ -1,36 +1,50 @@
 'use client';
 
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
-  Alert,
-  Autocomplete,
   Box,
-  Button,
   Card,
-  CardContent,
   Chip,
-  CircularProgress,
+  Alert,
+  Stack,
+  Button,
   Divider,
+  Tooltip,
+  Skeleton,
+  TextField,
   IconButton,
   Pagination,
-  Skeleton,
-  Stack,
-  TextField,
-  Tooltip,
   Typography,
+  CardContent,
+  Autocomplete,
+  CircularProgress,
 } from '@mui/material';
 import {
+  Bar,
+  Pie,
+  Cell,
+  Line,
+  XAxis,
+  YAxis,
+  Legend,
+  BarChart,
+  PieChart,
+  LineChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
+} from 'recharts';
+import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import {
   DataGrid,
-  GridColDef,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  GridRenderCellParams,
-  useGridApiContext,
 } from '@mui/x-data-grid';
-import type { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
-import { alpha, useTheme } from '@mui/material/styles';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import { alpha, useTheme } from '@mui/material/styles';
+
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -41,26 +55,11 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip as RechartsTooltip,
-  Legend,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  LineChart,
-  Line,
-} from 'recharts';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 // ── replace these with your actual project imports ───────────────────────────
 // import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'next/navigation';
 
 type ContractStatus = 'Draft' | 'Under Review' | 'Approved' | 'Active' | 'Expired' | 'Terminated';
 
@@ -427,7 +426,7 @@ function ContractsByStatusChart() {
         borderRadius: 2,
       }}
     >
-      <CardContent sx={{padding: 2}}>
+      <CardContent sx={{ padding: 2 }}>
         <Typography
           variant="caption"
           fontWeight={600}
@@ -480,7 +479,7 @@ function ContractsByVendorChart() {
         borderRadius: 2,
       }}
     >
-      <CardContent sx={{padding: 2}}>
+      <CardContent sx={{ padding: 2 }}>
         <Typography
           variant="caption"
           fontWeight={600}
@@ -535,7 +534,7 @@ function MonthlyRenewalsChart() {
         borderRadius: 2,
       }}
     >
-      <CardContent sx={{padding: 2}}>
+      <CardContent sx={{ padding: 2 }}>
         <Typography
           variant="caption"
           fontWeight={600}
@@ -652,7 +651,11 @@ function RowActions({ row, onView, onEdit, onRenew, onTerminate, onDownload }: R
       {/* Renew — Active / Expired only */}
       <Tooltip title={canRenew ? 'Renew' : 'Renewal not applicable'}>
         <span>
-          <IconButton size="small" disabled={!canRenew} onClick={() => router.push(paths.contract.renewal)}>
+          <IconButton
+            size="small"
+            disabled={!canRenew}
+            onClick={() => router.push(paths.contract.renewal)}
+          >
             <RefreshOutlinedIcon sx={{ fontSize: 16 }} />
           </IconButton>
         </span>
@@ -943,7 +946,12 @@ function ContractDashboard() {
       <Box textAlign="center" py={8}>
         <AssignmentIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
         <Typography color="text.secondary">No contracts found.</Typography>
-        <Button onClick={() => router.push(paths.contract.add)} variant="outlined" size="small" sx={{ mt: 2 }}>
+        <Button
+          onClick={() => router.push(paths.contract.add)}
+          variant="outlined"
+          size="small"
+          sx={{ mt: 2 }}
+        >
           + Create First Contract
         </Button>
       </Box>

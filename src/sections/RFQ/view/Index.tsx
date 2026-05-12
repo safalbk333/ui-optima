@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Box,
   Chip,
@@ -8,21 +7,24 @@ import {
   Stack,
   Avatar,
   Button,
-  Divider,
-  Typography,
-  IconButton,
   Drawer,
+  Divider,
+  IconButton,
+  Typography,
 } from '@mui/material';
-import RFQHeaderCard from './RFQSummaryCard';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import BusinessIcon from '@mui/icons-material/Business';
-import ModernItemsTable from './Table';
+import React, { useState } from 'react';
+
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import AttachmentsSection from './Attachment';
+import BusinessIcon from '@mui/icons-material/Business';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import ModernItemsTable from './Table';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import RFQHeaderCard from './RFQSummaryCard';
+import RFQProcessFlow from './ProcessFlow';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks/use-router';
-import RFQProcessFlow from './ProcessFlow';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
 function BuyingOrganizationCard() {
   return (
     <Paper

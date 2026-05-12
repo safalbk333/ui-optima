@@ -1,34 +1,33 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
 import {
   Box,
-  Stack,
-  Button,
-  TextField,
-  Typography,
-  Autocomplete,
   Chip,
-  IconButton,
-  Tooltip,
   Alert,
   Paper,
+  Stack,
+  Button,
   Divider,
+  Tooltip,
+  TextField,
+  IconButton,
+  Typography,
+  Autocomplete,
 } from '@mui/material';
+import React, { useRef, useState, useCallback } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -384,8 +383,8 @@ function SuccessState({
           {count} document{count > 1 ? 's' : ''} submitted successfully
         </Typography>
         <Typography fontSize={13} color="text.secondary" maxWidth={360} mx="auto">
-          Your documents have been uploaded and queued for review. You&apos;ll be notified once each is
-          processed.
+          Your documents have been uploaded and queued for review. You&apos;ll be notified once each
+          is processed.
         </Typography>
       </Box>
 
@@ -499,7 +498,6 @@ export default function UploadDocumentForm() {
 
   return (
     <Box>
-
       <Paper
         elevation={0}
         sx={{

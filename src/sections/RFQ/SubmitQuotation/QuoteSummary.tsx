@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
-import { Avatar, Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, Avatar, Button, Divider, Typography } from '@mui/material';
 
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
-import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import LocalShippingRoundedIcon from '@mui/icons-material/LocalShippingRounded';
-import { useRouter } from 'next/navigation';
+import React from 'react';
+import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 export default function QuoteSummaryCard() {
   const router = useRouter();

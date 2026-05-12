@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
-
-import { Box, Stack, TextField, Typography, Divider } from '@mui/material';
+import { Box, Stack, Divider, TextField, Typography } from '@mui/material';
 
 import DrawOutlinedIcon from '@mui/icons-material/DrawOutlined';
+import React from 'react';
 
 export default function VendorAttestationCard() {
   return (
