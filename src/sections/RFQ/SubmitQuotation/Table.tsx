@@ -79,8 +79,8 @@ export default function RFQPricingModern() {
       <Paper
         elevation={0}
         sx={{
-          borderRadius: 1,
-          border: '1px solid #E2E8F0',
+          borderRadius: 0,
+          borderBottom: '1px solid #E2E8F0',
           p: 2,
           mb: 2,
         }}

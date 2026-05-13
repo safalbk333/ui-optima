@@ -7,6 +7,7 @@ import type { NavSectionProps } from 'src/components/nav-section';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SvgColor } from 'src/components/svg-color';
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import UserIcon from '@mui/icons-material/Person';
 import { paths } from 'src/routes/paths';
 
@@ -56,6 +57,7 @@ const ICONS = {
   delivery: <LocalShippingIcon fontSize="small" />,
   contract: <HandshakeIcon fontSize="small" />,
   user: <UserIcon fontSize="small" />,
+  eoi: <ThumbsUpDownIcon fontSize="small" />,
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -64,6 +66,16 @@ export const navData: NavSectionProps['data'] = [
         title: 'Dashboard',
         path: paths.dashboard.root,
         icon: ICONS.dashboard,
+      },
+      {
+        title: 'My Profile / KYC',
+        path: paths.profile.root,
+        icon: ICONS.user,
+      },
+      {
+        title:'Expression of Interest',
+        path: paths.eoi.root,
+        icon: ICONS.eoi,
       },
       {
         title: 'RFQs',
@@ -89,11 +101,6 @@ export const navData: NavSectionProps['data'] = [
         title: 'Contracts',
         path: paths.contract.root,
         icon: ICONS.contract,
-      },
-      {
-        title: 'My Profile / KYC',
-        path: paths.profile.root,
-        icon: ICONS.user,
       },
     ],
   },

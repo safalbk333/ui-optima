@@ -10,6 +10,7 @@ const ROOTS = {
   DELIVERY: '/delivery',
   CONTRACT: '/contract',
   PROFILE: '/profile',
+  EOI: '/expression-of-interest',
 };
 
 // ----------------------------------------------------------------------
@@ -99,5 +100,8 @@ export const paths = {
   },
   profile: {
     root: ROOTS.PROFILE,
+  },
+  eoi: {
+    root: ROOTS.EOI,
   },
 };

@@ -211,6 +211,7 @@ function VendorDocumentsTable() {
       renderCell: () => (
         <Tooltip title="Preview">
           <IconButton
+            onClick={() => router.push('/documents/docs')}
             size="small"
             sx={{
               border: '1px solid',
