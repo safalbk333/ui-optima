@@ -70,7 +70,7 @@ export default function RFQPricingModern() {
 
           <Typography
             sx={{
-              fontSize: 10.5,
+              fontSize: 12,
               color: '#64748B',
             }}
           >
@@ -197,19 +197,6 @@ export default function RFQPricingModern() {
                   },
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: 9,
-                    color: '#94A3B8',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: 0.4,
-                    mb: 0.8,
-                  }}
-                >
-                  Upload Documents
-                </Typography>
-
                 <Button
                   component="label"
                   variant="outlined"
@@ -237,7 +224,7 @@ export default function RFQPricingModern() {
                 <Typography
                   sx={{
                     mt: 0.7,
-                    fontSize: 9,
+                    fontSize: 10,
                     color: '#94A3B8',
                     lineHeight: 1.4,
                   }}
@@ -300,10 +287,10 @@ export default function RFQPricingModern() {
 }
 
 const labelStyle = {
-  fontSize: 8,
+  fontSize: 12,
   color: '#94A3B8',
-  fontWeight: 700,
-  textTransform: 'uppercase',
+  fontWeight: 500,
+  textTransform: 'none',
   letterSpacing: 0.4,
   mb: 0.5,
 };
