@@ -22,9 +22,6 @@ export default function QuoteSummaryCard() {
         position: 'relative',
         borderRadius: 1,
         border: '1px solid rgba(148,163,184,0.16)',
-        background:
-          'radial-gradient(circle at top right, rgba(96,165,250,0.18), transparent 30%), linear-gradient(180deg, #F8FAFC 0%, #EEF4FF 100%)',
-        boxShadow: '0 10px 30px rgba(15,23,42,0.06)',
         backdropFilter: 'blur(16px)',
         color: '#0F172A',
       }}
@@ -200,6 +197,7 @@ export default function QuoteSummaryCard() {
             router.push(paths.quotations.submit);
           }}
           variant="contained"
+          color="primary"
           endIcon={<ArrowUpwardRoundedIcon sx={{ fontSize: 18 }} />}
           sx={{
             height: 44,
@@ -207,8 +205,6 @@ export default function QuoteSummaryCard() {
             textTransform: 'none',
             fontSize: 13,
             fontWeight: 600,
-            background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
-            boxShadow: '0 10px 24px rgba(37,99,235,0.22)',
           }}
         >
           Submit Final Quote
