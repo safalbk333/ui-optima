@@ -1,5 +1,4 @@
 import type { Theme } from '@mui/material/styles';
-
 import { varAlpha } from 'minimal-shared/utils';
 
 // ----------------------------------------------------------------------
@@ -38,7 +37,7 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
 // ----------------------------------------------------------------------
 
 function verticalVars(theme: Theme) {
-  const { shape } = theme;
+  const { shape, typography } = theme;
 
   return {
     ...colorVars(theme, 'vertical'),
@@ -52,9 +51,11 @@ function verticalVars(theme: Theme) {
     '--nav-item-root-height': '44px',
     // sub
     '--nav-item-sub-height': '36px',
+    // title (body2 default is 14px)
+    '--nav-item-title-font-size': typography.pxToRem(13),
     // icon
-    '--nav-icon-size': '24px',
-    '--nav-icon-margin': '0 12px 0 0',
+    '--nav-icon-size': typography.pxToRem(18),
+    '--nav-icon-margin': `0 ${typography.pxToRem(10)} 0 0`,
     // bullet
     '--nav-bullet-size': '12px',
     '--nav-bullet-light-color': bulletColor.light,

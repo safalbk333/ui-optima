@@ -73,7 +73,7 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.user,
       },
       {
-        title:'Expression of Interest',
+        title: 'Expression of Interest',
         path: paths.eoi.root,
         icon: ICONS.eoi,
       },
@@ -87,10 +87,25 @@ export const navData: NavSectionProps['data'] = [
         path: paths.purchaseOrders.root,
         icon: ICONS.purchaseOrder,
       },
+      // {
+      //   title: 'Delivery / Shipment',
+      //   path: paths.delivery.root,
+      //   icon: ICONS.delivery,
+      // },
       {
         title: 'Delivery / Shipment',
         path: paths.delivery.root,
         icon: ICONS.delivery,
+        children: [
+          {
+            title: 'ASN',
+            path: paths.delivery.root,
+          },
+          {
+            title: 'GRN',
+            path: paths.delivery.grn,
+          },
+        ],
       },
       {
         title: 'Documents',

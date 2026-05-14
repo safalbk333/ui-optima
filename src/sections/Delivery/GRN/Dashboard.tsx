@@ -6,7 +6,6 @@ import {
   Stack,
   Button,
   TextField,
-  IconButton,
   Pagination,
   Typography,
   Autocomplete,
@@ -22,10 +21,8 @@ import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
 
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -60,16 +57,15 @@ function CustomFooter() {
   );
 }
 
-function VendorShipmentDetails() {
+function VendorGRNDetails() {
   const theme = useTheme();
-  const router = useRouter();
 
   const PRIMARY = theme.palette.primary.main;
 
   const columns: GridColDef[] = [
     {
-      field: 'shipmentId',
-      headerName: 'Shipment ID',
+      field: 'grnNumber',
+      headerName: 'GRN Number',
       flex: 1,
     },
     {
@@ -80,7 +76,7 @@ function VendorShipmentDetails() {
     {
       field: 'buyerName',
       headerName: 'Buyer',
-      flex: 1.3,
+      flex: 1.4,
     },
     {
       field: 'asnNumber',
@@ -88,24 +84,29 @@ function VendorShipmentDetails() {
       flex: 1,
     },
     {
-      field: 'deliveryDate',
-      headerName: 'Expected Delivery',
+      field: 'receivedDate',
+      headerName: 'Received Date',
       flex: 1,
     },
     {
-      field: 'carrier',
-      headerName: 'Carrier',
-      flex: 1,
-    },
-    {
-      field: 'trackingNo',
-      headerName: 'Tracking No',
+      field: 'warehouse',
+      headerName: 'Warehouse',
       flex: 1.1,
     },
     {
-      field: 'quantity',
-      headerName: 'Qty',
-      flex: 0.7,
+      field: 'receivedQty',
+      headerName: 'Received Qty',
+      flex: 0.9,
+    },
+    {
+      field: 'acceptedQty',
+      headerName: 'Accepted',
+      flex: 0.8,
+    },
+    {
+      field: 'rejectedQty',
+      headerName: 'Rejected',
+      flex: 0.8,
     },
     {
       field: 'status',
@@ -114,10 +115,10 @@ function VendorShipmentDetails() {
       renderCell: (params: GridRenderCellParams) => {
         let color: any = 'default';
 
-        if (params.value === 'In Transit') color = 'info';
-        if (params.value === 'Delivered') color = 'success';
-        if (params.value === 'Delayed') color = 'warning';
-        if (params.value === 'Cancelled') color = 'error';
+        if (params.value === 'Pending Inspection') color = 'warning';
+        if (params.value === 'Accepted') color = 'success';
+        if (params.value === 'Partially Accepted') color = 'info';
+        if (params.value === 'Rejected') color = 'error';
 
         return (
           <Chip
@@ -128,88 +129,66 @@ function VendorShipmentDetails() {
             sx={{
               fontWeight: 600,
               borderRadius: 1,
+              fontSize: 11,
             }}
           />
         );
       },
-    },
-    {
-      field: 'actions',
-      headerName: 'Tracking',
-      sortable: false,
-      filterable: false,
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton
-          size="small"
-          onClick={(e) => {
-            e.stopPropagation();
-
-            router.push(`/delivery/tracking?${params.row.id}`);
-          }}
-        >
-          <LocalShippingOutlinedIcon
-            sx={{
-              fontSize: 18,
-              color: 'primary.main',
-            }}
-          />
-        </IconButton>
-      ),
     },
   ];
 
   const rows = [
     {
       id: 1,
-      shipmentId: 'SHP-3001',
+      grnNumber: 'GRN-5001',
       poNumber: 'PO-2026-1001',
       buyerName: 'ABC Manufacturing Pvt Ltd',
       asnNumber: 'ASN-9001',
-      deliveryDate: '12 May 2026',
-      carrier: 'BlueDart',
-      trackingNo: 'BD99871234',
-      quantity: 42,
-      status: 'In Transit',
+      receivedDate: '12 May 2026',
+      warehouse: 'Chennai WH',
+      receivedQty: 120,
+      acceptedQty: 118,
+      rejectedQty: 2,
+      status: 'Partially Accepted',
     },
     {
       id: 2,
-      shipmentId: 'SHP-3002',
+      grnNumber: 'GRN-5002',
       poNumber: 'PO-2026-1005',
       buyerName: 'Zen Industrial Group',
       asnNumber: 'ASN-9002',
-      deliveryDate: '10 May 2026',
-      carrier: 'DHL',
-      trackingNo: 'DHL776512',
-      quantity: 18,
-      status: 'Delivered',
+      receivedDate: '10 May 2026',
+      warehouse: 'Mumbai Hub',
+      receivedQty: 85,
+      acceptedQty: 85,
+      rejectedQty: 0,
+      status: 'Accepted',
     },
     {
       id: 3,
-      shipmentId: 'SHP-3003',
+      grnNumber: 'GRN-5003',
       poNumber: 'PO-2026-1008',
       buyerName: 'GreenLeaf Enterprises',
       asnNumber: 'ASN-9003',
-      deliveryDate: '15 May 2026',
-      carrier: 'FedEx',
-      trackingNo: 'FDX123998',
-      quantity: 10,
-      status: 'Delayed',
+      receivedDate: '15 May 2026',
+      warehouse: 'Bangalore DC',
+      receivedQty: 60,
+      acceptedQty: 0,
+      rejectedQty: 0,
+      status: 'Pending Inspection',
     },
     {
       id: 4,
-      shipmentId: 'SHP-3004',
+      grnNumber: 'GRN-5004',
       poNumber: 'PO-2026-1010',
       buyerName: 'Prime Tech Solutions',
       asnNumber: 'ASN-9004',
-      deliveryDate: '18 May 2026',
-      carrier: 'UPS',
-      trackingNo: 'UPS558812',
-      quantity: 5,
-      status: 'Cancelled',
+      receivedDate: '18 May 2026',
+      warehouse: 'Delhi WH',
+      receivedQty: 40,
+      acceptedQty: 0,
+      rejectedQty: 40,
+      status: 'Rejected',
     },
   ];
 
@@ -219,22 +198,11 @@ function VendorShipmentDetails() {
 
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="ASN"
+          title="GRN"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'ASN Lists', href: '/shipment-delivery' },
+            { label: 'GRN List', href: '/grn' },
           ]}
-          action={
-            <Button
-              sx={{ borderRadius: 0.5, fontWeight: 600 }}
-              variant="outlined"
-              onClick={() => {
-                router.push('/delivery/asn');
-              }}
-            >
-              Create ASN
-            </Button>
-          }
         />
       </Box>
 
@@ -248,20 +216,20 @@ function VendorShipmentDetails() {
           spacing={2}
           alignItems={{ xs: 'stretch', sm: 'center' }}
         >
-          <TextField size="small" label="Search Shipment / PO / ASN" fullWidth />
+          <TextField size="small" label="Search GRN / PO / ASN" fullWidth />
 
           <Autocomplete
             size="small"
-            options={['In Transit', 'Delivered', 'Delayed', 'Cancelled']}
-            sx={{ minWidth: 200 }}
-            renderInput={(params) => <TextField {...params} label="Shipment Status" />}
+            options={['Accepted', 'Partially Accepted', 'Pending Inspection', 'Rejected']}
+            sx={{ minWidth: 220 }}
+            renderInput={(params) => <TextField {...params} label="GRN Status" />}
           />
 
           <Autocomplete
             size="small"
-            options={['BlueDart', 'DHL', 'FedEx', 'UPS']}
-            sx={{ minWidth: 180 }}
-            renderInput={(params) => <TextField {...params} label="Carrier" />}
+            options={['Chennai WH', 'Mumbai Hub', 'Bangalore DC', 'Delhi WH']}
+            sx={{ minWidth: 200 }}
+            renderInput={(params) => <TextField {...params} label="Warehouse" />}
           />
 
           <Stack direction="row" spacing={1}>
@@ -311,9 +279,6 @@ function VendorShipmentDetails() {
             disableRowSelectionOnClick
             disableColumnMenu
             disableColumnSelector
-            onRowClick={(params) => {
-              router.push(`/delivery/asn?${params.row.id}`);
-            }}
             slots={{
               toolbar: GridToolbar,
               footer: CustomFooter,
@@ -370,4 +335,4 @@ function VendorShipmentDetails() {
   );
 }
 
-export default VendorShipmentDetails;
+export default VendorGRNDetails;
