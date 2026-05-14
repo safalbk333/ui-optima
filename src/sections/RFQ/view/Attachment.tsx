@@ -1,15 +1,8 @@
-import React from 'react';
-import {
-  Box,
-  Chip,
-  Paper,
-  Stack,
-  Typography,
-  IconButton,
-} from '@mui/material';
+import { Box, Chip, Paper, Stack, IconButton, Typography } from '@mui/material';
 
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import React from 'react';
 
 const attachments = [
   {
@@ -29,7 +22,7 @@ const attachments = [
   },
 ];
 
-function AttachmentItem({ file }:any) {
+function AttachmentItem({ file }: any) {
   return (
     <Box
       display="flex"
@@ -129,19 +122,11 @@ function AttachmentsSection() {
       }}
     >
       {/* Header */}
-      <Box
-        display="flex"
-        alignItems="center"
-        gap={1}
-        mb={1.5}
-      >
-
-
+      <Box display="flex" alignItems="center" gap={1} mb={1.5}>
         <Typography
           sx={{
             fontSize: '13px',
-            fontWeight: 700,
-            color: '#111827',
+            fontWeight: 600,
           }}
         >
           Supporting Documents
@@ -151,10 +136,7 @@ function AttachmentsSection() {
       {/* Files */}
       <Stack spacing={1}>
         {attachments.map((file, index) => (
-          <AttachmentItem
-            key={index}
-            file={file}
-          />
+          <AttachmentItem key={index} file={file} />
         ))}
       </Stack>
     </Paper>

@@ -87,6 +87,7 @@ export const paths = {
   delivery: {
     root: ROOTS.DELIVERY,
     asn: `${ROOTS.DELIVERY}/asn`,
+    grn: `${ROOTS.DELIVERY}/grn`,
   },
   contract: {
     root: ROOTS.CONTRACT,

@@ -1,5 +1,6 @@
+import { Box, Chip, Paper, Stack, Divider, Typography } from '@mui/material';
+
 import React from 'react';
-import { Box, Chip, Paper, Typography } from '@mui/material';
 
 const rows = [
   {
@@ -27,105 +28,148 @@ export default function CompactModernTable() {
     <Paper
       elevation={0}
       sx={{
-        border: '1px solid #E5E7EB',
-        borderRadius: 1,
         overflow: 'hidden',
+        // bgcolor: '#FBFCFE',
+        // px: 0.5,
+        borderRadius: 0,
       }}
     >
       {/* Header */}
       <Box
         sx={{
-          display: 'grid',
-          gridTemplateColumns: '140px 1fr 80px 80px',
-          alignItems: 'center',
-          px: 2,
-          py: 1.2,
-          borderBottom: '1px solid #E5E7EB',
+          py: 1.4,
+          borderBottom: '1px solid #F1F5F9',
         }}
       >
-        {['Item Code', 'Description', 'Qty', 'Unit'].map((item) => (
-          <Typography
-            key={item}
-            sx={{
-              fontSize: '11px',
-              fontWeight: 700,
-              color: '#6B7280',
-              textTransform: 'uppercase',
-              letterSpacing: 0.5,
-            }}
-          >
-            {item}
-          </Typography>
-        ))}
-      </Box>
-
-      {/* Rows */}
-      {rows.map((row, index) => (
-        <Box
-          key={index}
+        <Typography
           sx={{
-            display: 'grid',
-            gridTemplateColumns: '140px 1fr 80px 80px',
-            alignItems: 'center',
-            px: 2,
-            py: 1.5,
-            borderBottom: index !== rows.length - 1 ? '1px solid #F3F4F6' : 'none',
-            transition: '0.2s',
-            '&:hover': {
-              bgcolor: '#FAFAFA',
-            },
+            fontSize: 13,
+            fontWeight: 600,
+            mb: 0.5,
           }}
         >
-          {/* Code */}
-          <Box>
-            <Chip
-              label={row.code}
-              size="small"
-              sx={{
-                height: 24,
-                fontSize: '11px',
-                fontWeight: 600,
-                bgcolor: '#EEF2FF',
-                color: '#4338CA',
-                borderRadius: '6px',
-              }}
-            />
+          Material Line Items
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: 12,
+            fontWeight: 500,
+            color: 'text.secondary',
+          }}
+        >
+          Here are the details of the materials requested for quotation. Each item includes a
+          description, code, quantity, and unit of measurement for your reference.
+        </Typography>
+      </Box>
+
+      {rows.map((row, index) => (
+        <Box key={index}>
+          <Box
+            sx={{
+              py: 1.8,
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 2,
+              transition: '0.2s',
+            }}
+          >
+            {/* LEFT */}
+            <Box flex={1}>
+              {/* Description */}
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  lineHeight: 1.5,
+                  letterSpacing: 0.1,
+                }}
+              >
+                {row.description}
+              </Typography>
+
+              {/* Bottom Info */}
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                flexWrap="wrap"
+                sx={{ mt: 1.2 }}
+              >
+                <Chip
+                  label={row.code}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    bgcolor: '#EEF2FF',
+                    color: '#4338CA',
+                    borderRadius: '6px',
+                  }}
+                />
+
+                <Box
+                  sx={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: '50%',
+                    bgcolor: '#CBD5E1',
+                  }}
+                />
+
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: '#64748B',
+                    fontWeight: 500,
+                  }}
+                >
+                  Qty :
+                  <Box
+                    component="span"
+                    sx={{
+                      color: '#111827',
+                      fontWeight: 700,
+                      ml: 0.5,
+                    }}
+                  >
+                    {row.qty}
+                  </Box>
+                </Typography>
+
+                <Box
+                  sx={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: '50%',
+                    bgcolor: '#CBD5E1',
+                  }}
+                />
+
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: '#64748B',
+                    fontWeight: 500,
+                  }}
+                >
+                  Unit :
+                  <Box
+                    component="span"
+                    sx={{
+                      color: '#2563EB',
+                      fontWeight: 700,
+                      ml: 0.5,
+                    }}
+                  >
+                    {row.unit}
+                  </Box>
+                </Typography>
+              </Stack>
+            </Box>
           </Box>
 
-          {/* Description */}
-          <Typography
-            sx={{
-              fontSize: '13px',
-              fontWeight: 500,
-              color: '#111827',
-              lineHeight: 1.4,
-              pr: 2,
-            }}
-          >
-            {row.description}
-          </Typography>
-
-          {/* Qty */}
-          <Typography
-            sx={{
-              fontSize: '13px',
-              fontWeight: 500,
-              color: '#111827',
-            }}
-          >
-            {row.qty}
-          </Typography>
-
-          {/* Unit */}
-          <Typography
-            sx={{
-              fontSize: '13px',
-              fontWeight: 500,
-              color: '#4B5563',
-            }}
-          >
-            {row.unit}
-          </Typography>
+          {index !== rows.length - 1 && <Divider sx={{ borderColor: '#F1F5F9' }} />}
         </Box>
       ))}
     </Paper>

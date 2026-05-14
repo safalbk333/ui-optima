@@ -3,7 +3,6 @@
 import { Box, Chip, Paper, Stack, Avatar, Button, Divider, Typography } from '@mui/material';
 
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import LocalShippingRoundedIcon from '@mui/icons-material/LocalShippingRounded';
 import React from 'react';
 import ReceiptLongRoundedIcon from '@mui/icons-material/ReceiptLongRounded';
@@ -22,24 +21,9 @@ export default function QuoteSummaryCard() {
         position: 'relative',
         borderRadius: 1,
         border: '1px solid rgba(148,163,184,0.16)',
-        backdropFilter: 'blur(16px)',
         color: '#0F172A',
       }}
     >
-      {/* Glow */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: -80,
-          right: -60,
-          width: 180,
-          height: 180,
-          borderRadius: '50%',
-          background: 'rgba(96,165,250,0.28)',
-          filter: 'blur(55px)',
-        }}
-      />
-
       {/* Header */}
       <Box
         sx={{
@@ -77,25 +61,6 @@ export default function QuoteSummaryCard() {
             >
               QUOTATION SUMMARY
             </Typography>
-
-            <Stack direction="row" spacing={0.7} alignItems="center" mt={1}>
-              <CheckCircleRoundedIcon
-                sx={{
-                  fontSize: 15,
-                  color: '#22C55E',
-                }}
-              />
-
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  color: '#475569',
-                  fontWeight: 500,
-                }}
-              >
-                Competitive pricing submitted
-              </Typography>
-            </Stack>
           </Box>
 
           <Avatar
@@ -106,9 +71,7 @@ export default function QuoteSummaryCard() {
               borderRadius: '16px',
               background: 'rgba(255,255,255,0.75)',
               border: '1px solid rgba(148,163,184,0.16)',
-              backdropFilter: 'blur(12px)',
               color: '#2563EB',
-              boxShadow: '0 4px 18px rgba(37,99,235,0.08)',
             }}
           >
             <ReceiptLongRoundedIcon sx={{ fontSize: 22 }} />
@@ -156,10 +119,9 @@ export default function QuoteSummaryCard() {
             <Typography
               sx={{
                 mt: 0.4,
-                fontSize: 17,
+                fontSize: 16,
                 fontWeight: 600,
-                color: '#0F172A',
-                letterSpacing: -0.5,
+                letterSpacing: 0.5,
               }}
             >
               $26,295.90
@@ -196,7 +158,7 @@ export default function QuoteSummaryCard() {
           onClick={() => {
             router.push(paths.quotations.submit);
           }}
-          variant="contained"
+          variant="outlined"
           color="primary"
           endIcon={<ArrowUpwardRoundedIcon sx={{ fontSize: 18 }} />}
           sx={{

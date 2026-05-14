@@ -1,4 +1,4 @@
-import { Box, Chip, Paper, Button, Divider, IconButton, Typography } from '@mui/material';
+import { Box, Paper, Button, Divider, IconButton, Typography } from '@mui/material';
 
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -32,16 +32,16 @@ function DocumentsSection() {
     <Paper
       elevation={0}
       sx={{
-        border: '1px solid #dcdfe5',
-        borderRadius: 1,
+        border: '1px solid #e5e7eb',
+        borderRadius: 0.5,
         overflow: 'hidden',
       }}
     >
       {/* Header */}
       <Box
         sx={{
-          px: 2,
-          py: 1.5,
+          px: 1.5,
+          py: 1,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -51,8 +51,9 @@ function DocumentsSection() {
         <Box>
           <Typography
             sx={{
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: 700,
+              lineHeight: 1.2,
             }}
           >
             Documents
@@ -60,12 +61,12 @@ function DocumentsSection() {
 
           <Typography
             sx={{
-              fontSize: '11px',
+              fontSize: '9.5px',
               color: '#777',
-              mt: 0.3,
+              mt: 0.2,
             }}
           >
-            Upload and manage supporting files
+            Upload and manage files
           </Typography>
         </Box>
       </Box>
@@ -73,41 +74,41 @@ function DocumentsSection() {
       {/* Upload Box */}
       <Box
         sx={{
-          m: 2,
-          border: '1.5px dashed #c7cfdb',
-          borderRadius: '10px',
-          py: 3,
-          px: 2,
+          m: 1.5,
+          border: '1px dashed #cfd6e2',
+          borderRadius: '8px',
+          py: 2,
+          px: 1.5,
           textAlign: 'center',
           bgcolor: '#fafbfc',
         }}
       >
         <UploadFileOutlinedIcon
           sx={{
-            fontSize: 34,
+            fontSize: 24,
             color: '#7b8aa0',
-            mb: 1,
+            mb: 0.5,
           }}
         />
 
         <Typography
           sx={{
-            fontSize: '13px',
+            fontSize: '11px',
             fontWeight: 600,
-            mb: 0.5,
+            mb: 0.3,
           }}
         >
-          Drag & Drop files here
+          Drag & Drop files
         </Typography>
 
         <Typography
           sx={{
-            fontSize: '11px',
+            fontSize: '9px',
             color: '#7b7b7b',
-            mb: 1.5,
+            mb: 1,
           }}
         >
-          Supports PDF, DOCX, XLSX, PNG up to 10MB
+          PDF, DOCX, XLSX, PNG up to 10MB
         </Typography>
 
         <Button
@@ -115,29 +116,20 @@ function DocumentsSection() {
           size="small"
           sx={{
             textTransform: 'none',
-            fontSize: '11px',
-            borderRadius: '8px',
+            fontSize: '10px',
+            minHeight: 28,
+            px: 1.5,
+            borderRadius: '7px',
           }}
         >
-          Browse Files
+          Browse
         </Button>
       </Box>
 
       <Divider />
 
       {/* Existing Documents */}
-      <Box sx={{ p: 2 }}>
-        <Typography
-          sx={{
-            fontSize: '12px',
-            fontWeight: 700,
-            mb: 1.5,
-            color: '#555',
-          }}
-        >
-          Existing Documents
-        </Typography>
-
+      <Box sx={{ p: 1.5 }}>
         {documents.map((doc, index) => (
           <Box
             key={index}
@@ -145,87 +137,94 @@ function DocumentsSection() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              border: '1px solid #e6e9ef',
-              borderRadius: '10px',
-              px: 1.5,
-              py: 1.2,
-              mb: 1.2,
-              bgcolor: '#fff',
+              border: '1px solid #e7eaf0',
+              borderRadius: '8px',
+              px: 1.2,
+              py: 0.9,
+              mb: 0.8,
+              transition: 'all .2s ease',
+
+              '&:hover': {
+                borderColor: '#d9dee7',
+              },
             }}
           >
             {/* Left */}
-            <Box display="flex" alignItems="center" gap={1.2}>
+            <Box display="flex" alignItems="center" gap={1} minWidth={0}>
               <Box
                 sx={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: '8px',
+                  width: 30,
+                  height: 30,
+                  borderRadius: '7px',
                   bgcolor: '#eef3ff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flexShrink: 0,
                 }}
               >
                 <DescriptionOutlinedIcon
                   sx={{
-                    fontSize: 20,
+                    fontSize: 16,
                     color: '#4a67d6',
                   }}
                 />
               </Box>
 
-              <Box>
+              <Box minWidth={0}>
                 <Typography
+                  noWrap
                   sx={{
                     fontSize: '12px',
                     fontWeight: 600,
+                    lineHeight: 1.2,
                   }}
                 >
                   {doc.name}
                 </Typography>
 
-                <Box display="flex" alignItems="center" gap={0.8} mt={0.3}>
+                <Box display="flex" alignItems="center" gap={0.6} mt={0.2} flexWrap="wrap">
                   <Typography
                     sx={{
-                      fontSize: '10px',
+                      fontSize: '8.5px',
                       color: '#777',
                     }}
                   >
                     {doc.size}
                   </Typography>
 
-                  <Chip
-                    label={doc.type}
-                    size="small"
-                    sx={{
-                      height: 18,
-                      fontSize: '9px',
-                      bgcolor: '#f3f5f9',
-                    }}
-                  />
-
                   <Typography
                     sx={{
-                      fontSize: '10px',
+                      fontSize: '8.5px',
                       color: '#777',
                     }}
                   >
-                    Uploaded by {doc.uploadedBy}
+                    {doc.uploadedBy}
                   </Typography>
                 </Box>
               </Box>
             </Box>
 
             {/* Right */}
-            <Box display="flex" alignItems="center">
-              <IconButton size="small">
-                <DownloadOutlinedIcon sx={{ fontSize: 18 }} />
+            <Box display="flex" alignItems="center" ml={1}>
+              <IconButton
+                size="small"
+                sx={{
+                  p: 0.5,
+                }}
+              >
+                <DownloadOutlinedIcon sx={{ fontSize: 15 }} />
               </IconButton>
 
-              <IconButton size="small">
+              <IconButton
+                size="small"
+                sx={{
+                  p: 0.5,
+                }}
+              >
                 <DeleteOutlineOutlinedIcon
                   sx={{
-                    fontSize: 18,
+                    fontSize: 15,
                     color: '#d9534f',
                   }}
                 />

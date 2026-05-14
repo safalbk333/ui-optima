@@ -214,6 +214,7 @@ const ItemTexts = styled('span', { shouldForwardProp })<StyledState>(() => ({
 const ItemTitle = styled('span', { shouldForwardProp })<StyledState>(({ theme }) => ({
   ...navItemStyles.title(theme),
   ...theme.typography.body2,
+  fontSize: 'var(--nav-item-title-font-size)',
   fontWeight: theme.typography.fontWeightMedium,
   variants: [
     { props: { active: true }, style: { fontWeight: theme.typography.fontWeightSemiBold } },
