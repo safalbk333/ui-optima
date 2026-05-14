@@ -1,20 +1,8 @@
 'use client';
 
-import {
-  Box,
-  Chip,
-  Paper,
-  Stack,
-  Button,
-  Divider,
-  TextField,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import { Box, Chip, Paper, Stack, Button, Divider, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 type LineItem = {
@@ -43,363 +31,293 @@ export default function RFQPricingModern() {
     },
   ]);
 
-  const updateItem = (id: number, field: keyof LineItem, value: string | number) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, itemId: number) => {
+    const files = Array.from(e.target.files || []).map((file) => file.name);
+
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id
+        item.id === itemId
           ? {
               ...item,
-              [field]: value,
+              attachments: [...item.attachments, ...files],
             }
           : item
       )
     );
   };
 
-  const addItem = () => {
-    setItems((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        title: '',
-        sku: '',
-        price: 0,
-        attachments: [],
-      },
-    ]);
-  };
-
-  const removeItem = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
   return (
     <Box>
       {/* HEADER */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 1.5,
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: '#0F172A',
+            }}
+          >
+            Pricing & Commercials
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 10.5,
+              color: '#64748B',
+            }}
+          >
+            Manage vendor pricing and supporting documents
+          </Typography>
+        </Box>
+      </Box>
+
+      <Divider sx={{ my: 2 }} />
+
+      {/* MAIN CONTAINER */}
       <Paper
         elevation={0}
         sx={{
-          borderRadius: 0,
-          borderBottom: '1px solid #E2E8F0',
-          p: 2,
-          mb: 2,
+          overflow: 'hidden',
+          borderRadius: 2,
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 2,
-          }}
-        >
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: '#0F172A',
-                }}
-              >
-                Pricing & Commercials
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: '#64748B',
-                  mt: 0.3,
-                }}
-              >
-                Manage vendor pricing, SKU references and attachments
-              </Typography>
-            </Box>
-          </Box>
-
-          <Button
-            variant="contained"
-            disableElevation
-            color="primary"
-            startIcon={<AddRoundedIcon />}
-            onClick={addItem}
-            sx={{
-              borderRadius: 3,
-              textTransform: 'none',
-              fontWeight: 700,
-              px: 2,
-              minHeight: 40,
-              boxShadow: 'none',
-            }}
-          >
-            Add Line Item
-          </Button>
-        </Box>
-      </Paper>
-
-      {/* ITEMS */}
-      <Stack spacing={0}>
         {items.map((item, index) => (
-          <Paper
-            key={item.id}
-            elevation={0}
-            sx={{
-              borderRadius: 1,
-              border: '1px solid #E2E8F0',
-              overflow: 'hidden',
-              transition: 'all .2s ease',
-              mb: 2,
-              '&:hover': {
-                borderColor: '#CBD5E1',
-              },
-            }}
-          >
-            {/* TOP BAR */}
+          <Box key={item.id}>
             <Box
               sx={{
-                px: 2,
-                py: 1.2,
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                borderBottom: '1px solid #EEF2F7',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Chip
-                  label={`ITEM ${index + 1}`}
-                  size="small"
-                  sx={{
-                    height: 22,
-                    fontWeight: 700,
-                    fontSize: 10,
-                    borderRadius: 2,
-                    bgcolor: '#EEF2FF',
-                    color: '#4338CA',
-                  }}
-                />
-
-                <Typography
-                  sx={{
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: '#334155',
-                  }}
-                >
-                  Commercial Details
-                </Typography>
-              </Box>
-
-              <IconButton
-                size="small"
-                onClick={() => removeItem(item.id)}
-                sx={{
-                  bgcolor: '#FEF2F2',
-                  borderRadius: 2,
-                  '&:hover': {
-                    bgcolor: '#FEE2E2',
-                  },
-                }}
-              >
-                <DeleteOutlineRoundedIcon
-                  sx={{
-                    color: '#DC2626',
-                    fontSize: 18,
-                  }}
-                />
-              </IconButton>
-            </Box>
-
-            {/* BODY */}
-            <Box
-              sx={{
-                p: 2,
-                display: 'grid',
-                gridTemplateColumns: '1.5fr 180px 180px',
+                flexDirection: {
+                  xs: 'column',
+                  md: 'row',
+                },
                 gap: 2,
+                py: 1.5,
               }}
             >
-              {/* DESCRIPTION */}
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#64748B',
-                    mb: 0.8,
-                  }}
-                >
-                  Item Description
-                </Typography>
-
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Enter product or service name"
-                  value={item.title}
-                  onChange={(e) => updateItem(item.id, 'title', e.target.value)}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
+              {/* LEFT */}
+              <Box flex={1}>
+                {/* CHIP */}
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.3 }}>
+                  <Chip
+                    label={`ITEM ${index + 1}`}
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: 9,
+                      fontWeight: 700,
+                      bgcolor: '#EEF2FF',
+                      color: '#4338CA',
                       borderRadius: 1,
-                      bgcolor: '#FCFCFD',
-                    },
-                    '& .MuiInputBase-input': {
-                      fontSize: 14,
-                      py: 1.2,
-                    },
-                  }}
-                />
-              </Box>
+                    }}
+                  />
+                </Stack>
 
-              {/* SKU */}
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#64748B',
-                    mb: 0.8,
+                {/* DESCRIPTION */}
+                <Box sx={{ mb: 1.2 }}>
+                  <Typography sx={labelStyle}>Item Description</Typography>
+
+                  <TextField
+                    fullWidth
+                    size="small"
+                    value={item.title}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    sx={fieldStyle}
+                  />
+                </Box>
+
+                {/* SKU + PRICE */}
+                <Stack
+                  direction={{
+                    xs: 'column',
+                    sm: 'row',
                   }}
+                  spacing={1.2}
                 >
-                  SKU / Ref
-                </Typography>
+                  <Box flex={1}>
+                    <Typography sx={labelStyle}>SKU / REF</Typography>
 
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="SKU"
-                  value={item.sku}
-                  onChange={(e) => updateItem(item.id, 'sku', e.target.value)}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                      bgcolor: '#FCFCFD',
-                    },
-                    '& .MuiInputBase-input': {
-                      fontSize: 14,
-                      py: 1.2,
-                    },
-                  }}
-                />
-              </Box>
-
-              {/* PRICE */}
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#64748B',
-                    mb: 0.8,
-                  }}
-                >
-                  Unit Price
-                </Typography>
-
-                <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  placeholder="$0.00"
-                  value={item.price}
-                  onChange={(e) => updateItem(item.id, 'price', Number(e.target.value))}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                      bgcolor: '#FCFCFD',
-                    },
-                    '& .MuiInputBase-input': {
-                      fontSize: 14,
-                      py: 1.2,
-                      fontWeight: 600,
-                    },
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <Divider />
-
-            {/* ATTACHMENTS */}
-            <Box
-              sx={{
-                p: 2,
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-                gap: 2,
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#64748B',
-                    mb: 1,
-                  }}
-                >
-                  Attachments
-                </Typography>
-
-                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-                  {item.attachments.map((file) => (
-                    <Paper
-                      key={file}
-                      elevation={0}
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        px: 1.2,
-                        py: 0.8,
-                        borderRadius: 3,
-                        border: '1px solid #E2E8F0',
-                        bgcolor: '#FFFFFF',
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={item.sku}
+                      InputProps={{
+                        readOnly: true,
                       }}
-                    >
-                      <DescriptionOutlinedIcon
-                        sx={{
-                          fontSize: 16,
-                          color: '#6366F1',
-                        }}
-                      />
+                      sx={fieldStyle}
+                    />
+                  </Box>
 
-                      <Typography
-                        sx={{
-                          fontSize: 12,
-                          color: '#334155',
-                          fontWeight: 500,
-                        }}
-                      >
-                        {file}
-                      </Typography>
-                    </Paper>
-                  ))}
+                  <Box flex={1}>
+                    <Typography sx={labelStyle}>Unit Price</Typography>
+
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={`$ ${item.price}`}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      sx={{
+                        ...fieldStyle,
+                        '& .MuiInputBase-input': {
+                          fontWeight: 600,
+                        },
+                      }}
+                    />
+                  </Box>
                 </Stack>
               </Box>
 
-              <Button
-                component="label"
-                variant="outlined"
+              {/* RIGHT */}
+              <Box
                 sx={{
-                  borderRadius: 3,
-                  textTransform: 'none',
-                  minWidth: 140,
-                  height: 38,
-                  fontWeight: 600,
-                  borderColor: '#CBD5E1',
-                  color: '#334155',
-                  bgcolor: '#FFFFFF',
+                  width: {
+                    xs: '100%',
+                    md: 220,
+                  },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderLeft: {
+                    xs: 'none',
+                    md: '1px solid #F1F5F9',
+                  },
+                  pl: {
+                    xs: 0,
+                    md: 1.5,
+                  },
                 }}
               >
-                Upload Files
-                <input hidden type="file" multiple />
-              </Button>
+                <Typography
+                  sx={{
+                    fontSize: 9,
+                    color: '#94A3B8',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: 0.4,
+                    mb: 0.8,
+                  }}
+                >
+                  Upload Documents
+                </Typography>
+
+                <Button
+                  component="label"
+                  variant="outlined"
+                  fullWidth
+                  sx={{
+                    height: 34,
+                    borderRadius: 1.3,
+                    textTransform: 'none',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    borderColor: '#CBD5E1',
+                    color: '#334155',
+                    bgcolor: '#fff',
+                  }}
+                >
+                  Add Attachments
+                  <input
+                    hidden
+                    type="file"
+                    multiple
+                    onChange={(e) => handleFileUpload(e, item.id)}
+                  />
+                </Button>
+
+                <Typography
+                  sx={{
+                    mt: 0.7,
+                    fontSize: 9,
+                    color: '#94A3B8',
+                    lineHeight: 1.4,
+                  }}
+                >
+                  PDF, XLSX, DOC up to 10MB
+                </Typography>
+
+                {/* UPLOADED FILES */}
+                {item.attachments.length > 0 && (
+                  <Box sx={{ mt: 1.4 }}>
+                    <Stack spacing={0.8}>
+                      {item.attachments.map((file, fileIndex) => (
+                        <Paper
+                          key={fileIndex}
+                          elevation={0}
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.7,
+                            px: 1,
+                            py: 0.7,
+                            borderRadius: 1.2,
+                            border: '1px solid #E2E8F0',
+                            bgcolor: '#fff',
+                          }}
+                        >
+                          <DescriptionOutlinedIcon
+                            sx={{
+                              fontSize: 14,
+                              color: '#6366F1',
+                            }}
+                          />
+
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              color: '#334155',
+                              fontWeight: 500,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {file}
+                          </Typography>
+                        </Paper>
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Paper>
+
+            {index !== items.length - 1 && <Divider />}
+          </Box>
         ))}
-      </Stack>
+      </Paper>
     </Box>
   );
 }
+
+const labelStyle = {
+  fontSize: 8,
+  color: '#94A3B8',
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: 0.4,
+  mb: 0.5,
+};
+
+const fieldStyle = {
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 1.3,
+    bgcolor: '#fff',
+    minHeight: 34,
+  },
+  '& .MuiInputBase-input': {
+    fontSize: 12,
+    py: 0.9,
+    px: 1.2,
+    color: '#0F172A',
+  },
+};

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Grid, Paper, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Grid, Paper, Divider, MenuItem, TextField, Typography } from '@mui/material';
 
 import LineItemPricing from './Table';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
@@ -9,23 +9,24 @@ import React from 'react';
 
 function QuotationTerms() {
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 2, // reduced padding
-        borderRadius: 1,
-        border: '1px solid #e5e7eb',
-      }}
-    >
+    <Paper elevation={0}>
       <Typography
         sx={{
           fontSize: 13, // reduced title size
-          fontWeight: 700,
-          mb: 2,
-          color: '#1f2937',
+          fontWeight: 600,
         }}
       >
         Quotation Validity & Terms
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: 11, // reduced title size
+          mb: 2,
+          color: 'text.secondary',
+        }}
+      >
+        Specify the validity period of your quote, payment terms, and any additional comments for
+        the buyer.
       </Typography>
 
       <Grid container spacing={1.5}>
@@ -33,7 +34,7 @@ function QuotationTerms() {
           <Typography
             sx={{
               fontSize: 12,
-              fontWeight: 600,
+              fontWeight: 500,
               mb: 0.5,
               color: '#6b7280',
             }}
@@ -60,7 +61,7 @@ function QuotationTerms() {
           <Typography
             sx={{
               fontSize: 12,
-              fontWeight: 600,
+              fontWeight: 500,
               mb: 0.5,
               color: '#6b7280',
             }}
@@ -87,17 +88,6 @@ function QuotationTerms() {
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <Typography
-            sx={{
-              fontSize: 12,
-              fontWeight: 600,
-              mb: 0.5,
-              color: '#6b7280',
-            }}
-          >
-            Vendor Comments
-          </Typography>
-
           <TextField
             fullWidth
             multiline
@@ -147,6 +137,7 @@ function Index() {
           }}
         >
           <LineItemPricing />
+          <Divider sx={{ my: 2 }} />
           <QuotationTerms />
         </Paper>
 
