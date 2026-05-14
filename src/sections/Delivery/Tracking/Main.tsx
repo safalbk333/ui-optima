@@ -114,10 +114,9 @@ function PremiumShipmentTracking() {
               <Box>
                 <Typography
                   sx={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: '#111827',
-                    letterSpacing: -0.4,
+                    fontSize: 13,
+                    fontWeight: 600,
+                    letterSpacing: 0.4,
                   }}
                 >
                   Shipments
@@ -161,8 +160,8 @@ function PremiumShipmentTracking() {
                   borderRadius: 2.5,
                   bgcolor: 'primary.main',
                   textTransform: 'none',
-                  fontSize: 10.5,
-                  fontWeight: 700,
+                  fontSize: 11,
+                  fontWeight: 600,
                   boxShadow: 'none',
                 }}
               >
@@ -179,8 +178,8 @@ function PremiumShipmentTracking() {
                   borderColor: '#E2E8F0',
                   color: '#64748B',
                   textTransform: 'none',
-                  fontSize: 10.5,
-                  fontWeight: 700,
+                  fontSize: 11,
+                  fontWeight: 600,
                 }}
               >
                 Delivered
@@ -417,8 +416,9 @@ function PremiumShipmentTracking() {
                 <Box>
                   <Typography
                     sx={{
-                      fontSize: 16,
-                      fontWeight: 700,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      letterSpacing: 0.4,
                     }}
                   >
                     Tracking Activity

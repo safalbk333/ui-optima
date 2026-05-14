@@ -29,6 +29,9 @@ export default function CompactModernTable() {
       elevation={0}
       sx={{
         overflow: 'hidden',
+        // bgcolor: '#FBFCFE',
+        // px: 0.5,
+        borderRadius: 0,
       }}
     >
       {/* Header */}
@@ -49,7 +52,7 @@ export default function CompactModernTable() {
         </Typography>
         <Typography
           sx={{
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 500,
             color: 'text.secondary',
           }}
@@ -78,6 +81,7 @@ export default function CompactModernTable() {
                   fontSize: 13,
                   fontWeight: 600,
                   lineHeight: 1.5,
+                  letterSpacing: 0.1,
                 }}
               >
                 {row.description}
@@ -115,7 +119,7 @@ export default function CompactModernTable() {
 
                 <Typography
                   sx={{
-                    fontSize: 11,
+                    fontSize: 13,
                     color: '#64748B',
                     fontWeight: 500,
                   }}
@@ -144,7 +148,7 @@ export default function CompactModernTable() {
 
                 <Typography
                   sx={{
-                    fontSize: 11,
+                    fontSize: 13,
                     color: '#64748B',
                     fontWeight: 500,
                   }}
