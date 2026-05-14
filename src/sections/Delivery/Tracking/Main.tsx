@@ -1,14 +1,14 @@
 import {
-  Avatar,
   Box,
-  Button,
   Chip,
-  Divider,
-  IconButton,
-  LinearProgress,
   Paper,
   Stack,
+  Avatar,
+  Button,
+  Divider,
+  IconButton,
   Typography,
+  LinearProgress,
 } from '@mui/material';
 
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';

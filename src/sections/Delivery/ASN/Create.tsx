@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import { Box, Paper, Button, TextField, Typography, InputAdornment } from '@mui/material';
 
 import DocumentsSection from './Document';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

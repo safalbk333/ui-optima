@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Breadcrumbs, Typography } from '@mui/material';
+import { Box, Typography, Breadcrumbs } from '@mui/material';
 
 import React from 'react';
 import { styled } from '@mui/system';
@@ -62,11 +62,7 @@ interface PremiumBreadcrumbsProps {
   action?: React.ReactNode;
 }
 
-const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
-  title,
-  paths = [],
-  action,
-}) => {
+const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({ title, paths = [], action }) => {
   const router = useRouter();
 
   return (
@@ -74,11 +70,7 @@ const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
       {/* Top row */}
       <TopRow>
         <TitleWrapper>
-          <Typography
-            fontSize={15}
-            fontWeight={600}
-            color="primary.main"
-          >
+          <Typography fontSize={15} fontWeight={600} color="primary.main">
             {title}
           </Typography>
         </TitleWrapper>
@@ -88,15 +80,9 @@ const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
 
       {/* Breadcrumbs */}
       <Box mt={0.2}>
-        <Breadcrumbs
-          separator={<Separator>/</Separator>}
-          aria-label="breadcrumb"
-        >
+        <Breadcrumbs separator={<Separator>/</Separator>} aria-label="breadcrumb">
           {paths.map((path, idx) => (
-            <BreadcrumbLink
-              key={idx}
-              onClick={() => router.push(path.href)}
-            >
+            <BreadcrumbLink key={idx} onClick={() => router.push(path.href)}>
               {path.label}
             </BreadcrumbLink>
           ))}

@@ -1,4 +1,4 @@
-import type { CSSObject, Theme } from '@mui/material/styles';
+import type { Theme, CSSObject } from '@mui/material/styles';
 
 import type { SettingsState } from 'src/components/settings';
 import { bulletColor } from 'src/components/nav-section';
