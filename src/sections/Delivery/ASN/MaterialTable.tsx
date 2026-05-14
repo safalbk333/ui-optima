@@ -1,17 +1,5 @@
-import {
-  Box,
-  Paper,
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  TextField,
-  Typography,
-  TableContainer,
-} from '@mui/material';
+import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
 
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import React from 'react';
 
 const rows = [
@@ -20,24 +8,18 @@ const rows = [
     description: 'Precision Ball Bearings X200',
     ordered: 500,
     shipping: 500,
-    remaining: 0,
-    delivery: '10/15/2024',
   },
   {
     code: 'MAT-99025',
     description: 'Stainless Housing Unit - Large',
     ordered: 200,
     shipping: 150,
-    remaining: 50,
-    delivery: '10/15/2024',
   },
   {
     code: 'MAT-10220',
     description: 'Gasket Sealant Ultra-Bond',
     ordered: 100,
     shipping: 50,
-    remaining: 50,
-    delivery: '10/18/2024',
   },
 ];
 
@@ -46,174 +28,144 @@ function MaterialLineItems() {
     <Paper
       elevation={0}
       sx={{
-        border: '1px solid #d8d8de',
-        borderRadius: '8px',
+        borderRadius: 1,
         overflow: 'hidden',
+        bgcolor: '#fff',
       }}
     >
       {/* Header */}
       <Box
         sx={{
           px: 2,
-          py: 1.2,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #dcdce3',
+          py: 1.5,
+          borderBottom: '1px solid #F1F5F9',
         }}
       >
         <Typography
           sx={{
-            fontSize: '13px',
+            fontSize: 14,
             fontWeight: 700,
+            color: '#111827',
           }}
         >
           Material Line Items
         </Typography>
+
+        <Chip
+          label="Expected Delivery • 15 Oct 2024"
+          size="small"
+          sx={{
+            mt: 1,
+            height: 24,
+            borderRadius: 2,
+            fontSize: 10.5,
+            fontWeight: 600,
+            bgcolor: '#F8FAFC',
+            color: '#475569',
+            border: '1px solid #E2E8F0',
+          }}
+        />
       </Box>
 
-      {/* Table */}
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow sx={{ bgcolor: '#d8d8e2' }}>
-              {[
-                'Material Code',
-                'Description',
-                'Ordered',
-                'Shipping Qty',
-                'Remaining',
-                'Exp. Delivery',
-              ].map((head) => (
-                <TableCell
-                  key={head}
-                  sx={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {head}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell
-                  sx={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {row.code}
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    fontSize: '12px',
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {row.description}
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {row.ordered}
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  <TextField
-                    value={row.shipping}
-                    size="small"
-                    sx={{
-                      width: 80,
-                      '& .MuiOutlinedInput-root': {
-                        fontSize: '12px',
-                        alignItems: 'center',
-                        fontWeight: 400,
-                      },
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#555',
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {row.remaining}
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    py: 1,
-                    px: 1.5,
-                  }}
-                >
-                  {row.delivery}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Footer */}
-      <Box
-        sx={{
-          px: 2,
-          py: 1,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          borderTop: '1px solid #e1e1e8',
-        }}
-      >
-        <Box
-          display="flex"
-          alignItems="center"
-          gap={0.5}
-          sx={{
-            color: '#3366cc',
-            cursor: 'pointer',
-          }}
-        >
-          <AddCircleOutlineIcon sx={{ fontSize: 14 }} />
-
-          <Typography
+      {/* Items */}
+      <Stack spacing={1} sx={{ p: 1.5 }}>
+        {rows.map((item, index) => (
+          <Box
+            key={index}
             sx={{
-              fontSize: '11px',
-              fontWeight: 700,
+              border: '1px solid #EEF2F7',
+              borderRadius: 1,
+              p: 1.5,
+              transition: 'all .2s ease',
+              '&:hover': {
+                borderColor: '#D7DEE7',
+              },
             }}
           >
-            Add Supplemental Item
-          </Typography>
-        </Box>
-      </Box>
+            {/* Title */}
+            <Typography
+              sx={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: '#111827',
+                lineHeight: 1.4,
+              }}
+            >
+              {item.description}
+            </Typography>
+
+            {/* Code */}
+            <Typography
+              sx={{
+                fontSize: 11,
+                color: '#64748B',
+                mt: 0.4,
+              }}
+            >
+              {item.code}
+            </Typography>
+
+            {/* Stats */}
+            <Stack
+              direction="row"
+              spacing={3}
+              sx={{
+                mt: 1.3,
+              }}
+            >
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 9,
+                    color: '#94A3B8',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  Ordered Qty
+                </Typography>
+
+                <Typography
+                  sx={{
+                    mt: 0.3,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: '#0F172A',
+                  }}
+                >
+                  {item.ordered}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 9,
+                    color: '#94A3B8',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  Shipping Qty
+                </Typography>
+
+                <Typography
+                  sx={{
+                    mt: 0.3,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: item.shipping === item.ordered ? '#16A34A' : '#2563EB',
+                  }}
+                >
+                  {item.shipping}
+                </Typography>
+              </Box>
+            </Stack>
+          </Box>
+        ))}
+      </Stack>
     </Paper>
   );
 }

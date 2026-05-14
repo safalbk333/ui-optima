@@ -1,9 +1,10 @@
 'use client';
 
+import { Box, Breadcrumbs, Typography } from '@mui/material';
+
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Box, Typography, Breadcrumbs } from '@mui/material';
 import { styled } from '@mui/system';
+import { useRouter } from 'next/navigation';
 
 // Main container
 const BreadcrumbContainer = styled(Box)({
@@ -74,7 +75,7 @@ const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
       <TopRow>
         <TitleWrapper>
           <Typography
-            fontSize={17}
+            fontSize={15}
             fontWeight={600}
             color="primary.main"
           >

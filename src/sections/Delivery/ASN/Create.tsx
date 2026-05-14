@@ -1,22 +1,38 @@
-import { Box, Paper, TextField, Typography, InputAdornment } from '@mui/material';
+'use client';
+
+import { Box, Button, InputAdornment, Paper, TextField, Typography } from '@mui/material';
 
 import DocumentsSection from './Document';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MaterialLineItems from './MaterialTable';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 function Create() {
+  const router = useRouter();
+
   return (
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Create ASN"
+          title="Advance Shipment Notice. (ASN)"
           paths={[
             { label: 'Home', href: '/dashboard' },
             { label: 'Delivery', href: '/delivery' },
             { label: 'Create ASN', href: '/delivery/asn' },
           ]}
+          action={
+            <Button
+              sx={{ borderRadius: 0.5, fontWeight: 600 }}
+              variant="outlined"
+              onClick={() => {
+                router.push('/delivery/tracking');
+              }}
+            >
+              Shipment Tracking
+            </Button>
+          }
         />
       </Box>
 
@@ -30,59 +46,56 @@ function Create() {
             flex: 2.5,
             borderRadius: 1,
             overflow: 'auto',
-            mb: 2,
           }}
         >
           <Paper
             elevation={0}
             sx={{
-              border: '1px solid #d9d9df',
-              borderRadius: '10px',
               overflow: 'hidden',
-              mb: 2,
+              borderRadius: 0,
             }}
           >
             {/* Header */}
             <Box
               sx={{
-                px: 2,
-                py: 2,
+                px: 1.5,
+                py: 1.1,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                borderBottom: '1px solid #e4e4e7',
+                borderBottom: '1px solid #F1F5F9',
               }}
             >
-              <Box display="flex" alignItems="center" gap={1}>
-                <Typography
-                  sx={{
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    color: '#2f2f2f',
-                  }}
-                >
-                  Order Information
-                </Typography>
-              </Box>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: '#2f2f2f',
+                  lineHeight: 1,
+                }}
+              >
+                Order Information
+              </Typography>
             </Box>
 
             {/* Form Section */}
             <Box
               sx={{
-                p: 2,
+                p: 1.5,
                 display: 'flex',
-                gap: 3,
+                gap: 1.5,
                 flexWrap: 'wrap',
               }}
             >
-              {/* Left */}
-              <Box flex={1} minWidth="280px">
+              {/* PO Reference */}
+              <Box flex={1} minWidth="240px">
                 <Typography
                   sx={{
-                    fontSize: '13px',
+                    fontSize: '10.5px',
                     fontWeight: 600,
                     color: '#7a7a7a',
-                    mb: 1,
+                    mb: 0.7,
+                    lineHeight: 1,
                   }}
                 >
                   PO Reference Selection
@@ -95,28 +108,51 @@ function Create() {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <KeyboardArrowDownIcon sx={{ color: '#6d6d6d' }} />
+                        <KeyboardArrowDownIcon
+                          sx={{
+                            color: '#6d6d6d',
+                            fontSize: 15,
+                          }}
+                        />
                       </InputAdornment>
                     ),
                     readOnly: true,
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
+                      borderRadius: '7px',
                       fontWeight: 500,
                       fontSize: '10px',
-                      borderRadius: '6px',
+                      height: 34,
+                      px: 0.2,
+                      bgcolor: '#fff',
+                    },
+
+                    '& .MuiOutlinedInput-input': {
+                      py: 0.7,
+                      fontSize: '12px',
+                    },
+
+                    '& fieldset': {
+                      borderColor: '#dcdfe4',
+                    },
+
+                    '&:hover fieldset': {
+                      borderColor: '#cfd4dc',
                     },
                   }}
                 />
               </Box>
 
-              {/* Right */}
-              <Box flex={1} minWidth="280px">
+              {/* Shipment Number */}
+              <Box flex={1} minWidth="240px">
                 <Typography
                   sx={{
-                    fontSize: '13px',
+                    fontSize: '10.5px',
                     fontWeight: 600,
-                    mb: 1,
+                    color: '#7a7a7a',
+                    mb: 0.7,
+                    lineHeight: 1,
                   }}
                 >
                   Shipment Number (AUTO)
@@ -131,9 +167,25 @@ function Create() {
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
+                      borderRadius: '7px',
                       fontWeight: 500,
                       fontSize: '10px',
-                      borderRadius: '6px',
+                      height: 34,
+                      px: 0.3,
+                      bgcolor: '#fff',
+                    },
+
+                    '& .MuiOutlinedInput-input': {
+                      py: 0.7,
+                      fontSize: '12px',
+                    },
+
+                    '& fieldset': {
+                      borderColor: '#dcdfe4',
+                    },
+
+                    '&:hover fieldset': {
+                      borderColor: '#cfd4dc',
                     },
                   }}
                 />
@@ -149,6 +201,7 @@ function Create() {
           sx={{
             flex: 1,
             overflow: 'auto',
+            borderRadius: 0,
           }}
         >
           <DocumentsSection />

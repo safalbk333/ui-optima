@@ -197,6 +197,7 @@ function VendorShipmentDetails() {
           ]}
           action={
             <Button
+              sx={{ borderRadius: 0.5 }}
               variant="outlined"
               onClick={() => {
                 router.push('/delivery/asn');
