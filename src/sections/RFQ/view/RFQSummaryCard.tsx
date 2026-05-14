@@ -14,7 +14,7 @@ function RFQHeaderCard() {
       }}
     >
       {/* Top Section */}
-      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
+      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
         <Box>
           <Typography
             sx={{
@@ -43,8 +43,9 @@ function RFQHeaderCard() {
           </Typography>
 
           <Typography
+            color="primary"
             sx={{
-              fontSize: '18px',
+              fontSize: '14px',
               fontWeight: 700,
               lineHeight: 1.25,
               maxWidth: 500,
@@ -54,7 +55,7 @@ function RFQHeaderCard() {
           </Typography>
         </Box>
         <Button
-          sx={{ borderRadius: 0.5 }}
+          sx={{ borderRadius: 0.5, fontWeight: 600 }}
           variant="outlined"
           color="primary"
           size="small"
