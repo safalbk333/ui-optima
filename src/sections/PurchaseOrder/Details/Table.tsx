@@ -1,15 +1,6 @@
+import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
+
 import React from 'react';
-import {
-  Box,
-  Paper,
-  Table,
-  TableRow,
-  TableBody,
-  TableCell,
-  TableHead,
-  Typography,
-  TableContainer,
-} from '@mui/material';
 
 const rows = [
   {
@@ -18,8 +9,8 @@ const rows = [
     desc: '42U Standard Grade, Black Chrome',
     ordered: 2,
     unitPrice: '$2,400.00',
-    tax: '8%',
-    total: '$5,184.00',
+    total: '$4,800.00',
+    status: 'Approved',
   },
   {
     code: 'SW-0042',
@@ -27,8 +18,8 @@ const rows = [
     desc: 'Annual Subscription - Tier 3',
     ordered: 5,
     unitPrice: '$1,200.00',
-    tax: '0%',
     total: '$6,000.00',
+    status: 'Pending',
   },
   {
     code: 'CS-1192',
@@ -36,8 +27,8 @@ const rows = [
     desc: 'On-site technical configuration',
     ordered: 1,
     unitPrice: '$1,216.00',
-    tax: '0%',
     total: '$1,216.00',
+    status: 'Verified',
   },
 ];
 
@@ -45,243 +36,204 @@ const LineItemsTable = () => (
   <Paper
     elevation={0}
     sx={{
-      border: '1px solid #dcdce3',
+      border: '1px solid #e7e7ee',
       borderRadius: 1,
       overflow: 'hidden',
-      width: '100%',
-      mb: 2,
     }}
   >
     {/* Header */}
     <Box
-      display="flex"
-      alignItems="center"
-      px={2}
-      py={1.2}
       sx={{
+        px: 2,
+        py: 1.4,
         borderBottom: '1px solid #ececf2',
+        background: ' #f8f9fa',
       }}
     >
-      <Typography
-        sx={{
-          fontSize: 13,
-          fontWeight: 700,
-          color: '#333',
-        }}
-      >
-        Line Items Detail
-      </Typography>
-    </Box>
-
-    {/* Table */}
-    <TableContainer>
-      <Table size="small">
-        <TableHead>
-          <TableRow
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Box>
+          <Typography
             sx={{
-              backgroundColor: '#f4f4f7',
+              fontSize: 14,
+              fontWeight: 700,
+              color: '#202124',
             }}
           >
-            {['CODE', 'PRODUCT NAME', 'ORDERED', 'UNIT PRICE', 'TAX', 'TOTAL'].map((head) => (
-              <TableCell
-                key={head}
-                sx={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: '#7b7b88',
-                  py: 1,
-                  borderBottom: '1px solid #e4e4ea',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {head}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+            Line Items
+          </Typography>
 
-        <TableBody>
-          {rows.map((row, index) => (
-            <TableRow
-              key={index}
-              hover
-              sx={{
-                '& td': {
-                  borderBottom: '1px solid #f0f0f4',
-                },
-              }}
-            >
-              {/* CODE */}
-              <TableCell
-                sx={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: '#6f6f78',
-                  py: 1,
-                  width: 90,
-                }}
-              >
-                {row.code}
-              </TableCell>
+          <Typography
+            sx={{
+              fontSize: 11,
+              color: '#7b7b88',
+              mt: 0.2,
+            }}
+          >
+            Procurement items included in this purchase order
+          </Typography>
+        </Box>
 
-              {/* PRODUCT */}
-              <TableCell
-                sx={{
-                  py: 1.2,
-                  minWidth: 260,
-                }}
-              >
+        <Box
+          sx={{
+            px: 1.2,
+            py: 0.45,
+            borderRadius: 1.5,
+            background: '#f6f8fcbb',
+            border: '1px solid #d8e2ff',
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 10,
+              fontWeight: 700,
+              color: '#3559d9',
+            }}
+          >
+            {rows.length} ITEMS
+          </Typography>
+        </Box>
+      </Stack>
+    </Box>
+
+    {/* Tiles */}
+    <Box
+      sx={{
+        p: 1.2,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1,
+      }}
+    >
+      {rows.map((row, index) => (
+        <Paper
+          key={index}
+          elevation={0}
+          sx={{
+            border: '1px solid #ececf3',
+            borderRadius: 1,
+            p: 1.4,
+            transition: '0.2s',
+            background: '#fff',
+            cursor: 'pointer',
+
+            '&:hover': {
+              borderColor: '#d7def7',
+              boxShadow: '0 3px 10px rgba(16, 24, 40, 0.05)',
+            },
+          }}
+        >
+          <Stack direction="row" justifyContent="space-between" spacing={1.5}>
+            {/* Left */}
+            <Stack spacing={0.7} flex={1}>
+              <Stack direction="row" alignItems="center" spacing={0.8} flexWrap="wrap">
                 <Typography
                   sx={{
-                    fontSize: 13,
+                    fontSize: 12.5,
                     fontWeight: 700,
-                    color: '#2d2d2d',
-                    lineHeight: 1.2,
+                    color: '#202124',
                   }}
                 >
                   {row.product}
                 </Typography>
 
+                <Chip
+                  label={row.code}
+                  size="small"
+                  sx={{
+                    height: 18,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    background: '#f3f4f7',
+                    color: '#5f6472',
+                  }}
+                />
+              </Stack>
+
+              <Typography
+                sx={{
+                  fontSize: 11.5,
+                  color: '#737887',
+                  lineHeight: 1.4,
+                  mt: -0.2,
+                }}
+              >
+                {row.desc}
+              </Typography>
+
+              <Stack direction="row" spacing={0.8} alignItems="center">
                 <Typography
                   sx={{
-                    fontSize: 12,
-                    color: '#7b7b88',
-                    lineHeight: 1.35,
-                    mt: 0.3,
+                    fontSize: 11,
+                    color: '#8a8f9d',
                   }}
                 >
-                  {row.desc}
+                  Qty Ordered: {row.ordered}
                 </Typography>
-              </TableCell>
+              </Stack>
+            </Stack>
 
-              {/* ORDERED */}
-              <TableCell
-                sx={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: '#444',
-                  py: 1.2,
-                }}
-              >
-                {row.ordered}
-              </TableCell>
+            {/* Right */}
+            <Stack spacing={0.8} alignItems="flex-end" justifyContent="center" minWidth={120}>
+              <Box textAlign="right">
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    color: '#8a8f9d',
+                    mb: 0.2,
+                  }}
+                >
+                  Unit Price
+                </Typography>
 
-              {/* UNIT PRICE */}
-              <TableCell
-                sx={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: '#444',
-                  py: 1.2,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {row.unitPrice}
-              </TableCell>
+                <Typography
+                  sx={{
+                    fontSize: 12.5,
+                    fontWeight: 700,
+                    color: '#202124',
+                  }}
+                >
+                  {row.unitPrice}
+                </Typography>
+              </Box>
+            </Stack>
+          </Stack>
+        </Paper>
+      ))}
 
-              {/* TAX */}
-              <TableCell
-                sx={{
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: '#444',
-                  py: 1.2,
-                }}
-              >
-                {row.tax}
-              </TableCell>
+      {/* Total */}
+      <Paper
+        elevation={0}
+        sx={{
+          mt: 0.5,
+          border: '1px solid #dce3ff',
+          borderRadius: 1,
+          p: 1.5,
+        }}
+      >
+        <Stack direction="row" alignItems="center" justifyContent="right">
+          <Box textAlign="right">
+            <Typography
+              sx={{
+                fontSize: 10,
+                color: '#7b7b88',
+              }}
+            >
+              Subtotal
+            </Typography>
 
-              {/* TOTAL */}
-              <TableCell
-                sx={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: '#222',
-                  py: 1.2,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {row.total}
-              </TableCell>
-            </TableRow>
-          ))}
-
-          {/* Footer */}
-          <TableRow>
-            <TableCell colSpan={3} />
-
-            {/* Subtotal */}
-            <TableCell sx={{ py: 1.5 }}>
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  color: '#7b7b88',
-                }}
-              >
-                Subtotal
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#222',
-                }}
-              >
-                $12,016.00
-              </Typography>
-            </TableCell>
-
-            {/* Tax */}
-            <TableCell sx={{ py: 1.5 }}>
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  color: '#7b7b88',
-                }}
-              >
-                Tax Total
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: '#222',
-                }}
-              >
-                $384.00
-              </Typography>
-            </TableCell>
-
-            {/* Grand Total */}
-            <TableCell sx={{ py: 1.5 }}>
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: '#4d5bd1',
-                  letterSpacing: 0.3,
-                }}
-              >
-                GRAND TOTAL
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: '#3559d9',
-                  lineHeight: 1.1,
-                }}
-              >
-                $12,400.00
-              </Typography>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+            <Typography
+              sx={{
+                fontSize: 16,
+                fontWeight: 700,
+                color: '#202124',
+              }}
+            >
+              $12,016.00
+            </Typography>
+          </Box>
+        </Stack>
+      </Paper>
+    </Box>
   </Paper>
 );
 
