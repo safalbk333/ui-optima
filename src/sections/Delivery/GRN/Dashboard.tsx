@@ -23,6 +23,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -59,6 +60,7 @@ function CustomFooter() {
 
 function VendorGRNDetails() {
   const theme = useTheme();
+  const router = useRouter();
 
   const PRIMARY = theme.palette.primary.main;
 
@@ -279,6 +281,9 @@ function VendorGRNDetails() {
             disableRowSelectionOnClick
             disableColumnMenu
             disableColumnSelector
+            onRowClick={(params) => {
+              router.push(`/delivery/grn/details?${params.id}`);
+            }}
             slots={{
               toolbar: GridToolbar,
               footer: CustomFooter,
