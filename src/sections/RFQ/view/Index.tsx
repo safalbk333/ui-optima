@@ -52,7 +52,7 @@ function BuyingOrganizationCard() {
           <Typography
             sx={{
               fontSize: '13px',
-              fontWeight: 700,
+              fontWeight: 600,
               color: '#111827',
               lineHeight: 1.3,
             }}
@@ -189,16 +189,16 @@ function DetailedView() {
           elevation={0}
           sx={{
             flex: 2,
-            borderRadius: 1,
+            borderRadius: 0,
             overflow: 'auto',
           }}
         >
-          <Box mb={2}>
+          <Box>
             <RFQHeaderCard />
           </Box>
+          {/* divider */}
+          <Divider sx={{ my: 1.5 }} />
           <ModernItemsTable />
-
-          {/* Add your detailed content here */}
         </Paper>
 
         {/* Right Side */}

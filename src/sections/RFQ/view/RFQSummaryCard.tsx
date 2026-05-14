@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Paper, Button, Divider, Typography } from '@mui/material';
+import { Box, Paper, Button, Typography } from '@mui/material';
 
 import React from 'react';
 
@@ -9,9 +9,7 @@ function RFQHeaderCard() {
     <Paper
       elevation={0}
       sx={{
-        p: 1.75,
-        borderRadius: 1,
-        border: '1px solid #E5E7EB',
+        borderRadius: 0,
         maxWidth: 900,
       }}
     >
@@ -46,7 +44,7 @@ function RFQHeaderCard() {
 
           <Typography
             sx={{
-              fontSize: '20px',
+              fontSize: '18px',
               fontWeight: 700,
               lineHeight: 1.25,
               maxWidth: 500,
@@ -65,9 +63,6 @@ function RFQHeaderCard() {
           Ask Clarification
         </Button>
       </Box>
-
-      <Divider sx={{ mb: 2 }} />
-
       {/* Bottom Info Section */}
       <Box display="flex" gap={5} flexWrap="wrap">
         <Box>
