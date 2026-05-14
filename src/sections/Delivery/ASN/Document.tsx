@@ -32,7 +32,7 @@ function DocumentsSection() {
     <Paper
       elevation={0}
       sx={{
-        border: '1px solid #F1F5F9',
+        border: '1px solid #e5e7eb',
         borderRadius: 0.5,
         overflow: 'hidden',
       }}
@@ -51,7 +51,7 @@ function DocumentsSection() {
         <Box>
           <Typography
             sx={{
-              fontSize: '11.5px',
+              fontSize: '13px',
               fontWeight: 700,
               lineHeight: 1.2,
             }}
@@ -130,16 +130,6 @@ function DocumentsSection() {
 
       {/* Existing Documents */}
       <Box sx={{ p: 1.5 }}>
-        <Typography
-          sx={{
-            fontSize: '12px',
-            fontWeight: 600,
-            mb: 1,
-          }}
-        >
-          Existing Documents
-        </Typography>
-
         {documents.map((doc, index) => (
           <Box
             key={index}
@@ -152,11 +142,9 @@ function DocumentsSection() {
               px: 1.2,
               py: 0.9,
               mb: 0.8,
-              bgcolor: '#fff',
               transition: 'all .2s ease',
 
               '&:hover': {
-                bgcolor: '#fcfcfd',
                 borderColor: '#d9dee7',
               },
             }}
@@ -187,7 +175,7 @@ function DocumentsSection() {
                 <Typography
                   noWrap
                   sx={{
-                    fontSize: '10.5px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     lineHeight: 1.2,
                   }}

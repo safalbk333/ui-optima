@@ -69,6 +69,7 @@ function PremiumShipmentTracking() {
           title="Shipment Tracking"
           paths={[
             { label: 'Home', href: '/dashboard' },
+            { label: 'ASN', href: '/delivery' },
             { label: 'Tracking', href: '/delivery/tracking' },
           ]}
         />

@@ -1,25 +1,31 @@
-import { Box, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Divider, Typography } from '@mui/material';
 
 import React from 'react';
 
 const rows = [
   {
-    code: 'MAT-99021',
-    description: 'Precision Ball Bearings X200',
-    ordered: 500,
-    shipping: 500,
+    materialCode: 'MAT-99021',
+    materialName: 'Precision Ball Bearings X200',
+    poNumber: 'PO-2025-00124',
+    orderedQty: 500,
+    asnQty: 500,
+    status: 'Fully Shipped',
   },
   {
-    code: 'MAT-99025',
-    description: 'Stainless Housing Unit - Large',
-    ordered: 200,
-    shipping: 150,
+    materialCode: 'MAT-99025',
+    materialName: 'Stainless Housing Unit - Large',
+    poNumber: 'PO-2025-00125',
+    orderedQty: 200,
+    asnQty: 150,
+    status: 'Partially Shipped',
   },
   {
-    code: 'MAT-10220',
-    description: 'Gasket Sealant Ultra-Bond',
-    ordered: 100,
-    shipping: 50,
+    materialCode: 'MAT-10220',
+    materialName: 'Gasket Sealant Ultra-Bond',
+    poNumber: 'PO-2025-00126',
+    orderedQty: 100,
+    asnQty: 50,
+    status: 'Pending Shipment',
   },
 ];
 
@@ -28,144 +34,169 @@ function MaterialLineItems() {
     <Paper
       elevation={0}
       sx={{
-        borderRadius: 1,
         overflow: 'hidden',
-        bgcolor: '#fff',
       }}
     >
-      {/* Header */}
-      <Box
-        sx={{
-          px: 2,
-          py: 1.5,
-          borderBottom: '1px solid #F1F5F9',
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 14,
-            fontWeight: 700,
-            color: '#111827',
-          }}
-        >
-          Material Line Items
-        </Typography>
-
-        <Chip
-          label="Expected Delivery • 15 Oct 2024"
-          size="small"
-          sx={{
-            mt: 1,
-            height: 24,
-            borderRadius: 2,
-            fontSize: 10.5,
-            fontWeight: 600,
-            bgcolor: '#F8FAFC',
-            color: '#475569',
-            border: '1px solid #E2E8F0',
-          }}
-        />
-      </Box>
-
-      {/* Items */}
-      <Stack spacing={1} sx={{ p: 1.5 }}>
-        {rows.map((item, index) => (
+      {rows.map((item, index) => (
+        <Box key={index}>
           <Box
-            key={index}
             sx={{
-              border: '1px solid #EEF2F7',
-              borderRadius: 1,
-              p: 1.5,
-              transition: 'all .2s ease',
-              '&:hover': {
-                borderColor: '#D7DEE7',
-              },
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 3,
+              px: 0,
+              py: 1.8,
             }}
           >
-            {/* Title */}
-            <Typography
+            {/* LEFT SECTION */}
+            <Box flex={1}>
+              {/* Material Name */}
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#111827',
+                }}
+              >
+                {item.materialName}
+              </Typography>
+
+              {/* Material + PO */}
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  mt: 0.5,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 11,
+                    color: '#6B7280',
+                  }}
+                >
+                  Material Code : {item.materialCode}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: 11,
+                    color: '#6B7280',
+                  }}
+                >
+                  PO No : {item.poNumber}
+                </Typography>
+              </Stack>
+
+              {/* Qty Section */}
+              <Stack
+                direction="row"
+                spacing={4}
+                sx={{
+                  mt: 1.3,
+                }}
+              >
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: 9,
+                      color: '#94A3B8',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Ordered Qty
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      mt: 0.3,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: '#111827',
+                    }}
+                  >
+                    {item.orderedQty}
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: 9,
+                      color: '#94A3B8',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    ASN Qty
+                  </Typography>
+
+                  <Typography
+                    sx={{
+                      mt: 0.3,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: item.asnQty === item.orderedQty ? '#16A34A' : '#2563EB',
+                    }}
+                  >
+                    {item.asnQty}
+                  </Typography>
+                </Box>
+              </Stack>
+            </Box>
+
+            {/* RIGHT SECTION */}
+            <Box
               sx={{
-                fontSize: 13,
-                fontWeight: 600,
-                color: '#111827',
-                lineHeight: 1.4,
+                minWidth: 180,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                gap: 1,
               }}
             >
-              {item.description}
-            </Typography>
+              {/* <Chip
+                label={item.status}
+                size="small"
+                sx={{
+                  alignSelf: 'flex-start',
+                  height: 22,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  borderRadius: 1,
+                  bgcolor:
+                    item.status === 'Fully Shipped'
+                      ? '#DCFCE7'
+                      : item.status === 'Partially Shipped'
+                        ? '#DBEAFE'
+                        : '#FEF3C7',
+                  color:
+                    item.status === 'Fully Shipped'
+                      ? '#166534'
+                      : item.status === 'Partially Shipped'
+                        ? '#1D4ED8'
+                        : '#92400E',
+                }}
+              /> */}
 
-            {/* Code */}
-            <Typography
-              sx={{
-                fontSize: 11,
-                color: '#64748B',
-                mt: 0.4,
-              }}
-            >
-              {item.code}
-            </Typography>
-
-            {/* Stats */}
-            <Stack
-              direction="row"
-              spacing={3}
-              sx={{
-                mt: 1.3,
-              }}
-            >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 9,
-                    color: '#94A3B8',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: 0.5,
-                  }}
-                >
-                  Ordered Qty
-                </Typography>
-
-                <Typography
-                  sx={{
-                    mt: 0.3,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: '#0F172A',
-                  }}
-                >
-                  {item.ordered}
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 9,
-                    color: '#94A3B8',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: 0.5,
-                  }}
-                >
-                  Shipping Qty
-                </Typography>
-
-                <Typography
-                  sx={{
-                    mt: 0.3,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: item.shipping === item.ordered ? '#16A34A' : '#2563EB',
-                  }}
-                >
-                  {item.shipping}
-                </Typography>
-              </Box>
-            </Stack>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: '#6B7280',
+                }}
+              >
+                Expected Delivery : 15 Oct 2025
+              </Typography>
+            </Box>
           </Box>
-        ))}
-      </Stack>
+
+          {index !== rows.length - 1 && <Divider />}
+        </Box>
+      ))}
     </Paper>
   );
 }
