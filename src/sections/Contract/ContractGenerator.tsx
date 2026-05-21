@@ -31,6 +31,7 @@ import {
 } from '@mui/material';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import { Edit } from '@mui/icons-material';
 
 // ─── Icons (inline SVG components to avoid import issues) ────────────────────
 const BellIcon = () => (
@@ -366,7 +367,6 @@ function ContractDocument({ values }: { values: ContractValues }) {
 
 // ─── VALIDATION AGENT PANEL ───────────────────────────────────────────────────
 function ValidationPanel({ values }: { values: ContractValues }) {
-
   type ValidationCheck = {
     id: string;
     severity: ValidationSeverity;
@@ -925,26 +925,6 @@ export default function ContractGeneratorPage() {
           >
             Download DOCX
           </Button>
-
-          {/* Edit Mode Toggle */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                size="small"
-                checked={editMode}
-                onChange={(e) => setEditMode(e.target.checked)}
-                sx={{
-                  color: '#d1d5db',
-                  '&.Mui-checked': { color: theme.palette.primary.main },
-                  p: 0.5,
-                }}
-              />
-            }
-            label={
-              <Typography sx={{ fontSize: 12, color: '#374151' }}>Enable Edit Mode</Typography>
-            }
-            sx={{ ml: 0 }}
-          />
         </Box>
       </Box>
 
@@ -984,67 +964,78 @@ export default function ContractGeneratorPage() {
           }}
         >
           <Box>
-            <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
+           <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+             <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
               Contract Preview
             </Typography>
+            <IconButton
+                size="small"
+                onClick={(e) => setEditMode(e.target.checked)}
+                sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
+              >
+                <Edit fontSize='inherit'/>
+              </IconButton>
+           </Box>
             <Typography sx={{ fontSize: 11, color: '#6b7280' }}>
               {values.contractType} · {values.vendor} · {values.clientName}
             </Typography>
           </Box>
 
-          <Stack direction="row" spacing={1} alignItems="center">
-            {/* Validation badge inside preview */}
-            <GreenChip>
-              <CheckIcon size={10} />
-              VALIDATED
-            </GreenChip>
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center">
+              {/* Validation badge inside preview */}
+              <GreenChip>
+                <CheckIcon size={10} />
+                VALIDATED
+              </GreenChip>
 
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={<DownloadIcon />}
-              sx={{
-                borderColor: '#e5e7eb',
-                color: '#374151',
-                textTransform: 'none',
-                fontSize: 11,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                '&:hover': {
-                  borderColor: theme.palette.primary.main,
-                  color: theme.palette.primary.main,
-                  bgcolor: alpha(theme.palette.primary.main, 0.08),
-                },
-              }}
-            >
-              Download DOCX
-            </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                sx={{
+                  borderColor: '#e5e7eb',
+                  color: '#374151',
+                  textTransform: 'none',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  borderRadius: 1.5,
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    color: theme.palette.primary.main,
+                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                  },
+                }}
+              >
+                Download DOCX
+              </Button>
 
-            <Button
-              size="small"
-              variant="contained"
-              startIcon={<PrinterIcon />}
-              sx={{
-                bgcolor: theme.palette.primary.main,
-                '&:hover': { bgcolor: theme.palette.primary.dark },
-                textTransform: 'none',
-                fontSize: 11,
-                fontWeight: 600,
-                borderRadius: 1.5,
-                boxShadow: 'none',
-              }}
-            >
-              Print
-            </Button>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<PrinterIcon />}
+                sx={{
+                  bgcolor: theme.palette.primary.main,
+                  '&:hover': { bgcolor: theme.palette.primary.dark },
+                  textTransform: 'none',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  borderRadius: 1.5,
+                  boxShadow: 'none',
+                }}
+              >
+                Print
+              </Button>
 
-            <IconButton
-              size="small"
-              onClick={() => setPreviewOpen(false)}
-              sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
-            >
-              <XIcon />
-            </IconButton>
-          </Stack>
+              <IconButton
+                size="small"
+                onClick={() => setPreviewOpen(false)}
+                sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
+              >
+                <XIcon />
+              </IconButton>
+            </Stack>
+          </Box>
         </Box>
 
         {/* Dialog Body — document + side validation */}
