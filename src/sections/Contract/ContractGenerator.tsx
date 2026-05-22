@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useReducer, useCallback } from 'react';
+import React, { useState, useRef, useReducer, useCallback, useEffect } from 'react';
 import {
   Box,
   Stack,
@@ -225,14 +225,214 @@ const HighlightSpan = styled('span')({
   padding: '0 1px',
 });
 
+// ─── EDITABLE INLINE SPAN ─────────────────────────────────────────────────────
+// A helper component that renders a contentEditable span for inline text editing
+// in edit mode, and plain text in view mode.
+const EditableInline = ({
+  value,
+  onChange,
+  editMode,
+  bold = false,
+  style = {},
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  editMode: boolean;
+  bold?: boolean;
+  style?: React.CSSProperties;
+}) => {
+  const spanRef = useRef<HTMLSpanElement>(null);
+
+  // Sync external value changes into the DOM without clobbering cursor
+  useEffect(() => {
+    if (spanRef.current && !editMode) {
+      spanRef.current.textContent = value;
+    }
+  }, [value, editMode]);
+
+  // On entering edit mode, set the initial content
+  useEffect(() => {
+    if (spanRef.current && editMode) {
+      if (spanRef.current.textContent !== value) {
+        spanRef.current.textContent = value;
+      }
+    }
+  }, [editMode]);
+
+  if (!editMode) {
+    return bold ? <strong style={style}>{value}</strong> : <span style={style}>{value}</span>;
+  }
+
+  return (
+    <span
+      ref={spanRef}
+      contentEditable
+      suppressContentEditableWarning
+      onBlur={(e) => onChange(e.currentTarget.textContent || '')}
+      style={{
+        outline: 'none',
+        borderBottom: '1.5px dashed #3b82f6',
+        borderRadius: 2,
+        background: alpha('#3b82f6', 0.05),
+        padding: '0 2px',
+        cursor: 'text',
+        fontWeight: bold ? 700 : undefined,
+        minWidth: 40,
+        display: 'inline',
+        ...style,
+      }}
+    />
+  );
+};
+
+// ─── EDITABLE BLOCK PARAGRAPH ─────────────────────────────────────────────────
+// For full-paragraph blocks — renders a contentEditable div in edit mode.
+const EditableBlock = ({
+  value,
+  onChange,
+  editMode,
+  sx = {},
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  editMode: boolean;
+  sx?: object;
+}) => {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (divRef.current && !editMode) {
+      divRef.current.textContent = value;
+    }
+  }, [value, editMode]);
+
+  useEffect(() => {
+    if (divRef.current && editMode) {
+      if (divRef.current.textContent !== value) {
+        divRef.current.textContent = value;
+      }
+    }
+  }, [editMode]);
+
+  const baseTypographySx = {
+    fontSize: 12.5,
+    mb: 2,
+    fontFamily: '"Times New Roman", serif',
+    lineHeight: 1.75,
+    color: '#1a1a1a',
+    ...sx,
+  };
+
+  if (!editMode) {
+    return <Typography sx={baseTypographySx}>{value}</Typography>;
+  }
+
+  return (
+    <Box
+      ref={divRef}
+      contentEditable
+      suppressContentEditableWarning
+      onBlur={(e) => onChange(e.currentTarget.textContent || '')}
+      sx={{
+        ...baseTypographySx,
+        outline: 'none',
+        border: '1px dashed #93c5fd',
+        borderRadius: 1,
+        p: '6px 8px',
+        background: alpha('#3b82f6', 0.03),
+        cursor: 'text',
+        minHeight: 48,
+        '&:focus': {
+          border: '1.5px solid #3b82f6',
+          background: alpha('#3b82f6', 0.06),
+          boxShadow: `0 0 0 3px ${alpha('#3b82f6', 0.12)}`,
+        },
+        '&:hover': {
+          borderColor: '#60a5fa',
+        },
+        transition: 'border 0.15s, box-shadow 0.15s, background 0.15s',
+      }}
+    />
+  );
+};
+
 // ─── CONTRACT DOCUMENT PREVIEW ────────────────────────────────────────────────
-function ContractDocument({ values }: { values: ContractValues }) {
-  const contractId = `CTR-2026-${String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0')}`;
+function ContractDocument({
+  values,
+  setValues,
+  editMode,
+}: {
+  values: ContractValues;
+  setValues: React.Dispatch<React.SetStateAction<ContractValues>>;
+  editMode: boolean;
+}) {
+  // Stable contract ID (memoised so it doesn't re-randomise on every re-render)
+  const contractId = useRef(
+    `CTR-2026-${String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0')}`
+  ).current;
+
   const today = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
+
+  // Helper to update a single ContractValues field
+  const field =
+    (key: keyof ContractValues) =>
+    (val: string) =>
+      setValues((prev) => ({ ...prev, [key]: val }));
+
+  // ── Derived display values ────────────────────────────────────────────────
+  const contractValueFormatted = values.contractValue
+    ? Number(values.contractValue.replace(/,/g, '')).toLocaleString()
+    : '44,200';
+
+  const performanceBond = values.contractValue
+    ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
+    : '4,420';
+
+  const penaltyCap = values.contractValue
+    ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
+    : '4,420';
+
+  // ── Editable section bodies stored in local state so the whole paragraph ──
+  // ── can be edited freely without re-seeding from props on every keystroke ─
+  const [sectionText, setSectionText] = useState({
+    parties: `This ${values.contractType || 'Service Level Agreement'} ("Agreement") is entered into as of ${today} between ${values.clientName || 'Econet Wireless Zimbabwe Limited'}, a company registered under the laws of Zimbabwe (Registration No. ZW-CR-1998-00001), having its principal place of business at 2 Old Mutual Centre, Jason Moyo Avenue, Harare ("the Client"), and ${values.vendor || 'Zimbabwe Cooling Ltd'}, a company registered under the laws of Zimbabwe (Registration No. ZW-CR-2009-04417), having its principal place of business at 14 Industrial Drive, Workington, Harare ("the Service Provider").`,
+    scope:
+      values.scope ||
+      "The Service Provider shall provide comprehensive HVAC maintenance services across the Client's four (4) Network Operation Centre facilities located in Harare, Bulawayo, Gweru and Mutare as detailed in Schedule A attached hereto. Services include preventive maintenance (monthly), deep service (quarterly), emergency corrective maintenance (24/7), and annual certification submissions.",
+    sla: `Emergency callout response: 2 hours maximum from notification to technician on-site, applicable to all four NOC locations. Preventive maintenance completion: within the scheduled month. System uptime contribution target: 99.5% per site. SLA breach penalties: 0.5% of monthly contract value per incident, capped at 10% of annual contract value. The Client reserves the right to terminate this agreement with 30 days notice in the event of 3 or more consecutive SLA breaches.`,
+    commercial: `The total contract value for the initial 12-month term is ${values.currency || 'USD'} ${contractValueFormatted} (${values.contractValueWords || 'forty-four thousand two hundred United States Dollars'}), exclusive of VAT at 15% per ZIMRA regulations. Payment shall be made within ${values.paymentTerms || '30'} days of receipt of a valid tax invoice, subject to GRN acknowledgement via the OPTIMA platform. Withholding tax at 10% shall be deducted from all payments per applicable ZIMRA regulations. A performance bond of ${values.currency || 'USD'} ${performanceBond} (10% of contract value) shall be submitted by the Service Provider within 5 business days of execution of this agreement.`,
+    term: `This Agreement shall commence on ${values.startDate || '1st June 2026'} and continue for an initial term of twelve (12) months, expiring on ${values.endDate || '31st May 2027'}, unless earlier terminated. Either party may terminate this Agreement by providing thirty (30) days' written notice. The Client may terminate immediately in the event of material breach, insolvency of the Service Provider, or debarment under PRAZ regulations.`,
+    governingLaw: `This Agreement shall be governed by and construed in accordance with the laws of ${values.governingLaw || 'Zimbabwe (Chapter 8:01)'}. Any disputes arising out of or in connection with this Agreement shall be referred to arbitration in accordance with the Arbitration Act [Chapter 7:15] of Zimbabwe.`,
+    compliance: `Both parties shall comply with all applicable ZIMRA tax regulations, PRAZ procurement guidelines, and ZACC anti-corruption obligations. The Service Provider warrants that it is duly registered with the relevant regulatory authorities and holds all necessary certifications required to perform the services outlined herein.`,
+  });
+
+  const setSection = (key: keyof typeof sectionText) => (val: string) =>
+    setSectionText((prev) => ({ ...prev, [key]: val }));
+
+  // ── Edit-mode tooltip banner ──────────────────────────────────────────────
+  const EditBanner = editMode ? (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1,
+        mb: 2,
+        p: '6px 12px',
+        borderRadius: 1.5,
+        background: alpha('#3b82f6', 0.08),
+        border: `1px solid ${alpha('#3b82f6', 0.25)}`,
+      }}
+    >
+      <Edit sx={{ fontSize: 13, color: '#3b82f6' }} />
+      <Typography sx={{ fontSize: 11, color: '#1d4ed8', fontWeight: 600 }}>
+        Edit mode — click any text field to edit it directly
+      </Typography>
+    </Box>
+  ) : null;
 
   return (
     <Box sx={{ fontFamily: '"Times New Roman", serif', lineHeight: 1.75, color: '#1a1a1a' }}>
@@ -240,105 +440,106 @@ function ContractDocument({ values }: { values: ContractValues }) {
         mb={2}
         sx={{ bgcolor: '#fff', p: 4, borderRadius: 2, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
       >
-        {/* Header */}
+        {EditBanner}
+
+        {/* ── Header ─────────────────────────────────────────────────────── */}
         <Typography
           align="center"
           sx={{ fontWeight: 800, fontSize: 17, letterSpacing: '0.08em', mb: 0.5 }}
         >
-          {values.contractType?.toUpperCase() || 'SERVICE LEVEL AGREEMENT'}
+          <EditableInline
+            value={values.contractType?.toUpperCase() || 'SERVICE LEVEL AGREEMENT'}
+            onChange={(v) => field('contractType')(v)}
+            editMode={editMode}
+          />
         </Typography>
         <Typography align="center" sx={{ fontSize: 11, color: '#555', mb: 3 }}>
-          {contractId} · {values.clientName || 'Econet Zimbabwe'} ·{' '}
-          {values.vendor || 'Zimbabwe Cooling Ltd'} · {today}
+          {contractId} ·{' '}
+          <EditableInline
+            value={values.clientName || 'Econet Zimbabwe'}
+            onChange={field('clientName')}
+            editMode={editMode}
+          />{' '}
+          ·{' '}
+          <EditableInline
+            value={values.vendor || 'Zimbabwe Cooling Ltd'}
+            onChange={field('vendor')}
+            editMode={editMode}
+          />{' '}
+          · {today}
         </Typography>
 
+        {/* ── Section 1: Parties ─────────────────────────────────────────── */}
         <SectionHeading>1. Parties &amp; Definitions</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 2 }}>
-          This {values.contractType || 'Service Level Agreement'} (&quot;Agreement&quot;) is entered
-          into as of {today} between{' '}
-          <strong>{values.clientName || 'Econet Wireless Zimbabwe Limited'}</strong>, a company
-          registered under the laws of Zimbabwe (Registration No. ZW-CR-1998-00001), having its
-          principal place of business at 2 Old Mutual Centre, Jason Moyo Avenue, Harare (&quot;the
-          Client&quot;), and <strong>{values.vendor || 'Zimbabwe Cooling Ltd'}</strong>, a company
-          registered under the laws of Zimbabwe (Registration No. ZW-CR-2009-04417), having its
-          principal place of business at 14 Industrial Drive, Workington, Harare (&quot;the Service
-          Provider&quot;).
-        </Typography>
+        <EditableBlock
+          value={sectionText.parties}
+          onChange={setSection('parties')}
+          editMode={editMode}
+        />
 
+        {/* ── Section 2: Scope ───────────────────────────────────────────── */}
         <SectionHeading>2. Scope of Services</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 2 }}>
-          {values.scope ||
-            "The Service Provider shall provide comprehensive HVAC maintenance services across the Client's four (4) Network Operation Centre facilities located in Harare, Bulawayo, Gweru and Mutare as detailed in Schedule A attached hereto. Services include preventive maintenance (monthly), deep service (quarterly), emergency corrective maintenance (24/7), and annual certification submissions."}
-        </Typography>
+        <EditableBlock
+          value={sectionText.scope}
+          onChange={setSection('scope')}
+          editMode={editMode}
+        />
 
+        {/* ── Section 3: SLAs ────────────────────────────────────────────── */}
         <SectionHeading>3. Service Levels &amp; KPIs</SectionHeading>
         <Box
           sx={{
-            border: '1px solid #e5e7eb',
+            border: `1px solid ${editMode ? '#93c5fd' : '#e5e7eb'}`,
             borderRadius: 1.5,
             p: 2,
             mb: 2,
-            bgcolor: '#fafafa',
+            bgcolor: editMode ? alpha('#3b82f6', 0.03) : '#fafafa',
             fontSize: 12.5,
+            transition: 'border-color 0.2s, background 0.2s',
           }}
         >
-          <Typography sx={{ fontSize: 12.5 }}>
-            Emergency callout response: <strong>2 hours maximum</strong> from notification to
-            technician on-site, applicable to all four NOC locations. Preventive maintenance
-            completion: within the scheduled month. System uptime contribution target: 99.5% per
-            site. SLA breach penalties: 0.5% of monthly contract value per incident,{' '}
-            <HighlightSpan>capped at 10% of annual contract value</HighlightSpan>. The Client
-            reserves the right to terminate this agreement with 30 days notice in the event of 3 or
-            more consecutive SLA breaches.
-          </Typography>
+          <EditableBlock
+            value={sectionText.sla}
+            onChange={setSection('sla')}
+            editMode={editMode}
+            sx={{ mb: 0 }}
+          />
         </Box>
 
+        {/* ── Section 4: Commercial Terms ────────────────────────────────── */}
         <SectionHeading>4. Commercial Terms</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 2 }}>
-          The total contract value for the initial 12-month term is {values.currency || 'USD'}{' '}
-          {values.contractValue
-            ? Number(values.contractValue.replace(/,/g, '')).toLocaleString()
-            : '44,200'}{' '}
-          ({values.contractValueWords || 'forty-four thousand two hundred United States Dollars'}),
-          exclusive of VAT at 15% per ZIMRA regulations. Payment shall be made within{' '}
-          {values.paymentTerms || '30'} days of receipt of a valid tax invoice, subject to GRN
-          acknowledgement via the OPTIMA platform. Withholding tax at 10% shall be deducted from all
-          payments per applicable ZIMRA regulations. A performance bond of{' '}
-          {values.currency || 'USD'}{' '}
-          {values.contractValue
-            ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
-            : '4,420'}{' '}
-          (10% of contract value) shall be submitted by the Service Provider within 5 business days
-          of execution of this agreement.
-        </Typography>
+        <EditableBlock
+          value={sectionText.commercial}
+          onChange={setSection('commercial')}
+          editMode={editMode}
+        />
 
+        {/* ── Section 5: Term & Termination ──────────────────────────────── */}
         <SectionHeading>5. Term &amp; Termination</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 2 }}>
-          This Agreement shall commence on {values.startDate || '1st June 2026'} and continue for an
-          initial term of twelve (12) months, expiring on {values.endDate || '31st May 2027'},
-          unless earlier terminated. Either party may terminate this Agreement by providing{' '}
-          <HighlightSpan>thirty (30) days&apos; written notice</HighlightSpan>. The Client may
-          terminate immediately in the event of material breach, insolvency of the Service Provider,
-          or debarment under PRAZ regulations.
-        </Typography>
+        <EditableBlock
+          value={sectionText.term}
+          onChange={setSection('term')}
+          editMode={editMode}
+        />
 
+        {/* ── Section 6: Governing Law ───────────────────────────────────── */}
         <SectionHeading>6. Governing Law</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 2 }}>
-          This Agreement shall be governed by and construed in accordance with the laws of{' '}
-          {values.governingLaw || 'Zimbabwe (Chapter 8:01)'}. Any disputes arising out of or in
-          connection with this Agreement shall be referred to arbitration in accordance with the
-          Arbitration Act [Chapter 7:15] of Zimbabwe.
-        </Typography>
+        <EditableBlock
+          value={sectionText.governingLaw}
+          onChange={setSection('governingLaw')}
+          editMode={editMode}
+        />
 
+        {/* ── Section 7: Compliance ──────────────────────────────────────── */}
         <SectionHeading>7. Compliance &amp; Regulatory</SectionHeading>
-        <Typography sx={{ fontSize: 12.5, mb: 3 }}>
-          Both parties shall comply with all applicable ZIMRA tax regulations, PRAZ procurement
-          guidelines, and ZACC anti-corruption obligations. The Service Provider warrants that it is
-          duly registered with the relevant regulatory authorities and holds all necessary
-          certifications required to perform the services outlined herein.
-        </Typography>
+        <EditableBlock
+          value={sectionText.compliance}
+          onChange={setSection('compliance')}
+          editMode={editMode}
+          sx={{ mb: 3 }}
+        />
 
-        {/* Signature block */}
+        {/* ── Signature Block ────────────────────────────────────────────── */}
         <Box sx={{ borderTop: '1px solid #e5e7eb', pt: 3, mt: 2 }}>
           <Box display="grid" gridTemplateColumns="1fr 1fr" gap={4}>
             {['Client', 'Service Provider'].map((party) => (
@@ -485,6 +686,8 @@ export default function ContractGeneratorPage() {
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+
+  // ── Edit mode state — false = view (grey icon), true = edit (blue icon) ──
   const [editMode, setEditMode] = useState(false);
 
   const handleChange = (field: keyof ContractValues, val: string) => {
@@ -497,6 +700,12 @@ export default function ContractGeneratorPage() {
     await new Promise((r) => setTimeout(r, 1800));
     setGenerating(false);
     setGenerated(true);
+  };
+
+  // Reset edit mode when dialog is closed
+  const handleClosePreview = () => {
+    setPreviewOpen(false);
+    setEditMode(false);
   };
 
   return (
@@ -931,7 +1140,7 @@ export default function ContractGeneratorPage() {
       {/* ── PREVIEW POPUP DIALOG ───────────────────────────────────────────── */}
       <Dialog
         open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
+        onClose={handleClosePreview}
         maxWidth="md"
         fullWidth
         scroll="paper"
@@ -948,7 +1157,7 @@ export default function ContractGeneratorPage() {
           },
         }}
       >
-        {/* Dialog Header */}
+        {/* ── Dialog Header ──────────────────────────────────────────────── */}
         <Box
           sx={{
             display: 'flex',
@@ -956,26 +1165,89 @@ export default function ContractGeneratorPage() {
             justifyContent: 'space-between',
             px: 3,
             py: 1.8,
-            borderBottom: '1px solid #e5e7eb',
+            borderBottom: `1px solid ${editMode ? alpha('#3b82f6', 0.3) : '#e5e7eb'}`,
             position: 'sticky',
             top: 0,
-            bgcolor: '#fff',
+            bgcolor: editMode ? alpha('#3b82f6', 0.03) : '#fff',
             zIndex: 10,
+            transition: 'background 0.25s, border-color 0.25s',
           }}
         >
           <Box>
-           <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-             <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
-              Contract Preview
-            </Typography>
-            <IconButton
-                size="small"
-                onClick={(e) => setEditMode(e.target.checked)}
-                sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
+            <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+              <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
+                Contract Preview
+              </Typography>
+
+              {/*
+               * ── EDIT MODE TOGGLE BUTTON ────────────────────────────────
+               * Color indicators:
+               *   View mode  → grey  (#6b7280) with grey hover ring
+               *   Edit mode  → blue  (#3b82f6) with blue glow ring
+               * ──────────────────────────────────────────────────────────
+               */}
+              <Tooltip
+                title={editMode ? 'Exit edit mode' : 'Edit contract'}
+                placement="top"
+                arrow
               >
-                <Edit fontSize='inherit'/>
-              </IconButton>
-           </Box>
+                <IconButton
+                  size="small"
+                  onClick={() => setEditMode((prev) => !prev)}
+                  sx={{
+                    // ── Color indicator: icon colour changes by mode ──
+                    color: editMode ? '#3b82f6' : '#6b7280',
+                    bgcolor: editMode ? alpha('#3b82f6', 0.1) : 'transparent',
+                    border: `1.5px solid ${editMode ? alpha('#3b82f6', 0.35) : 'transparent'}`,
+                    borderRadius: 1.5,
+                    p: '4px',
+                    transition: 'color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      bgcolor: editMode ? alpha('#3b82f6', 0.18) : '#f3f4f6',
+                      boxShadow: editMode
+                        ? `0 0 0 3px ${alpha('#3b82f6', 0.18)}`
+                        : '0 0 0 3px #f3f4f6',
+                    },
+                  }}
+                >
+                  <Edit
+                    sx={{
+                      fontSize: 15,
+                      // Icon itself pulses subtly when in edit mode
+                      animation: editMode ? 'editPulse 2.4s ease-in-out infinite' : 'none',
+                      '@keyframes editPulse': {
+                        '0%, 100%': { opacity: 1 },
+                        '50%': { opacity: 0.65 },
+                      },
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+
+              {/* ── Mode label badge next to the icon ────────────────── */}
+              {editMode && (
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    px: 1,
+                    py: '2px',
+                    borderRadius: 10,
+                    bgcolor: alpha('#3b82f6', 0.1),
+                    border: `1px solid ${alpha('#3b82f6', 0.25)}`,
+                    color: '#1d4ed8',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: '0.04em',
+                    userSelect: 'none',
+                  }}
+                >
+                  EDITING
+                </Box>
+              )}
+            </Box>
+
             <Typography sx={{ fontSize: 11, color: '#6b7280' }}>
               {values.contractType} · {values.vendor} · {values.clientName}
             </Typography>
@@ -1029,7 +1301,7 @@ export default function ContractGeneratorPage() {
 
               <IconButton
                 size="small"
-                onClick={() => setPreviewOpen(false)}
+                onClick={handleClosePreview}
                 sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
               >
                 <XIcon />
@@ -1038,20 +1310,21 @@ export default function ContractGeneratorPage() {
           </Box>
         </Box>
 
-        {/* Dialog Body — document + side validation */}
+        {/* ── Dialog Body — document + side validation ───────────────────── */}
         <DialogContent sx={{ p: 0, display: 'flex', gap: 0 }}>
           {/* Document area */}
           <Box
             sx={{
               flex: 1,
               p: { xs: 3, md: 5 },
-              bgcolor: '#f8f8f8',
+              bgcolor: editMode ? '#f0f4ff' : '#f8f8f8',
               overflowY: 'auto',
               display: 'flex',
               justifyContent: 'center',
+              transition: 'background 0.25s',
             }}
           >
-            <ContractDocument values={values} />
+            <ContractDocument values={values} setValues={setValues} editMode={editMode} />
           </Box>
 
           {/* Validation sidebar inside modal */}
@@ -1059,10 +1332,11 @@ export default function ContractGeneratorPage() {
             sx={{
               width: 260,
               flexShrink: 0,
-              borderLeft: '1px solid #e5e7eb',
+              borderLeft: `1px solid ${editMode ? alpha('#3b82f6', 0.2) : '#e5e7eb'}`,
               p: 2.5,
               bgcolor: '#fff',
               overflowY: 'auto',
+              transition: 'border-color 0.25s',
             }}
           >
             <Typography sx={{ fontSize: 12, fontWeight: 800, color: '#111827', mb: 0.3 }}>
