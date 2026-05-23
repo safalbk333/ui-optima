@@ -8,7 +8,7 @@ const ROOTS = {
   PRODUCTS: '/products',
   QUOTATIONS: '/quotations',
   PURCHASE_ORDERS: '/purchase_orders',
-  PR: '/purchase-requests',
+  CONTRACT_GENERATOR: '/contract-generator',
 };
 
 // ----------------------------------------------------------------------
@@ -58,12 +58,17 @@ export const paths = {
   dashboard: {
     root: ROOTS.DASHBOARD,
   },
+  contractGenerator: {
+    root: ROOTS.CONTRACT_GENERATOR,
+  },
   request: {
     root: ROOTS.REQUEST,
   },
   vendor: {
     root: ROOTS.VENDOR,
     management: `${ROOTS.VENDOR}/management`,
+    directory: `${ROOTS.VENDOR}/directory`,
+    details: `${ROOTS.VENDOR}/details`,
   },
   products: {
     root: ROOTS.PRODUCTS,
@@ -76,8 +81,5 @@ export const paths = {
   purchaseOrders: {
     root: ROOTS.PURCHASE_ORDERS,
     details: `${ROOTS.PURCHASE_ORDERS}/details`,
-  },
-  purchaseRequests: {
-    root: ROOTS.PR,
-  },
+  }
 };

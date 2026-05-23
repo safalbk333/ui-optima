@@ -67,6 +67,16 @@ export const navData: NavSectionProps['data'] = [
         path: paths.purchaseOrders.root,
         icon: ICONS.purchaseOrder,
       },
+      {
+        title: 'Vendor Directory',
+        path: paths.vendor.directory,
+        icon: ICONS.purchaseOrder,
+      },
+      {
+        title: 'Contract Generator',
+        path: paths.contractGenerator.root,
+        icon: ICONS.purchaseOrder,
+      }
     ],
   },
 ];
