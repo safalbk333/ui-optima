@@ -9,6 +9,8 @@ const ROOTS = {
   QUOTATIONS: '/quotations',
   PURCHASE_ORDERS: '/purchase_orders',
   CONTRACT_GENERATOR: '/contract-generator',
+  PR: '/purchase-requests',
+  VR: '/vendor-onboarding',
 };
 
 // ----------------------------------------------------------------------
@@ -81,5 +83,11 @@ export const paths = {
   purchaseOrders: {
     root: ROOTS.PURCHASE_ORDERS,
     details: `${ROOTS.PURCHASE_ORDERS}/details`,
-  }
+  },
+  purchaseRequests: {
+    root: ROOTS.PR,
+  },
+  vendorOnboarding: {
+    roots: ROOTS.VR,
+  },
 };

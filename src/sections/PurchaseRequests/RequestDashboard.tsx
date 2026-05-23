@@ -199,7 +199,6 @@ export default function PurchaseRequests() {
           <DataGrid
             rows={rows}
             columns={columns}
-            autoHeight
             pageSizeOptions={[5, 10]}
             disableColumnFilter
             disableRowSelectionOnClick
