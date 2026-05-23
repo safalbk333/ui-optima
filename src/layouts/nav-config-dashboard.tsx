@@ -1,7 +1,10 @@
 import { CONFIG } from 'src/global-config';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import type { NavSectionProps } from 'src/components/nav-section';
+import NotesIcon from '@mui/icons-material/Notes';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SvgColor } from 'src/components/svg-color';
 import { paths } from 'src/routes/paths';
@@ -48,6 +51,9 @@ const ICONS = {
   dashboard: <DashboardIcon fontSize="small" />,
   rfq: <RequestQuoteIcon fontSize="small" />,
   purchaseOrder: <ShoppingCartIcon fontSize="small" />,
+  vendorDirectory: <SettingsAccessibilityIcon fontSize="small" />,
+  contract: <NotesIcon fontSize="small" />,
+  onboarding: <Diversity3Icon fontSize="small" />,
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -62,10 +68,25 @@ export const navData: NavSectionProps['data'] = [
         path: paths.purchaseRequests.root,
         icon: ICONS.rfq,
       },
+      // {
+      //   title: 'Purchase Orders',
+      //   path: paths.purchaseOrders.root,
+      //   icon: ICONS.purchaseOrder,
+      // },
       {
-        title: 'Purchase Orders',
-        path: paths.purchaseOrders.root,
-        icon: ICONS.purchaseOrder,
+        title: 'Vendor Directory',
+        path: paths.vendor.directory,
+        icon: ICONS.vendorDirectory,
+      },
+      {
+        title: 'Contract Generator',
+        path: paths.contractGenerator.root,
+        icon: ICONS.contract,
+      },
+      {
+        title: 'Vendor Onboarding',
+        path: paths.vendorOnboarding.roots,
+        icon: ICONS.onboarding,
       },
     ],
   },
