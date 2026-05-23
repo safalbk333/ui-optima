@@ -1,0 +1,349 @@
+'use client';
+
+import { Box, Chip, Paper, Stack, Button, Divider, IconButton, Typography } from '@mui/material';
+import React, { useState } from 'react';
+
+import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
+
+const initialFiles = [
+  {
+    id: 1,
+    name: 'Vendor_Quotation.pdf',
+    size: '1.8 MB',
+    progress: 100,
+    type: 'PDF',
+  },
+  {
+    id: 2,
+    name: 'Technical_Specification.docx',
+    size: '860 KB',
+    progress: 75,
+    type: 'DOCX',
+  },
+];
+
+export default function StylishDocumentUpload() {
+  const [files, setFiles] = useState(initialFiles);
+
+  const removeFile = (id: number) => {
+    setFiles((prev) => prev.filter((file) => file.id !== id));
+  };
+
+  // Demo Upload
+  const handleUpload = () => {
+    const newFile = {
+      id: Date.now(),
+      name: `New_Document_${files.length + 1}.pdf`,
+      size: '1.2 MB',
+      progress: 100,
+      type: 'PDF',
+    };
+
+    // Add latest upload at TOP
+    setFiles((prev) => [newFile, ...prev]);
+  };
+
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 1,
+        overflow: 'hidden',
+        mt: 2,
+        border: '1px solid #eef2f7',
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          px: 2,
+          py: 1.5,
+          borderBottom: '1px solid #f1f5f9',
+          bgcolor: '#fff',
+        }}
+      >
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Box>
+            <Typography
+              sx={{
+                fontWeight: 600,
+                fontSize: '0.82rem',
+              }}
+            >
+              Supporting Documents
+            </Typography>
+
+            <Typography
+              sx={{
+                color: '#64748b',
+                mt: 0.2,
+                fontSize: '0.74rem',
+              }}
+            >
+              Upload quotations, invoices, specs, or approvals
+            </Typography>
+          </Box>
+
+          <Chip
+            label={`${files.length} Files`}
+            size="small"
+            sx={{
+              height: 24,
+              fontSize: '0.68rem',
+              bgcolor: '#eff6ff',
+              color: '#2563eb',
+              fontWeight: 700,
+            }}
+          />
+        </Stack>
+      </Box>
+
+      <Box sx={{ p: 2 }}>
+        {/* Uploaded Files */}
+        <Stack spacing={1.2}>
+          {files.map((file) => (
+            <Paper
+              key={file.id}
+              elevation={0}
+              sx={{
+                border: '1px solid #eef2f7',
+                borderRadius: 2,
+                px: 1.5,
+                py: 1.2,
+                transition: '0.2s',
+
+                '&:hover': {
+                  borderColor: '#dbeafe',
+                },
+              }}
+            >
+              <Stack
+                direction="row"
+                spacing={1.5}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                {/* Left */}
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                  {/* Icon */}
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 2,
+                      bgcolor: '#eff6ff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <DescriptionRoundedIcon
+                      sx={{
+                        color: '#2563eb',
+                        fontSize: 20,
+                      }}
+                    />
+                  </Box>
+
+                  {/* File Info */}
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography
+                      noWrap
+                      sx={{
+                        fontWeight: 600,
+                        color: '#0f172a',
+                        fontSize: '0.8rem',
+                        mb: 0.3,
+                        maxWidth: 260,
+                      }}
+                    >
+                      {file.name}
+                    </Typography>
+
+                    <Stack direction="row" spacing={0.8} alignItems="center">
+                      <Typography
+                        sx={{
+                          color: '#64748b',
+                          fontSize: '0.68rem',
+                        }}
+                      >
+                        {file.size}
+                      </Typography>
+
+                      <Divider orientation="vertical" flexItem sx={{ height: 10 }} />
+
+                      <Chip
+                        label={file.type}
+                        size="small"
+                        sx={{
+                          height: 18,
+                          fontSize: '0.6rem',
+                          fontWeight: 700,
+                          bgcolor: '#f1f5f9',
+                          color: '#334155',
+                        }}
+                      />
+                    </Stack>
+                  </Box>
+                </Stack>
+
+                {/* Delete */}
+                <IconButton
+                  onClick={() => removeFile(file.id)}
+                  size="small"
+                  sx={{
+                    bgcolor: '#fff1f2',
+                    color: '#e11d48',
+                    flexShrink: 0,
+
+                    '&:hover': {
+                      bgcolor: '#ffe4e6',
+                    },
+                  }}
+                >
+                  <DeleteOutlineRoundedIcon sx={{ fontSize: 18 }} />
+                </IconButton>
+              </Stack>
+            </Paper>
+          ))}
+        </Stack>
+
+        {/* Upload Area at Bottom */}
+        <Box
+          sx={{
+            mt: 1.5,
+            border: '1px dashed #cbd5e1',
+            borderRadius: 2,
+            p: 1.8,
+            bgcolor: '#f8fafc',
+            transition: '0.3s',
+            cursor: 'pointer',
+
+            '&:hover': {
+              borderColor: '#2563eb',
+              bgcolor: '#f8fbff',
+            },
+          }}
+        >
+          <Stack direction="row" spacing={1.5} alignItems="center" justifyContent="space-between">
+            {/* Left Content */}
+            <Stack direction="row" spacing={1.4} alignItems="center">
+              {/* Upload Icon */}
+              <Box
+                sx={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 2,
+                  bgcolor: '#dbeafe',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <CloudUploadRoundedIcon
+                  sx={{
+                    fontSize: 20,
+                    color: '#2563eb',
+                  }}
+                />
+              </Box>
+
+              {/* Upload Info */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: '0.78rem',
+                    mb: 0.3,
+                  }}
+                >
+                  Upload Supporting Documents
+                </Typography>
+
+                <Stack direction="row" spacing={0.8} alignItems="center" flexWrap="wrap">
+                  <Chip
+                    label="PDF"
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: '0.58rem',
+                      fontWeight: 700,
+                      bgcolor: '#eff6ff',
+                      color: '#2563eb',
+                    }}
+                  />
+
+                  <Chip
+                    label="DOCX"
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: '0.58rem',
+                      fontWeight: 700,
+                      bgcolor: '#f1f5f9',
+                      color: '#334155',
+                    }}
+                  />
+
+                  <Chip
+                    label="XLSX"
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontSize: '0.58rem',
+                      fontWeight: 700,
+                      bgcolor: '#fef3c7',
+                      color: '#b45309',
+                    }}
+                  />
+
+                  <Divider orientation="vertical" flexItem sx={{ height: 12 }} />
+
+                  <Typography
+                    sx={{
+                      color: '#64748b',
+                      fontSize: '0.66rem',
+                    }}
+                  >
+                    Max file size: 20MB
+                  </Typography>
+                </Stack>
+              </Box>
+            </Stack>
+
+            {/* Browse Button */}
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              onClick={handleUpload}
+              startIcon={<InsertDriveFileRoundedIcon sx={{ fontSize: 15 }} />}
+              sx={{
+                textTransform: 'none',
+                borderRadius: 1.8,
+                px: 1.4,
+                py: 0.45,
+                minHeight: 30,
+                fontWeight: 600,
+                fontSize: '0.68rem',
+                boxShadow: 'none',
+                flexShrink: 0,
+
+                '&:hover': {
+                  boxShadow: 'none',
+                },
+              }}
+            >
+              Browse Files
+            </Button>
+          </Stack>
+        </Box>
+      </Box>
+    </Paper>
+  );
+}

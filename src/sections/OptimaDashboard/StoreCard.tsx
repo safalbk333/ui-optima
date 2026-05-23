@@ -1,19 +1,19 @@
 'use client';
 
-import React from 'react';
+import { Area, AreaChart, Bar, BarChart, Line, LineChart, ResponsiveContainer } from 'recharts';
 import {
   Box,
-  Grid,
   Card,
+  CardContent,
+  Grid,
+  LinearProgress,
   Stack,
+  Typography,
   alpha,
   useTheme,
-  Typography,
-  CardContent,
-  LinearProgress,
 } from '@mui/material';
 
-import { Bar, Area, Line, BarChart, AreaChart, LineChart, ResponsiveContainer } from 'recharts';
+import React from 'react';
 
 const kpis = [
   {
@@ -72,7 +72,7 @@ export default function CompactKpiCards() {
       <Typography
         sx={{
           fontSize: 14,
-          fontWeight: 700,
+          fontWeight: 600,
           mb: 3,
         }}
       >

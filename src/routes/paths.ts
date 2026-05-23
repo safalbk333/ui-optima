@@ -1,6 +1,5 @@
 // ----------------------------------------------------------------------
 
-
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
@@ -9,6 +8,7 @@ const ROOTS = {
   PRODUCTS: '/products',
   QUOTATIONS: '/quotations',
   PURCHASE_ORDERS: '/purchase_orders',
+  PR: '/purchase-requests',
 };
 
 // ----------------------------------------------------------------------
@@ -76,5 +76,8 @@ export const paths = {
   purchaseOrders: {
     root: ROOTS.PURCHASE_ORDERS,
     details: `${ROOTS.PURCHASE_ORDERS}/details`,
+  },
+  purchaseRequests: {
+    root: ROOTS.PR,
   },
 };

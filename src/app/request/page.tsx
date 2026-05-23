@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import React from 'react';
-import RequestDashboard from 'src/sections/Requests/RequestDashboard';
+import RequestDashboard from 'src/sections/PurchaseRequests/RequestDashboard';
 
 function page() {
   return <div>

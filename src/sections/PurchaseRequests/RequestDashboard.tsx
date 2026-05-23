@@ -1,21 +1,21 @@
 'use client';
 
 import * as React from 'react';
-import { Box, Stack, Button, TextField, Typography, Pagination, Autocomplete } from '@mui/material';
-import type {
-  GridColDef,
-  GridRenderCellParams} from '@mui/x-data-grid';
+
+import { Autocomplete, Box, Button, Pagination, Stack, TextField, Typography } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
+import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -50,14 +50,15 @@ function CustomFooter() {
   );
 }
 export default function PurchaseRequests() {
+  const router = useRouter();
   const theme = useTheme();
   const PRIMARY = theme.palette.primary.main;
   const columns: GridColDef[] = [
-    { field: 'mrNumber', headerName: 'PR Number', flex: 1 },
-    { field: 'type', headerName: 'Request Type', flex: 1 },
+    { field: 'prNumber', headerName: 'PR Number', flex: 1 },
+    { field: 'requestType', headerName: 'Request Type', flex: 1 },
+    { field: 'requester', headerName: 'Requester', flex: 1 },
     { field: 'department', headerName: 'Department', flex: 1 },
-    { field: 'budget', headerName: 'Budget', flex: 1 },
-    { field: 'approvalLevel', headerName: 'Approval Level', flex: 1 },
+    { field: 'amount', headerName: 'Amount', flex: 1 },
     {
       field: 'status',
       headerName: 'Status',
@@ -68,6 +69,7 @@ export default function PurchaseRequests() {
         if (params.value === 'Approved') color = 'success.main';
         if (params.value === 'Pending') color = 'warning.main';
         if (params.value === 'Rejected') color = 'error.main';
+        if (params.value === 'In Review') color = 'info.main';
 
         return (
           <Typography variant="caption" sx={{ color, fontWeight: 600 }}>
@@ -76,50 +78,69 @@ export default function PurchaseRequests() {
         );
       },
     },
-    { field: 'orionPr', headerName: 'Orion PR', flex: 1 },
+    { field: 'createdDate', headerName: 'Created Date', flex: 1 },
   ];
+
   const rows = [
     {
       id: 1,
-      mrNumber: 'PR-2026-001',
-      type: 'Material Request',
+      prNumber: 'PR-2026-001',
+      requestType: 'Office Supplies',
+      requester: 'Ajith Pradeep',
       department: 'Procurement',
-      budget: '₹1,20,000',
-      approvalLevel: 'Level 2',
+      amount: '₹45,000',
       status: 'Approved',
-      orionPr: 'OR-45872',
+      createdDate: '12 May 2026',
     },
     {
       id: 2,
-      mrNumber: 'PR-2026-002',
-      type: 'Service Request',
+      prNumber: 'PR-2026-002',
+      requestType: 'Laptop Purchase',
+      requester: 'Rahul Nair',
       department: 'IT',
-      budget: '₹75,000',
-      approvalLevel: 'Level 1',
+      amount: '₹1,25,000',
       status: 'Pending',
-      orionPr: 'OR-45873',
+      createdDate: '14 May 2026',
     },
     {
       id: 3,
-      mrNumber: 'PR-2026-003',
-      type: 'Asset Purchase',
-      department: 'Admin',
-      budget: '₹2,50,000',
-      approvalLevel: 'Level 3',
+      prNumber: 'PR-2026-003',
+      requestType: 'AMC Renewal',
+      requester: 'Sneha Kumar',
+      department: 'Administration',
+      amount: '₹82,000',
+      status: 'In Review',
+      createdDate: '15 May 2026',
+    },
+    {
+      id: 4,
+      prNumber: 'PR-2026-004',
+      requestType: 'Furniture Purchase',
+      requester: 'Arun George',
+      department: 'Facilities',
+      amount: '₹2,10,000',
       status: 'Rejected',
-      orionPr: 'OR-45874',
+      createdDate: '16 May 2026',
     },
   ];
   return (
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Requisitions"
+          title="Purchase Requests"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor', href: '/vendor' },
+            { label: 'List', href: '/purchase-request' },
           ]}
-          action={<Button variant="outlined">New Purchase Request</Button>}
+          action={
+            <Button
+              onClick={() => router.push('/purchase-requests/purchase-request')}
+              sx={{ borderRadius: 0.5,fontWeight:600 }}
+              variant="outlined"
+            >
+              New Purchase Request
+            </Button>
+          }
         />
       </Box>
       <Box mb={2} sx={{ borderTop: '1px dashed #d1d5db' }} />

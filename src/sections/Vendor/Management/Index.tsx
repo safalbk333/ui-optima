@@ -1,26 +1,27 @@
 'use client';
 
-import React from 'react';
 import {
   Box,
-  Grid,
   Card,
+  Grid,
   Stack,
-  Switch,
   Avatar,
+  Switch,
   Divider,
   TextField,
-  Typography,
   IconButton,
+  Typography,
   Autocomplete,
   FormControlLabel,
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
-import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import React from 'react';
 import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
 
 function VendorForm() {

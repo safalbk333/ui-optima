@@ -1,183 +1,190 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { alpha, useTheme } from '@mui/material/styles';
+'use client';
+
+import { Box, Paper, Stack, alpha, useTheme, Typography } from '@mui/material';
+
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
+import React from 'react';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+
+const stats = [
+  {
+    label: 'RFQs',
+    value: '24',
+    icon: <ReceiptLongOutlinedIcon sx={{ fontSize: 16 }} />,
+  },
+  {
+    label: 'POs',
+    value: '128',
+    icon: <ShoppingCartOutlinedIcon sx={{ fontSize: 16 }} />,
+  },
+  {
+    label: 'Suppliers',
+    value: '46',
+    icon: <BusinessOutlinedIcon sx={{ fontSize: 16 }} />,
+  },
+];
 
 export default function HeroSection() {
   const theme = useTheme();
 
   return (
-    <Box
+    <Paper
+      elevation={0}
       sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '1fr ' },
-        gap: 5,
-        alignItems: 'center',
         position: 'relative',
         overflow: 'hidden',
+        borderRadius: 4,
+        p: { xs: 2.5, md: 3.5 },
+        border: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+        background: theme.palette.background.paper,
       }}
     >
-      {/* Grid overlay */}
+      {/* subtle grid */}
       <Box
         sx={{
           position: 'absolute',
-          right: 0,
-          top: 0,
-          height: '100%',
-          opacity: 0.18,
+          inset: 0,
+          opacity: 0.04,
           backgroundImage: `
-            linear-gradient(${alpha(theme.palette.primary.main, 0.35)} 1px, transparent 1px),
-            linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.35)} 1px, transparent 1px)
+            linear-gradient(${theme.palette.primary.main} 1px, transparent 1px),
+            linear-gradient(90deg, ${theme.palette.primary.main} 1px, transparent 1px)
           `,
-          backgroundSize: '40px 40px',
-          maskImage: 'radial-gradient(ellipse 80% 80% at 70% 50%, black 20%, transparent 80%)',
+          backgroundSize: '32px 32px',
           pointerEvents: 'none',
         }}
       />
 
-      {/* LEFT */}
-      <Box sx={{ position: 'relative', zIndex: 1 }}>
-        <Stack spacing={2} maxWidth={800}>
-          <Typography
-            variant="overline"
-            sx={{
-              color: 'primary.main',
-              letterSpacing: '0.2em',
-              fontWeight: 700,
-            }}
-          >
-            Optima Vendor Portal
-          </Typography>
-
-          <Typography
-            variant="h2"
-            component="h1"
-            sx={{
-              maxWidth: 600,
-              fontWeight: 800,
-              fontSize: { xs: '2rem', md: '2.5rem' },
-              lineHeight: 1.15,
-              color: 'text.primary',
-            }}
-          >
-            Welcome back !{' '}
-            <Box component="span" sx={{ color: 'primary.main' }}>
-              Mr. John
-            </Box>
-          </Typography>
-
-          {/* <Typography
-            fontSize={14}
-            sx={{
-              maxWidth: 500,
-              color: 'text.secondary',
-              fontWeight: 500,
-            }}
-          >
-            Hello , Mr John. Your current performance rating is 4.5{' '}
-          </Typography> */}
-        </Stack>
-      </Box>
-
-      {/* RIGHT */}
-      {/* <Box
+      <Stack
+        spacing={3}
         sx={{
           position: 'relative',
           zIndex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: 1.5,
         }}
       >
-        <Box
-          sx={{
-            border: `1px solid ${alpha(theme.palette.primary.main, 0.35)}`,
-            borderRadius: 3,
-            p: '20px 22px',
-            width: '100%',
-            maxWidth: 340,
-            animation: `${cardIn} 0.6s ease both`,
-            boxShadow: `
-              0 0 0 1px ${alpha(theme.palette.primary.main, 0.08)},
-              inset 0 1px 0 ${alpha(theme.palette.primary.main, 0.04)}
-            `,
-            bgcolor: 'background.paper',
-          }}
+        {/* top */}
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={3}
+          alignItems={{ md: 'center' }}
+          justifyContent="space-between"
         >
-          <Stack direction="row" alignItems="center" spacing={1.25} mb={1.5}>
-            <Box
+          <Box>
+            <Typography
+              variant="overline"
               sx={{
-                width: 30,
-                height: 30,
-                background: alpha(theme.palette.primary.main, 0.08),
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
+                color: 'primary.main',
+                letterSpacing: '0.18em',
+                fontWeight: 700,
+                display: 'block',
+                lineHeight: 1,
               }}
             >
-              <GitHubIcon sx={{ fontSize: 17, color: 'primary.main' }} />
-            </Box>
+              Optima Procur-to-pay
+            </Typography>
+
+            {/* vertical gap */}
+            <Box sx={{ height: { xs: 18, md: 28 } }} />
 
             <Typography
               sx={{
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 700,
-                fontSize: 15,
-                color: 'text.primary',
-                letterSpacing: 1,
+                fontSize: { xs: 24, md: 32 },
+                fontWeight: 800,
+                letterSpacing: -0.8,
+                lineHeight: 1.2,
               }}
             >
-              OPTIMA
-            </Typography>
-
-            <Chip
-              label="Completed"
-              size="small"
-              icon={<CheckCircleOutlineIcon sx={{ fontSize: '14px !important' }} />}
-              sx={{
-                ml: 'auto !important',
-                background: alpha(theme.palette.primary.main, 0.1),
-                color: 'primary.main',
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
-                fontWeight: 600,
-                fontSize: 12,
-                height: 24,
-                borderRadius: 20,
-                '& .MuiChip-label': { px: 1 },
-              }}
-            />
-          </Stack>
-
-          <Box
-            sx={{
-              height: '1px',
-              background: alpha(theme.palette.primary.main, 0.12),
-              mb: 1.5,
-            }}
-          />
-
-          <Stack direction="row" alignItems="center" spacing={0.75}>
-            <Typography sx={{ fontSize: 12.5, color: 'text.secondary' }}>
-              Deployed: 2026-01-01 23:22
-            </Typography>
-
-            <Typography sx={{ color: 'text.disabled', fontSize: 13 }}>·</Typography>
-
-            <Typography sx={{ fontSize: 12.5, color: 'text.secondary' }}>
-              Branch:{' '}
-              <Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>
-                main
+              Welcome back,
+              <Box
+                component="span"
+                sx={{
+                  color: 'primary.main',
+                  ml: 1,
+                }}
+              >
+                Mr. John
               </Box>
             </Typography>
 
-            <Box sx={{ ml: 'auto !important' }}>
-              <OpenInNewIcon sx={{ fontSize: 13, color: 'primary.main' }} />
+            <Typography
+              sx={{
+                mt: 1.2,
+                color: 'text.secondary',
+                fontSize: 14,
+                maxWidth: 520,
+              }}
+            >
+              Manage procurement operations, approvals and supplier activities.
+            </Typography>
+          </Box>
+
+          {/* right summary */}
+        </Stack>
+
+        {/* stats */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(3,1fr)',
+              md: 'repeat(3,180px)',
+            },
+            gap: 1.5,
+          }}
+        >
+          {stats.map((item) => (
+            <Box
+              key={item.label}
+              sx={{
+                p: 1.75,
+                borderRadius: 3,
+                border: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.25,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 2,
+                  bgcolor: alpha(theme.palette.primary.main, 0.08),
+                  color: 'primary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                {item.icon}
+              </Box>
+
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 700,
+                    lineHeight: 1,
+                  }}
+                >
+                  {item.value}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontSize: 12.5,
+                    color: 'text.secondary',
+                    mt: 0.25,
+                  }}
+                >
+                  {item.label}
+                </Typography>
+              </Box>
             </Box>
-          </Stack>
+          ))}
         </Box>
-      </Box> */}
-    </Box>
+      </Stack>
+    </Paper>
   );
 }

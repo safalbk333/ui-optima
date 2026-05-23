@@ -1,13 +1,11 @@
-import type { NavSectionProps } from 'src/components/nav-section';
-
-import { paths } from 'src/routes/paths';
-
 import { CONFIG } from 'src/global-config';
-
-import { SvgColor } from 'src/components/svg-color';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import type { NavSectionProps } from 'src/components/nav-section';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { SvgColor } from 'src/components/svg-color';
+import { paths } from 'src/routes/paths';
+
 // ----------------------------------------------------------------------
 
 const icon = (name: string) => (
@@ -60,8 +58,8 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.dashboard,
       },
       {
-        title: 'RFQs',
-        path: paths.quotations.root,
+        title: 'Purchase Requests',
+        path: paths.purchaseRequests.root,
         icon: ICONS.rfq,
       },
       {

@@ -1,45 +1,36 @@
 'use client';
 
-import React from 'react';
-import { Box, Grid, Stack, Paper, alpha, Button, useTheme, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, alpha, useTheme, Typography } from '@mui/material';
 
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
+import Image from 'next/image';
+import React from 'react';
 
 const apps = [
   {
     id: 1,
-    title: 'RFQs',
-    company: 'View RFQs',
-    action: 'Open',
-    color: '#2D2D35',
-    icon: <ShoppingCartOutlinedIcon sx={{ fontSize: 20 }} />,
+    title: 'Create a Purchase Request',
+    description: 'Create PR instantly',
+    image: '/NA_SEP._29.jpg',
   },
   {
     id: 2,
-    title: 'Purchase Order Management',
-    company: 'View Purchase Order',
-    action: 'Open',
-    color: '#635BFF',
-    icon: <BusinessOutlinedIcon sx={{ fontSize: 20 }} />,
+    title: 'Purchase Orders',
+    description: 'Create and track purchase orders',
+    image: '/87.jpg',
   },
   {
     id: 3,
-    title: 'Shipment / Delivery Module',
-    company: 'View Shipment Tracking',
-    action: 'Open',
-    color: '#0094FF',
-    icon: <ReceiptLongOutlinedIcon sx={{ fontSize: 20 }} />,
+    title: 'Shipment Tracking',
+    description: 'Monitor deliveries and logistics',
+    image: '/20943859.jpg',
   },
   {
     id: 4,
     title: 'Invoice Management',
-    company: 'View Invoices',
-    action: 'Open',
-    color: '#7B1FA2',
-    icon: <Inventory2OutlinedIcon sx={{ fontSize: 20 }} />,
+    description: 'Manage invoices and payments',
+    image:
+      '/inventory-control-illustration-concept-illustration-websites-landing-pages-mobile-applications-posters-banners_108061-773.avif',
   },
 ];
 
@@ -49,14 +40,14 @@ export default function TrendingTeams() {
   return (
     <Box mb={3}>
       {/* Header */}
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
+      {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
         <Typography
           sx={{
             fontSize: 14,
-            fontWeight: 700,
+            fontWeight: 600,
           }}
         >
-          Trending in your optima
+          Trending in Optima
         </Typography>
 
         <Typography
@@ -69,103 +60,100 @@ export default function TrendingTeams() {
         >
           See all
         </Typography>
-      </Stack>
+      </Stack> */}
 
       {/* Cards */}
-      <Grid container spacing={1.5}>
+      <Grid container spacing={2}>
         {apps.map((app) => (
           <Grid size={{ xs: 12, md: 6 }} key={app.id}>
             <Paper
               elevation={0}
               sx={{
-                px: 1.5,
-                py: 1.15,
+                p: 2.2,
                 borderRadius: 1,
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                position: 'relative',
+                overflow: 'hidden',
                 transition: 'all 0.2s ease',
-                minHeight: 82,
-                bgcolor: '#fff',
+                minHeight: 150,
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+
                 '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                  transform: 'translateY(-1px)',
+                  borderColor: alpha(theme.palette.primary.main, 0.28),
                 },
               }}
             >
-              {/* Left */}
-              <Stack
-                direction="row"
-                spacing={1.5}
-                alignItems="center"
-                sx={{ flex: 1, minWidth: 0 }}
-              >
-                {/* Icon */}
+              {/* Top */}
+              <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                {/* Image */}
                 <Box
                   sx={{
-                    width: 42,
-                    height: 42,
-                    borderRadius: 2,
-                    bgcolor: alpha(theme.palette.primary.main, 0.1), // same background for all
+                    width: 92,
+                    height: 92,
+                    // borderRadius: 3,
+                    // border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: theme.palette.primary.main, // same icon color for all
-                    flexShrink: 0,
+                    bgcolor: '#fff',
                   }}
                 >
-                  {app.icon}
+                  <Image
+                    src={app.image}
+                    alt={app.title}
+                    width={92}
+                    height={92}
+                    style={{
+                      objectFit: 'contain',
+                    }}
+                  />
                 </Box>
 
-                {/* Content */}
-                <Box sx={{ minWidth: 0 }}>
-                  <Typography
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: 14,
-                      color: '#2B2B2B',
-                      mb: 0.4,
-                    }}
-                  >
-                    {app.title}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      color: '#666',
-                      fontSize: 12,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {app.company}
-                  </Typography>
+                {/* Arrow */}
+                <Box
+                  sx={{
+                    width: 34,
+                    height: 34,
+                    borderRadius: 2,
+                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: theme.palette.primary.main,
+                  }}
+                >
+                  <ArrowOutwardRoundedIcon sx={{ fontSize: 18 }} />
                 </Box>
               </Stack>
 
-              {/* Action */}
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{
-                  minWidth: 68,
-                  height: 32,
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: 12,
-                  color: '#2B2B2B',
-                  borderColor: alpha(theme.palette.primary.main, 0.25),
-                  px: 1.5,
-                  ml: 1,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    bgcolor: alpha(theme.palette.primary.main, 0.04),
-                  },
-                }}
-              >
-                {app.action}
-              </Button>
+              {/* Content */}
+              <Box mt={1}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: 16,
+                    mb: 0.2,
+                    color: 'primary.main',
+                  }}
+                >
+                  {app.title}
+                </Typography>
+
+                <Typography
+                  sx={{
+                    color: '#6B7280',
+                    fontSize: 13,
+                    lineHeight: 1.6,
+                    maxWidth: '90%',
+                  }}
+                >
+                  {app.description}
+                </Typography>
+              </Box>
             </Paper>
           </Grid>
         ))}

@@ -1,22 +1,20 @@
 'use client';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-
 import { alpha, useTheme } from '@mui/material/styles';
 
-import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
-
-import TrendingTeams from './Files';
+import AbstractDashboard from './Cards';
 import AppStoreCards from './StoreCard';
-import RecentActivityCard from './RecentActivity';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import FeatureCards from './Ext';
-import HeroSection from './DeploymentCard';
+import GettingStartedBanner from './Header';
+import Grid from '@mui/material/Grid';
+import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
+import Paper from '@mui/material/Paper';
+import RecentActivityCard from './RecentActivity';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 function Dashboard() {
   const theme = useTheme();
@@ -24,57 +22,13 @@ function Dashboard() {
   return (
     <Box>
       <Container maxWidth="lg" sx={{ mb: { xs: 4, md: 6 } }}>
-        {/* Banner */}
-        {/* <Reveal direction="up">
-          <SupportBanner />
-        </Reveal> */}
-        {/* <Reveal direction="up">
-        <Box
-          sx={{
-            position: 'relative',
-            overflow: 'hidden',
-            py: { xs: 2, md: 2 },
-            display: { md: 'block' },
-          }}
-        >
-         
-          <Stack spacing={2} maxWidth={720} sx={{ pb: 2, position: 'relative', zIndex: 2 }}>
-            <Typography variant="overline" sx={{ color: 'primary.dark', letterSpacing: '0.2em' }}>
-              Optima Procure-to-Pay
-            </Typography>
-
-            <Typography
-              variant="h2"
-              component="h1"
-              sx={{
-                maxWidth: 600,
-                fontWeight: 800,
-                fontSize: { xs: '2rem', md: '2.5rem' },
-                lineHeight: 1.15,
-                color: 'text.primary',
-              }}
-            >
-              From Purchase Request to Payment — All in One
-            </Typography>
-
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 500 }}>
-              Manage purchase requests, approvals, invoices, and payments in one simple platform
-              with faster workflows and better visibility.
-            </Typography>
-          </Stack>
-        </Box>
-        </Reveal> */}
-        <HeroSection />
-        <Box
-          sx={{
-            mt: 3,
-            borderBottom: `0.5px dashed ${alpha(theme.palette.primary.main, 0.25)}`,
-          }}
-        />
+        <GettingStartedBanner />
+        <Box mb={3} />
+        <AbstractDashboard />
         <Box mb={3} />
 
         {/* Teams */}
-        <TrendingTeams />
+        {/* <TrendingTeams /> */}
 
         {/* App Cards */}
         <Grid container spacing={2} sx={{ mb: 3, mt: 0.5 }}>
