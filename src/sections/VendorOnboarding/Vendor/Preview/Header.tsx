@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Stack, Divider, Typography } from '@mui/material';
 
 import React from 'react';
 
@@ -170,7 +170,6 @@ export default function VendorHeroBanner() {
           >
             Payment Preferences
           </Typography>
-
 
           <Stack spacing={1.5}>
             <Box

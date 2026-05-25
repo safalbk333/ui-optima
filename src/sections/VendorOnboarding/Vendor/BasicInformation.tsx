@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Box, Divider, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Grid, Stack, Divider, MenuItem, TextField, Typography } from '@mui/material';
 
 import PayoutPreferences from './PaymentPreference';
 
@@ -134,7 +134,7 @@ export default function VendorOnboardingForm() {
             <Divider />
 
             {/* Banking Information */}
-            <Box >
+            <Box>
               <Typography fontSize={13} fontWeight={600} mb={2}>
                 Banking Information
               </Typography>
@@ -167,7 +167,7 @@ export default function VendorOnboardingForm() {
                   />
                 </Grid>
               </Grid>
-              <Divider sx={{mb:3}}/>
+              <Divider sx={{ mb: 3 }} />
 
               <PayoutPreferences />
             </Box>

@@ -1,10 +1,9 @@
 'use client';
 
-import { Box, Button, Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack, Button } from '@mui/material';
 
 import EOIHeroBanner from './Header';
 import EOISidebar from './Sidebar';
-import MaterialLineItems from './Table';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import ProjectOverview from './Overview';
 import React from 'react';
@@ -73,9 +72,7 @@ function Preview() {
       <EOIHeroBanner />
 
       {/* Main Content */}
-      <Box
-
-      >
+      <Box>
         <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="flex-start">
           {/* LEFT SIDE - MORE SPACE */}
           <Box
@@ -86,7 +83,7 @@ function Preview() {
           >
             <Paper elevation={0}>
               <ProjectOverview />
-              <MaterialLineItems />
+              {/* <MaterialLineItems /> */}
             </Paper>
           </Box>
 

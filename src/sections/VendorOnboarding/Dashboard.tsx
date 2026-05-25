@@ -3,22 +3,22 @@
 import * as React from 'react';
 
 import {
-  Autocomplete,
-  Avatar,
   Box,
-  Button,
   Chip,
-  Pagination,
   Stack,
+  Avatar,
+  Button,
   TextField,
+  Pagination,
   Typography,
+  Autocomplete,
 } from '@mui/material';
 import {
   DataGrid,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
@@ -258,7 +258,7 @@ export default function VendorOnboardingDetails() {
                 textTransform: 'none',
               }}
             >
-             Add New Vendor
+              Add New Vendor
             </Button>
           }
         />

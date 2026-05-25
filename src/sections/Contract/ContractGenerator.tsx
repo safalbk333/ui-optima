@@ -1,37 +1,28 @@
 'use client';
 
-import React, { useState, useRef, useReducer, useCallback, useEffect } from 'react';
 import {
   Box,
+  Fade,
   Stack,
   Button,
-  Divider,
   Dialog,
-  DialogContent,
-  DialogTitle,
+  Select,
+  Divider,
+  Tooltip,
+  Backdrop,
+  MenuItem,
+  TextField,
   IconButton,
   Typography,
-  TextField,
-  Select,
-  MenuItem,
   FormControl,
-  InputLabel,
-  Chip,
-  Tooltip,
-  Alert,
+  DialogContent,
   CircularProgress,
-  LinearProgress,
-  Checkbox,
-  FormControlLabel,
-  Autocomplete,
-  Paper,
-  Fade,
-  Backdrop,
-  Badge,
 } from '@mui/material';
+import React, { useRef, useState, useEffect } from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+
 import { Edit } from '@mui/icons-material';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 // ─── Icons (inline SVG components to avoid import issues) ────────────────────
 const BellIcon = () => (
@@ -378,10 +369,8 @@ function ContractDocument({
   });
 
   // Helper to update a single ContractValues field
-  const field =
-    (key: keyof ContractValues) =>
-    (val: string) =>
-      setValues((prev) => ({ ...prev, [key]: val }));
+  const field = (key: keyof ContractValues) => (val: string) =>
+    setValues((prev) => ({ ...prev, [key]: val }));
 
   // ── Derived display values ────────────────────────────────────────────────
   const contractValueFormatted = values.contractValue
@@ -516,11 +505,7 @@ function ContractDocument({
 
         {/* ── Section 5: Term & Termination ──────────────────────────────── */}
         <SectionHeading>5. Term &amp; Termination</SectionHeading>
-        <EditableBlock
-          value={sectionText.term}
-          onChange={setSection('term')}
-          editMode={editMode}
-        />
+        <EditableBlock value={sectionText.term} onChange={setSection('term')} editMode={editMode} />
 
         {/* ── Section 6: Governing Law ───────────────────────────────────── */}
         <SectionHeading>6. Governing Law</SectionHeading>
@@ -1186,11 +1171,7 @@ export default function ContractGeneratorPage() {
                *   Edit mode  → blue  (#3b82f6) with blue glow ring
                * ──────────────────────────────────────────────────────────
                */}
-              <Tooltip
-                title={editMode ? 'Exit edit mode' : 'Edit contract'}
-                placement="top"
-                arrow
-              >
+              <Tooltip title={editMode ? 'Exit edit mode' : 'Edit contract'} placement="top" arrow>
                 <IconButton
                   size="small"
                   onClick={() => setEditMode((prev) => !prev)}
