@@ -1,15 +1,13 @@
-import type { CSSObject } from '@mui/material/styles';
-import type { NavItemProps } from '../types';
-
-import { mergeClasses } from 'minimal-shared/utils';
-
-import Tooltip from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
-
-import { Iconify } from '../../iconify';
-import { createNavItem } from '../utils';
 import { navItemStyles, navSectionClasses } from '../styles';
+
+import ButtonBase from '@mui/material/ButtonBase';
+import type { CSSObject } from '@mui/material/styles';
+import { Iconify } from '../../iconify';
+import type { NavItemProps } from '../types';
+import Tooltip from '@mui/material/Tooltip';
+import { createNavItem } from '../utils';
+import { mergeClasses } from 'minimal-shared/utils';
+import { styled } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -171,11 +169,15 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
 /**
  * @slot icon
  */
-const ItemIcon = styled('span', { shouldForwardProp })<StyledState>(() => ({
+const ItemIcon = styled('span', { shouldForwardProp })<StyledState>(({ active }) => ({
   ...navItemStyles.icon,
   width: 'var(--nav-icon-size)',
   height: 'var(--nav-icon-size)',
   margin: 'var(--nav-icon-root-margin)',
+  opacity: active ? 1 : 0.72,
+  '& .MuiSvgIcon-root': {
+    fontSize: 'var(--nav-icon-size)',
+  },
   variants: [{ props: { variant: 'subItem' }, style: { margin: 'var(--nav-icon-sub-margin)' } }],
 }));
 
@@ -185,19 +187,20 @@ const ItemIcon = styled('span', { shouldForwardProp })<StyledState>(() => ({
 const ItemTitle = styled('span', { shouldForwardProp })<StyledState>(({ active, theme }) => ({
   ...navItemStyles.title(theme),
   lineHeight: '16px',
-  fontSize: theme.typography.pxToRem(10),
-  fontWeight: theme.typography.fontWeightSemiBold,
+  fontSize: theme.typography.pxToRem(9),
+  fontWeight: theme.typography.fontWeightRegular,
+  letterSpacing: '0.04em',
   variants: [
     {
       props: { variant: 'rootItem' },
-      style: { ...(active && { fontWeight: theme.typography.fontWeightBold }) },
+      style: { ...(active && { fontWeight: theme.typography.fontWeightMedium }) },
     },
     {
       props: { variant: 'subItem' },
       style: {
-        ...theme.typography.body2,
-        fontWeight: theme.typography.fontWeightMedium,
-        ...(active && { fontWeight: theme.typography.fontWeightSemiBold }),
+        fontSize: theme.typography.pxToRem(12),
+        fontWeight: theme.typography.fontWeightRegular,
+        ...(active && { fontWeight: theme.typography.fontWeightMedium }),
       },
     },
   ],

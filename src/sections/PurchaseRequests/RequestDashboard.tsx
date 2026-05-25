@@ -2,13 +2,22 @@
 
 import * as React from 'react';
 
-import { Autocomplete, Box, Button, Pagination, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Chip,
+  Stack,
+  Button,
+  TextField,
+  Pagination,
+  Typography,
+  Autocomplete,
+} from '@mui/material';
 import {
   DataGrid,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
@@ -59,22 +68,51 @@ export default function PurchaseRequests() {
     { field: 'requester', headerName: 'Requester', flex: 1 },
     { field: 'department', headerName: 'Department', flex: 1 },
     { field: 'amount', headerName: 'Amount', flex: 1 },
+
     {
       field: 'status',
       headerName: 'Status',
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
-        let color = 'text.primary';
+        let bg = '#EEF2FF';
+        let color = '#4338CA';
 
-        if (params.value === 'Approved') color = 'success.main';
-        if (params.value === 'Pending') color = 'warning.main';
-        if (params.value === 'Rejected') color = 'error.main';
-        if (params.value === 'In Review') color = 'info.main';
+        if (params.value === 'Approved') {
+          bg = '#E8F5E9';
+          color = '#2E7D32';
+        }
+
+        if (params.value === 'Pending') {
+          bg = '#FFF8E1';
+          color = '#ED6C02';
+        }
+
+        if (params.value === 'Rejected') {
+          bg = '#FEEBEE';
+          color = '#D32F2F';
+        }
+
+        if (params.value === 'In Review') {
+          bg = '#E3F2FD';
+          color = '#0288D1';
+        }
 
         return (
-          <Typography variant="caption" sx={{ color, fontWeight: 600 }}>
-            {params.value}
-          </Typography>
+          <Chip
+            label={params.value}
+            size="small"
+            sx={{
+              height: 22,
+              fontSize: 11,
+              fontWeight: 600,
+              borderRadius: 1,
+              backgroundColor: bg,
+              color,
+              '& .MuiChip-label': {
+                px: 1,
+              },
+            }}
+          />
         );
       },
     },
@@ -134,8 +172,9 @@ export default function PurchaseRequests() {
           ]}
           action={
             <Button
+              color="primary"
               onClick={() => router.push('/purchase-requests/purchase-request')}
-              sx={{ borderRadius: 0.5,fontWeight:600 }}
+              sx={{ borderRadius: 0.5, fontWeight: 600 }}
               variant="outlined"
             >
               New Purchase Request
@@ -197,6 +236,7 @@ export default function PurchaseRequests() {
           }}
         >
           <DataGrid
+            autoHeight
             rows={rows}
             columns={columns}
             pageSizeOptions={[5, 10]}
@@ -229,13 +269,15 @@ export default function PurchaseRequests() {
               },
 
               '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 13,
-                fontWeight: 600,
+                fontSize: 14,
+                fontWeight: 500,
                 color: 'primary.main',
               },
 
               '& .MuiDataGrid-cell': {
-                fontSize: 12,
+                fontSize: 13,
+                letterSpacing: 0.2,
+                fontWeight: 200,
               },
 
               '& .MuiDataGrid-row': {

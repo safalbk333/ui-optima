@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Box,
-  Stack,
-  alpha,
-  Paper,
-  Dialog,
   Button,
-  Typography,
-  IconButton,
+  Dialog,
   DialogContent,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+  alpha,
 } from '@mui/material';
+import React, { useState } from 'react';
 
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
-import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArticleIcon from '@mui/icons-material/ArticleOutlined';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmberRounded';
 
 const feedItems = [
@@ -85,7 +85,7 @@ export default function RecentActivityCard() {
         sx={(theme) => ({
           px: 1.5,
           py: 1.15,
-          borderRadius: 1,
+          borderRadius: 0,
           border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
           display: 'flex',
           alignItems: 'center',
@@ -93,11 +93,6 @@ export default function RecentActivityCard() {
           transition: '0.2s',
           minHeight: 82,
           cursor: 'pointer',
-
-          '&:hover': {
-            boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
-            transform: 'translateY(-1px)',
-          },
         })}
       >
         {/* Left */}
@@ -130,7 +125,7 @@ export default function RecentActivityCard() {
             <Typography
               noWrap
               sx={{
-                fontWeight: 700,
+                fontWeight: 600,
                 fontSize: 14,
                 color: '#2B2B2B',
                 lineHeight: 1.2,

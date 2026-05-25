@@ -35,7 +35,9 @@ export const NavSubheader = styled(({ open, children, className, ...other }: Nav
   alignSelf: 'flex-start',
   color: 'var(--nav-subheader-color)',
   padding: theme.spacing(2, 1, 1, 1.5),
-  fontSize: theme.typography.pxToRem(11),
+  fontSize: theme.typography.pxToRem(10),
+  fontWeight: theme.typography.fontWeightMedium,
+  letterSpacing: '0.08em',
   transition: theme.transitions.create(['color', 'padding-left'], {
     duration: theme.transitions.duration.standard,
   }),

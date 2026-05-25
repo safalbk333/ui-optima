@@ -1,37 +1,29 @@
 'use client';
 
+import { Box, Breadcrumbs, Typography } from '@mui/material';
+
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Box, Typography, Breadcrumbs } from '@mui/material';
 import { styled } from '@mui/system';
+import { useRouter } from 'next/navigation';
 
 // Main container
 const BreadcrumbContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-});
-
-// Top row
-const TopRow = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  height: 34,
   position: 'relative',
 });
 
-// Title group
-const TitleWrapper = styled(Box)({
+// Top action row
+const TopRow = styled(Box)({
   display: 'flex',
-  alignItems: 'center',
-  gap: 4,
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
 });
 
-// Action container
-const ActionWrapper = styled(Box)({
-  position: 'absolute',
-  right: 0,
-  top: '50%',
-  transform: 'translateY(-50%)',
+// Content block
+const ContentWrapper = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 // Breadcrumb link
@@ -61,46 +53,48 @@ interface PremiumBreadcrumbsProps {
   action?: React.ReactNode;
 }
 
-const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({
-  title,
-  paths = [],
-  action,
-}) => {
+const PremiumBreadcrumbs: React.FC<PremiumBreadcrumbsProps> = ({ title, paths = [], action }) => {
   const router = useRouter();
 
   return (
     <BreadcrumbContainer>
-      {/* Top row */}
       <TopRow>
-        <TitleWrapper>
-          <Typography
-            fontSize={17}
-            fontWeight={600}
-            color="primary.main"
-          >
+        {/* Left Content */}
+        <ContentWrapper
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1, // increase/decrease spacing here
+          }}
+        >
+          {' '}
+          {/* Breadcrumbs */}
+          {paths.length > 0 && (
+            <Breadcrumbs
+              separator={<Separator>/</Separator>}
+              aria-label="breadcrumb"
+              sx={{ mb: 0.2 }}
+            >
+              {paths.map((path, idx) => (
+                <BreadcrumbLink key={idx} onClick={() => router.push(path.href)}>
+                  {path.label}
+                </BreadcrumbLink>
+              ))}
+            </Breadcrumbs>
+          )}
+          {/* Title */}
+          <Typography fontSize={17} fontWeight={600} color="primary.main" lineHeight={1.2}>
             {title}
           </Typography>
-        </TitleWrapper>
+        </ContentWrapper>
 
-        {action && <ActionWrapper>{action}</ActionWrapper>}
+        {/* Always Top Right */}
+        {action && (
+          <Box ml={2} flexShrink={0}>
+            {action}
+          </Box>
+        )}
       </TopRow>
-
-      {/* Breadcrumbs */}
-      <Box mt={0.2}>
-        <Breadcrumbs
-          separator={<Separator>/</Separator>}
-          aria-label="breadcrumb"
-        >
-          {paths.map((path, idx) => (
-            <BreadcrumbLink
-              key={idx}
-              onClick={() => router.push(path.href)}
-            >
-              {path.label}
-            </BreadcrumbLink>
-          ))}
-        </Breadcrumbs>
-      </Box>
     </BreadcrumbContainer>
   );
 };

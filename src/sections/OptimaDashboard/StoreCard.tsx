@@ -78,22 +78,18 @@ export default function CompactKpiCards() {
       >
         Insight in your optima
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {kpis.map((item, index) => (
           <Grid size={{ xs: 12, md: 6 }} key={index}>
             <Card
               elevation={0}
               sx={{
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-                borderRadius: 1,
+                borderRadius: 0,
                 overflow: 'hidden',
                 height: '100%',
                 transition: '0.2s ease',
                 boxShadow: 0,
-
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                },
               }}
             >
               {/* Preview */}

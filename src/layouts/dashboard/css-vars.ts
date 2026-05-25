@@ -70,8 +70,11 @@ export function dashboardNavColorVars(
           '--nav-subheader-hover-color': palette.common.white,
           // item
           '--nav-item-color': palette.grey[500],
-          '--nav-item-root-active-color': palette.primary.light,
+          '--nav-item-root-active-color': palette.common.white,
+          '--nav-item-root-active-bg': varAlpha(palette.primary.mainChannel, 0.28),
+          '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.36),
           '--nav-item-root-open-color': palette.common.white,
+          '--nav-item-active-indicator-color': palette.primary.main,
           // bullet
           '--nav-bullet-light-color': bulletColor.dark,
           // sub

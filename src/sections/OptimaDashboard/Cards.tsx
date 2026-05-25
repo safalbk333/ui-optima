@@ -14,10 +14,7 @@ import {
 
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
-import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
 import React from 'react';
 import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 
@@ -40,24 +37,6 @@ const cards = [
     desc: 'Monitor received items, delivery status, and warehouse confirmations.',
     icon: <Inventory2OutlinedIcon fontSize="small" />,
     color: '#E46C86',
-  },
-  {
-    title: 'Vendor Management',
-    desc: 'Manage suppliers, contracts, onboarding, and vendor performance.',
-    icon: <GroupsOutlinedIcon fontSize="small" />,
-    color: '#A855F7',
-  },
-  {
-    title: 'Invoice Processing',
-    desc: 'Match invoices with POs and automate payment verification workflows.',
-    icon: <PaidOutlinedIcon fontSize="small" />,
-    color: '#4F7DF3',
-  },
-  {
-    title: 'Spend Analytics',
-    desc: 'Track procurement spend, savings opportunities, and real-time insights.',
-    icon: <QueryStatsRoundedIcon fontSize="small" />,
-    color: '#E6A53B',
   },
 ];
 
@@ -138,7 +117,7 @@ export default function AbstractCards() {
             sx={{
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: 1,
+              borderRadius: 0,
               p: 3,
               minHeight: 180,
               display: 'flex',
