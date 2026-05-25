@@ -1,26 +1,9 @@
 import Box from '@mui/material/Box';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import DeliveryTracking from './Tracking';
 import React from 'react';
-import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
-const cards = [
-  {
-    title: 'Purchase Request',
-    desc: 'Create and approve procurement requests across departments.',
-    icon: <DashboardOutlinedIcon fontSize="small" />,
-    color: '#14B88A',
-    active: true,
-  },
-  {
-    title: 'Purchase Order',
-    desc: 'Generate and track supplier purchase orders with approval workflows.',
-    icon: <StorageRoundedIcon fontSize="small" />,
-    color: '#E8B63E',
-  },
-];
 const STATS = [
   { value: '140+', label: 'Countries' },
   { value: '$2.4T', label: 'Assets Managed' },

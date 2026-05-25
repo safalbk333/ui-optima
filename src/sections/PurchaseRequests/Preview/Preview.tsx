@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Paper, Stack } from '@mui/material';
+import { Box, Paper, Stack, Button } from '@mui/material';
 
 import EOIHeroBanner from './Header';
 import EOISidebar from './Sidebar';
@@ -73,9 +73,7 @@ function Preview() {
       <EOIHeroBanner />
 
       {/* Main Content */}
-      <Box
-
-      >
+      <Box>
         <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="flex-start">
           {/* LEFT SIDE - MORE SPACE */}
           <Box

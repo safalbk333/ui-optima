@@ -1,16 +1,16 @@
 'use client';
 
-import { Area, AreaChart, Bar, BarChart, Line, LineChart, ResponsiveContainer } from 'recharts';
+import { Bar, Area, Line, BarChart, AreaChart, LineChart, ResponsiveContainer } from 'recharts';
 import {
   Box,
   Card,
-  CardContent,
   Grid,
-  LinearProgress,
   Stack,
-  Typography,
   alpha,
   useTheme,
+  Typography,
+  CardContent,
+  LinearProgress,
 } from '@mui/material';
 
 import React from 'react';

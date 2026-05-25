@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Grid, Paper, Stack, Typography, alpha, useTheme } from '@mui/material';
+import { Box, Grid, Paper, Stack, alpha, useTheme, Typography } from '@mui/material';
 
 import React from 'react';
 

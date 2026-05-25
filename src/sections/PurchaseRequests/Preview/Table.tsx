@@ -29,8 +29,6 @@ const rows = [
   },
 ];
 
-const grandTotal = rows.reduce((sum, item) => sum + item.total, 0);
-
 const labelStyle = {
   fontSize: 10,
   fontWeight: 700,

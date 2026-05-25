@@ -6,11 +6,10 @@ import {
   Chip,
   Grid,
   Tabs,
-  Alert,
   Paper,
   Stack,
-  Button,
   Avatar,
+  Button,
   Divider,
   Tooltip,
   Skeleton,
@@ -20,9 +19,8 @@ import {
   LinearProgress,
 } from '@mui/material';
 import React, { useEffect, useReducer, useCallback } from 'react';
-import { alpha, useTheme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -36,20 +34,13 @@ import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -1120,9 +1111,6 @@ interface VendorDetailPageProps {
 }
 
 function VendorDetailPage({ vendorId = 'VND-0014' }: VendorDetailPageProps) {
-  const theme = useTheme();
-  const PRIMARY = theme.palette.primary.main;
-
   const [state, dispatch] = useReducer(vendorDetailReducer, initialState);
   const { data, loading, error } = state;
   const [activeTab, setActiveTab] = React.useState(0);

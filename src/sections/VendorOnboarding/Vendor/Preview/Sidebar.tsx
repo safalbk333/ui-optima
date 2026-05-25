@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, Box, Button, Chip, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, Avatar, Button, Typography } from '@mui/material';
 
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';

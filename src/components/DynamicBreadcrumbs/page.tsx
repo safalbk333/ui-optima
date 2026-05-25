@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Breadcrumbs, Typography } from '@mui/material';
+import { Box, Typography, Breadcrumbs } from '@mui/material';
 
 import React from 'react';
 import { styled } from '@mui/system';
