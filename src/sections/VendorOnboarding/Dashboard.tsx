@@ -3,22 +3,22 @@
 import * as React from 'react';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Avatar,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
@@ -258,7 +258,7 @@ export default function VendorOnboardingDetails() {
                 textTransform: 'none',
               }}
             >
-              New Vendor
+             Add New Vendor
             </Button>
           }
         />
@@ -364,13 +364,15 @@ export default function VendorOnboardingDetails() {
             },
 
             '& .MuiDataGrid-columnHeaderTitle': {
-              fontSize: 13,
-              fontWeight: 600,
+              fontSize: 14,
+              fontWeight: 500,
               color: 'primary.main',
             },
 
             '& .MuiDataGrid-cell': {
-              fontSize: 12,
+              fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
             },
 
             '& .MuiDataGrid-row': {

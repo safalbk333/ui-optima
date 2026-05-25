@@ -1,5 +1,4 @@
 import type { Theme } from '@mui/material/styles';
-
 import { varAlpha } from 'minimal-shared/utils';
 
 // ----------------------------------------------------------------------
@@ -18,8 +17,8 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
     // root
     '--nav-item-root-active-color': palette.primary.main,
     '--nav-item-root-active-color-on-dark': palette.primary.light,
-    '--nav-item-root-active-bg': varAlpha(palette.primary.mainChannel, 0.08),
-    '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.16),
+    '--nav-item-root-active-bg': varAlpha(palette.primary.mainChannel, 0.12),
+    '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.18),
     '--nav-item-root-open-color': palette.text.primary,
     '--nav-item-root-open-bg': palette.action.hover,
     // sub
@@ -31,6 +30,9 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
       '--nav-item-sub-active-bg': palette.action.hover,
       '--nav-subheader-color': palette.text.disabled,
       '--nav-subheader-hover-color': palette.text.primary,
+      '--nav-item-active-indicator-width': '4px',
+      '--nav-item-active-indicator-height': '24px',
+      '--nav-item-active-indicator-color': palette.primary.main,
     }),
   };
 }

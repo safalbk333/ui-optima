@@ -1,7 +1,8 @@
 'use client';
 
+import { Box, Grid, Paper, Stack, Typography, alpha, useTheme } from '@mui/material';
+
 import React from 'react';
-import { Box, Grid, Paper, Stack, alpha, useTheme, Typography } from '@mui/material';
 
 const cards = [
   {
@@ -23,19 +24,16 @@ export default function FeatureCards() {
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {cards.map((card, index) => (
           <Grid size={{ xs: 12, md: 6 }} key={index}>
             <Paper
               elevation={0}
               sx={{
                 p: 1,
-                borderRadius: 1,
+                borderRadius: 0,
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
                 transition: '0.25s',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                },
               }}
             >
               <Stack direction="row" spacing={3} alignItems="center">
@@ -55,7 +53,7 @@ export default function FeatureCards() {
 
                 {/* Text */}
                 <Box>
-                  <Typography fontSize={15} fontWeight={700} gutterBottom>
+                  <Typography fontSize={15} fontWeight={600} gutterBottom>
                     {card.title}
                   </Typography>
 

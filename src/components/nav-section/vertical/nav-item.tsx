@@ -1,15 +1,13 @@
-import type { CSSObject } from '@mui/material/styles';
-import type { NavItemProps } from '../types';
-
-import { mergeClasses } from 'minimal-shared/utils';
-
-import Tooltip from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
-
-import { Iconify } from '../../iconify';
-import { createNavItem } from '../utils';
 import { navItemStyles, navSectionClasses } from '../styles';
+
+import ButtonBase from '@mui/material/ButtonBase';
+import type { CSSObject } from '@mui/material/styles';
+import { Iconify } from '../../iconify';
+import type { NavItemProps } from '../types';
+import Tooltip from '@mui/material/Tooltip';
+import { createNavItem } from '../utils';
+import { mergeClasses } from 'minimal-shared/utils';
+import { styled } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -125,6 +123,18 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
   open,
   theme,
 }) => {
+  const activeIndicatorStyles: CSSObject = {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    width: 'var(--nav-item-active-indicator-width, 3px)',
+    height: 'var(--nav-item-active-indicator-height, 22px)',
+    borderRadius: 999,
+    backgroundColor: 'var(--nav-item-active-indicator-color, currentColor)',
+  };
+
   const bulletSvg = `"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' viewBox='0 0 14 14'%3E%3Cpath d='M1 1v4a8 8 0 0 0 8 8h4' stroke='%23efefef' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"`;
 
   const bulletStyles: CSSObject = {
@@ -152,8 +162,10 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
       backgroundColor: 'var(--nav-item-root-open-bg)',
     }),
     ...(active && {
+      position: 'relative',
       color: 'var(--nav-item-root-active-color)',
       backgroundColor: 'var(--nav-item-root-active-bg)',
+      '&::before': activeIndicatorStyles,
       '&:hover': { backgroundColor: 'var(--nav-item-root-active-hover-bg)' },
       ...theme.applyStyles('dark', {
         color: 'var(--nav-item-root-active-color-on-dark)',
@@ -194,11 +206,15 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
 /**
  * @slot icon
  */
-const ItemIcon = styled('span', { shouldForwardProp })<StyledState>(() => ({
+const ItemIcon = styled('span', { shouldForwardProp })<StyledState>(({ active }) => ({
   ...navItemStyles.icon,
   width: 'var(--nav-icon-size)',
   height: 'var(--nav-icon-size)',
   margin: 'var(--nav-icon-margin)',
+  opacity: active ? 1 : 0.72,
+  '& .MuiSvgIcon-root': {
+    fontSize: 'var(--nav-icon-size)',
+  },
 }));
 
 /**
@@ -213,10 +229,11 @@ const ItemTexts = styled('span', { shouldForwardProp })<StyledState>(() => ({
  */
 const ItemTitle = styled('span', { shouldForwardProp })<StyledState>(({ theme }) => ({
   ...navItemStyles.title(theme),
-  ...theme.typography.body2,
-  fontWeight: theme.typography.fontWeightMedium,
+  fontSize: theme.typography.pxToRem(14),
+  fontWeight: theme.typography.fontWeightRegular,
+  letterSpacing: '0.01em',
   variants: [
-    { props: { active: true }, style: { fontWeight: theme.typography.fontWeightSemiBold } },
+    { props: { active: true }, style: { fontWeight: theme.typography.fontWeightMedium } },
   ],
 }));
 

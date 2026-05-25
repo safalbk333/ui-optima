@@ -2,16 +2,15 @@
 
 import { alpha, useTheme } from '@mui/material/styles';
 
-import AbstractDashboard from './Cards';
 import AppStoreCards from './StoreCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import FeatureCards from './Ext';
-import GettingStartedBanner from './Header';
 import Grid from '@mui/material/Grid';
 import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import Paper from '@mui/material/Paper';
+import ProcureToPayBanner from './Modern';
 import RecentActivityCard from './RecentActivity';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -22,10 +21,13 @@ function Dashboard() {
   return (
     <Box>
       <Container maxWidth="lg" sx={{ mb: { xs: 4, md: 6 } }}>
-        <GettingStartedBanner />
+        {/* <SchoolBanner /> */}
+        <ProcureToPayBanner />
         <Box mb={3} />
+        {/* <GettingStartedBanner /> */}
+        {/* <Box mb={2} />
         <AbstractDashboard />
-        <Box mb={3} />
+        <Box mb={2} /> */}
 
         {/* Teams */}
         {/* <TrendingTeams /> */}
@@ -49,7 +51,7 @@ function Dashboard() {
         </Typography>
 
         {/* Info Cards */}
-        <Grid container spacing={2} mb={2}>
+        <Grid container spacing={3} mb={3}>
           {/* Recent Activity */}
           <Grid size={{ xs: 12, md: 6 }}>
             <RecentActivityCard />
@@ -62,7 +64,7 @@ function Dashboard() {
               sx={{
                 px: 1.5,
                 py: 1.15,
-                borderRadius: 1,
+                borderRadius: 0,
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
                 display: 'flex',
                 alignItems: 'center',
@@ -72,11 +74,6 @@ function Dashboard() {
                 cursor: 'pointer',
                 overflow: 'hidden',
                 position: 'relative',
-
-                '&:hover': {
-                  boxShadow: `0 8px 22px ${alpha(theme.palette.primary.main, 0.12)}`,
-                  transform: 'translateY(-2px)',
-                },
               }}
             >
               {/* LEFT */}
@@ -115,7 +112,7 @@ function Dashboard() {
                   <Typography
                     noWrap
                     sx={{
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: 14,
                       color: theme.palette.text.primary,
                       lineHeight: 1.2,
@@ -164,7 +161,7 @@ function Dashboard() {
             </Paper>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 12 }}>
             <FeatureCards />
           </Grid>

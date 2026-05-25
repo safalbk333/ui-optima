@@ -15,8 +15,8 @@ type NavItemStyles = {
 
 export const navItemStyles: NavItemStyles = {
   icon: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     flexShrink: 0,
     display: 'inline-flex',
     /**
@@ -34,9 +34,9 @@ export const navItemStyles: NavItemStyles = {
     flex: '1 1 auto',
   }),
   info: {
-    fontSize: 12,
+    fontSize: 11,
     flexShrink: 0,
-    fontWeight: 600,
+    fontWeight: 500,
     marginLeft: '6px',
     lineHeight: 18 / 12,
     display: 'inline-flex',
