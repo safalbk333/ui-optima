@@ -51,11 +51,11 @@ function verticalVars(theme: Theme) {
     '--nav-item-pb': '4px',
     '--nav-item-pl': '12px',
     // root
-    '--nav-item-root-height': '44px',
+    '--nav-item-root-height': '42px',
     // sub
     '--nav-item-sub-height': '36px',
     // icon
-    '--nav-icon-size': '24px',
+    '--nav-icon-size': '20px',
     '--nav-icon-margin': '0 12px 0 0',
     // bullet
     '--nav-bullet-size': '12px',

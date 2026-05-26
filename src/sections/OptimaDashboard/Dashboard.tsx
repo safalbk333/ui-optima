@@ -74,6 +74,7 @@ function Dashboard() {
                 cursor: 'pointer',
                 overflow: 'hidden',
                 position: 'relative',
+                bgcolor: 'transparent',
               }}
             >
               {/* LEFT */}

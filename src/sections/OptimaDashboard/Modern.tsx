@@ -18,7 +18,7 @@ export default function OptimaLandingPage() {
     <div
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
-        background: '#FFFFFF',
+        background: 'transparent',
         color: '#161A1D',
         overflowX: 'hidden',
       }}
@@ -37,7 +37,7 @@ export default function OptimaLandingPage() {
         }
 
         body {
-          background: #FFFFFF;
+          background: 'transparent';
         }
 
 
@@ -172,7 +172,7 @@ export default function OptimaLandingPage() {
           </Typography>
         </div>
       </section>
-      <section style={{ background: '#FFFFFF' }}>
+      <section style={{ background: 'transparent' }}>
         <div
           style={{
             borderTop: `1px solid ${theme.palette.primary.main}25`,
