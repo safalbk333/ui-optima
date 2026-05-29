@@ -90,6 +90,7 @@ export default function CompactKpiCards() {
                 height: '100%',
                 transition: '0.2s ease',
                 boxShadow: 0,
+                bgcolor: 'transparent',
               }}
             >
               {/* Preview */}

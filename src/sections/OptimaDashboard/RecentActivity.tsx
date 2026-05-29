@@ -93,6 +93,7 @@ export default function RecentActivityCard() {
           transition: '0.2s',
           minHeight: 82,
           cursor: 'pointer',
+          bgcolor: 'transparent',
         })}
       >
         {/* Left */}

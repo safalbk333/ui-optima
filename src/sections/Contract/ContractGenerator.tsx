@@ -25,12 +25,7 @@ import { Edit } from '@mui/icons-material';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 
 // ─── Icons (inline SVG components to avoid import issues) ────────────────────
-const BellIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-  </svg>
-);
+
 const SparkleIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
@@ -98,12 +93,6 @@ const PrinterIcon = () => (
 const MaximizeIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-  </svg>
-);
-const EditIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
   </svg>
 );
 
@@ -208,13 +197,6 @@ const SectionHeading = styled(Typography)(({ theme }) => ({
   marginBottom: 10,
   marginTop: 22,
 }));
-
-const HighlightSpan = styled('span')({
-  backgroundColor: '#fef9c3',
-  borderBottom: '1.5px solid #ca8a04',
-  borderRadius: 2,
-  padding: '0 1px',
-});
 
 // ─── EDITABLE INLINE SPAN ─────────────────────────────────────────────────────
 // A helper component that renders a contentEditable span for inline text editing
@@ -378,10 +360,6 @@ function ContractDocument({
     : '44,200';
 
   const performanceBond = values.contractValue
-    ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
-    : '4,420';
-
-  const penaltyCap = values.contractValue
     ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
     : '4,420';
 

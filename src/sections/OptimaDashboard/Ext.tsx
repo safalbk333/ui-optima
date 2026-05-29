@@ -34,6 +34,7 @@ export default function FeatureCards() {
                 borderRadius: 0,
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
                 transition: '0.25s',
+                bgcolor: 'transparent',
               }}
             >
               <Stack direction="row" spacing={3} alignItems="center">

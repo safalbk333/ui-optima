@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import DeliveryTracking from './Tracking';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
@@ -18,9 +17,10 @@ export default function OptimaLandingPage() {
     <div
       style={{
         fontFamily: "'Cormorant Garamond', Georgia, serif",
-        background: '#FFFFFF',
+        background: 'transparent',
         color: '#161A1D',
         overflowX: 'hidden',
+        marginTop: -62,
       }}
     >
       <style>{`
@@ -37,7 +37,7 @@ export default function OptimaLandingPage() {
         }
 
         body {
-          background: #FFFFFF;
+          background: 'transparent';
         }
 
 
@@ -102,80 +102,10 @@ export default function OptimaLandingPage() {
         }
       `}</style>
 
-      {/* HERO */}
-      <section
-        style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          className="hero-content"
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: 760,
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: "'Jost', sans-serif",
-              fontSize: 12,
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: theme.palette.primary.main,
-              mb: 2,
-            }}
-          >
-            optima Procure-to-Pay Platform
-          </Typography>
-
-          <Typography
-            sx={{
-              fontWeight: 700,
-              lineHeight: 1,
-              letterSpacing: '0.03em',
-              color: theme.palette.primary.main,
-              mt: 0.5,
-              mb: 2.5,
-              fontSize: 22,
-            }}
-          >
-            Hey, Mr John
-          </Typography>
-
-          <Box
-            sx={{
-              width: 60,
-              height: 1,
-              background: theme.palette.primary.main,
-              opacity: 0.5,
-              mb: 2.5,
-            }}
-          />
-
-          <Typography
-            sx={{
-              fontFamily: "'Jost', sans-serif",
-              fontSize: 14,
-              fontWeight: 300,
-              color: '#555',
-              lineHeight: 1.8,
-              maxWidth: 500,
-              mb: 4,
-            }}
-          >
-            OPTIMA unifies sourcing, procurement, supplier collaboration, invoicing, and payments
-            into one intelligent platform designed for modern global enterprises.
-          </Typography>
-        </div>
-      </section>
-      <section style={{ background: '#FFFFFF' }}>
+      <section style={{ background: 'transparent' }}>
         <div
           style={{
-            borderTop: `1px solid ${theme.palette.primary.main}25`,
+            // borderTop: `1px solid ${theme.palette.primary.main}25`,
             borderBottom: `1px solid ${theme.palette.primary.main}25`,
           }}
         >
@@ -197,7 +127,7 @@ export default function OptimaLandingPage() {
                 <Typography
                   variant="h2"
                   sx={{
-                    fontWeight: 300,
+                    fontWeight: 600,
                     color: 'primary.main',
                     lineHeight: 1,
                     mb: 1.5,
@@ -222,7 +152,7 @@ export default function OptimaLandingPage() {
           </div>
         </div>
       </section>
-      <DeliveryTracking />
+      {/* <DeliveryTracking /> */}
       {/* CARDS */}
       {/* <section style={{ background: '#FFFFFF' }}>
         <div

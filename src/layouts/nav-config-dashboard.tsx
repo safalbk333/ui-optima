@@ -1,3 +1,4 @@
+import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import { CONFIG } from 'src/global-config';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
@@ -54,6 +55,7 @@ const ICONS = {
   vendorDirectory: <SettingsAccessibilityIcon fontSize="small" />,
   contract: <NotesIcon fontSize="small" />,
   onboarding: <Diversity3Icon fontSize="small" />,
+  rfqs: <AttachEmailIcon fontSize="small" />,
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -87,6 +89,11 @@ export const navData: NavSectionProps['data'] = [
         title: 'Vendor Onboarding',
         path: paths.vendorOnboarding.roots,
         icon: ICONS.onboarding,
+      },
+      {
+        title: 'RFP / RFQ',
+        path: paths.rfq.roots,
+        icon: ICONS.rfqs,
       },
     ],
   },

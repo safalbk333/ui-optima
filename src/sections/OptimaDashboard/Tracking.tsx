@@ -65,7 +65,6 @@ export default function DeliveryTracking() {
                   border: item.active ? '1px solid #4F8CFF' : '1px solid #E5E7EB',
                   borderRadius: 1,
                   p: 1.3,
-                  background: '#FFFFFF',
                   boxShadow: item.active ? '0 4px 12px rgba(79,140,255,0.10)' : 'none',
                 }}
               >

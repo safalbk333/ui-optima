@@ -11,13 +11,13 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
   } = theme;
 
   return {
-    '--nav-item-color': palette.text.secondary,
+    '--nav-item-color':'#fff',
     '--nav-item-hover-bg': palette.action.hover,
     '--nav-item-caption-color': palette.text.disabled,
     // root
-    '--nav-item-root-active-color': palette.primary.main,
+    '--nav-item-root-active-color': '#fff',
     '--nav-item-root-active-color-on-dark': palette.primary.light,
-    '--nav-item-root-active-bg': varAlpha(palette.primary.mainChannel, 0.12),
+    '--nav-item-root-active-bg': varAlpha(palette.common.whiteChannel, 0.12),
     '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.18),
     '--nav-item-root-open-color': palette.text.primary,
     '--nav-item-root-open-bg': palette.action.hover,
@@ -30,9 +30,9 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
       '--nav-item-sub-active-bg': palette.action.hover,
       '--nav-subheader-color': palette.text.disabled,
       '--nav-subheader-hover-color': palette.text.primary,
-      '--nav-item-active-indicator-width': '4px',
-      '--nav-item-active-indicator-height': '24px',
-      '--nav-item-active-indicator-color': palette.primary.main,
+      '--nav-item-active-indicator-width': '5px',
+      '--nav-item-active-indicator-height': '20px',
+      '--nav-item-active-indicator-color': 'transparent',
     }),
   };
 }
@@ -51,11 +51,11 @@ function verticalVars(theme: Theme) {
     '--nav-item-pb': '4px',
     '--nav-item-pl': '12px',
     // root
-    '--nav-item-root-height': '44px',
+    '--nav-item-root-height': '42px',
     // sub
     '--nav-item-sub-height': '36px',
     // icon
-    '--nav-icon-size': '24px',
+    '--nav-icon-size': '20px',
     '--nav-icon-margin': '0 12px 0 0',
     // bullet
     '--nav-bullet-size': '12px',

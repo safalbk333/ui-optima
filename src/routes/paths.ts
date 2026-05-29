@@ -11,6 +11,7 @@ const ROOTS = {
   CONTRACT_GENERATOR: '/contract-generator',
   PR: '/purchase-requests',
   VR: '/vendor-onboarding',
+  RFQ: '/rfq',
 };
 
 // ----------------------------------------------------------------------
@@ -89,5 +90,8 @@ export const paths = {
   },
   vendorOnboarding: {
     roots: ROOTS.VR,
+  },
+  rfq: {
+    roots: ROOTS.RFQ,
   },
 };
