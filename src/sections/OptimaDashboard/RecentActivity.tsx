@@ -2,14 +2,14 @@
 
 import {
   Box,
-  Button,
-  Dialog,
-  DialogContent,
-  IconButton,
   Paper,
   Stack,
-  Typography,
   alpha,
+  Button,
+  Dialog,
+  IconButton,
+  Typography,
+  DialogContent,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -93,7 +93,7 @@ export default function RecentActivityCard() {
           transition: '0.2s',
           minHeight: 82,
           cursor: 'pointer',
-          bgcolor:'transparent'
+          bgcolor: 'transparent',
         })}
       >
         {/* Left */}

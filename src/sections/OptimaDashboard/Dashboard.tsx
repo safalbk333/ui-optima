@@ -2,6 +2,7 @@
 
 import { alpha, useTheme } from '@mui/material/styles';
 
+import AbstractHero from './Image';
 import AppStoreCards from './StoreCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,8 +10,9 @@ import Container from '@mui/material/Container';
 import FeatureCards from './Ext';
 import Grid from '@mui/material/Grid';
 import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
+import OptimaLandingPage from './Modern';
 import Paper from '@mui/material/Paper';
-import ProcureToPayBanner from './Modern';
+import ProcessSection from './One';
 import RecentActivityCard from './RecentActivity';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -22,17 +24,17 @@ function Dashboard() {
     <Box>
       <Container maxWidth="lg" sx={{ mb: { xs: 4, md: 6 } }}>
         {/* <SchoolBanner /> */}
-        <ProcureToPayBanner />
-        <Box mb={3} />
-        {/* <GettingStartedBanner /> */}
-        {/* <Box mb={2} />
-        <AbstractDashboard />
-        <Box mb={2} /> */}
+        <AbstractHero />
+        {/* <OptmaHero /> */}
 
+        <OptimaLandingPage />
+
+        <Box mb={3} />
         {/* Teams */}
         {/* <TrendingTeams /> */}
 
         {/* App Cards */}
+        <ProcessSection />
         <Grid container spacing={2} sx={{ mb: 3, mt: 0.5 }}>
           <Grid size={{ xs: 12 }}>
             <AppStoreCards />

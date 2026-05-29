@@ -3,13 +3,6 @@ import { Box, Paper, Typography } from '@mui/material';
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import React from 'react';
 
-const attachments = [
-  {
-    name: 'Vendor_Quotation.pdf',
-    size: '1.8 MB',
-  },
-];
-
 export default function AttachmentSection() {
   return (
     <Box

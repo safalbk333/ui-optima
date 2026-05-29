@@ -1,15 +1,15 @@
 'use client';
 
 import {
-  Avatar,
   Box,
   Grid,
-  IconButton,
   Paper,
   Stack,
-  Typography,
   alpha,
+  Avatar,
   useTheme,
+  IconButton,
+  Typography,
 } from '@mui/material';
 
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
@@ -39,71 +39,6 @@ const cards = [
     color: '#E46C86',
   },
 ];
-
-function AbstractShape({ color }: { color: string }) {
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        right: -8,
-        bottom: -8,
-        width: 120,
-        height: 80,
-      }}
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          width: 85,
-          height: 36,
-          borderRadius: '24px 24px 10px 10px',
-          bgcolor: alpha(color, 0.18),
-          border: `1px solid ${alpha(color, 0.22)}`,
-          backdropFilter: 'blur(10px)',
-        }}
-      />
-
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 14,
-          right: 54,
-          width: 42,
-          height: 42,
-          borderRadius: '50%',
-          bgcolor: alpha(color, 0.55),
-        }}
-      />
-
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 0,
-          right: 22,
-          width: 18,
-          height: 62,
-          borderRadius: 20,
-          bgcolor: alpha(color, 0.3),
-          transform: 'rotate(24deg)',
-        }}
-      />
-
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 6,
-          right: 92,
-          width: 24,
-          height: 24,
-          borderRadius: '50%',
-          bgcolor: alpha(color, 0.28),
-        }}
-      />
-    </Box>
-  );
-}
 
 export default function AbstractCards() {
   const theme = useTheme();

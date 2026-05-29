@@ -3,18 +3,21 @@
 import * as React from 'react';
 
 import {
-  Autocomplete,
   Box,
-  Button,
   Grid,
-  IconButton,
   Stack,
+  Button,
   TextField,
+  IconButton,
   Typography,
+  Autocomplete,
 } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 
 const priorityOptions = ['Low', 'Medium', 'High'];
 
@@ -252,6 +255,170 @@ export default function RFQBuilderForm() {
           </Box>
         </Box>
 
+        {/* Attachment Section */}
+        <Typography fontSize={13} fontWeight={600} mt={2.5} mb={1}>
+          Attachments
+        </Typography>
+
+        <Typography fontSize={11} color="text.secondary" mb={1.5}>
+          Upload RFQ related documents and supporting files
+        </Typography>
+
+        <Box
+          sx={{
+            overflow: 'hidden',
+          }}
+        >
+          {/* Uploaded Files */}
+          <Stack spacing={1} py={1.5}>
+            {[
+              {
+                name: 'Technical Specification.pdf',
+                size: '2.5 MB',
+                color: '#14b8a6',
+                bg: 'rgba(20,184,166,0.10)',
+              },
+              {
+                name: 'Vendor Requirement.docx',
+                size: '1.2 MB',
+                color: '#f97316',
+                bg: 'rgba(249,115,22,0.10)',
+              },
+              {
+                name: 'Quotation Format.xlsx',
+                size: '850 KB',
+                color: '#8b5cf6',
+                bg: 'rgba(139,92,246,0.10)',
+              },
+            ].map((file, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  py: 1.2,
+                  borderRadius: 1,
+                  border: `1px solid ${file.bg}`,
+                }}
+              >
+                <Stack direction="row" spacing={1.2} alignItems="center">
+                  <Box
+                    sx={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 1,
+                      bgcolor: '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: file.color,
+                    }}
+                  >
+                    <InsertDriveFileOutlinedIcon sx={{ fontSize: 20 }} />
+                  </Box>
+
+                  <Box>
+                    <Typography fontSize={12} fontWeight={600}>
+                      {file.name}
+                    </Typography>
+
+                    <Typography fontSize={10.5} color="text.secondary">
+                      {file.size}
+                    </Typography>
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" spacing={0.5}>
+                  <IconButton
+                    size="small"
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      bgcolor: '#fff',
+
+                      '&:hover': {
+                        bgcolor: 'rgba(255,255,255,0.7)',
+                      },
+                    }}
+                  >
+                    <DownloadRoundedIcon sx={{ fontSize: 17 }} />
+                  </IconButton>
+
+                  <IconButton
+                    size="small"
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      bgcolor: '#fff',
+                      color: '#ef4444',
+
+                      '&:hover': {
+                        bgcolor: 'rgba(255,255,255,0.7)',
+                      },
+                    }}
+                  >
+                    <DeleteOutlineIcon sx={{ fontSize: 17 }} />
+                  </IconButton>
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+
+          {/* Upload Area */}
+          <Box
+            sx={{
+              borderTop: '1px solid #f1f5f9',
+              py: 2,
+            }}
+          >
+            <Box
+              component="label"
+              sx={{
+                border: '1px dashed #dbe3ec',
+                borderRadius: 1,
+                minHeight: 170,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                cursor: 'pointer',
+                transition: '0.2s',
+
+                '&:hover': {
+                  borderColor: 'primary.main',
+                  bgcolor: 'rgba(64,106,175,0.03)',
+                },
+              }}
+            >
+              <input type="file" hidden multiple />
+
+              <Box
+                sx={{
+                  width: 72,
+                  height: 72,
+                  borderRadius: '50%',
+                  bgcolor: 'rgba(64,106,175,0.10)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'primary.main',
+                  mb: 1.5,
+                }}
+              >
+                <CloudUploadOutlinedIcon sx={{ fontSize: 34 }} />
+              </Box>
+
+              <Typography fontSize={13} fontWeight={600}>
+                Drop your files here
+              </Typography>
+
+              <Typography fontSize={11} color="text.secondary" mt={0.5}>
+                or click to browse multiple attachments
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
         {/* Terms */}
         <Typography fontSize={13} fontWeight={600} mt={2.5} mb={1}>
           Terms & Conditions

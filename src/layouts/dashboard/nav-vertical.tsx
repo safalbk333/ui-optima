@@ -1,6 +1,5 @@
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
-import { styled, useTheme } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import type { Breakpoint } from '@mui/material/styles';
@@ -11,6 +10,7 @@ import { NavUpgrade } from '../components/nav-upgrade';
 import { Scrollbar } from 'src/components/scrollbar';
 import Typography from '@mui/material/Typography';
 import { layoutClasses } from '../core';
+import { styled } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +26,6 @@ export type NavVerticalProps = React.ComponentProps<'div'> &
   };
 
 function Wordmark({ text }: { text: string }) {
-  const theme = useTheme(); // 👈 get theme
   const firstA = text.toUpperCase().indexOf('A');
 
   return (
@@ -36,7 +35,7 @@ function Wordmark({ text }: { text: string }) {
         fontWeight: 800,
         fontSize: { xs: '1.05rem', md: '1.35rem' },
         letterSpacing: '0.04em',
-        color: '#000',
+        color: '#fff',
         lineHeight: 1,
       }}
     >
@@ -52,9 +51,11 @@ function Wordmark({ text }: { text: string }) {
                 position: 'relative',
                 display: 'inline-block',
                 px: '0.02em',
+                color: '#fff',
               }}
             >
               {ch}
+
               <Box
                 component="span"
                 sx={{
@@ -66,14 +67,18 @@ function Wordmark({ text }: { text: string }) {
                   height: 0,
                   borderLeft: '5px solid transparent',
                   borderRight: '5px solid transparent',
-                  borderBottom: `6px solid ${theme.palette.primary.main}`, // ✅ FIXED
+                  borderBottom: '6px solid #fff',
                 }}
               />
             </Box>
           );
         }
 
-        return <span key={`${i}-${ch}`}>{ch}</span>;
+        return (
+          <Box key={`${i}-${ch}`} component="span" sx={{ color: '#fff' }}>
+            {ch}
+          </Box>
+        );
       })}
     </Typography>
   );
@@ -175,25 +180,21 @@ const NavRoot = styled('div', {
     position: 'fixed',
     flexDirection: 'column',
     zIndex: 'var(--layout-nav-zIndex)',
-    backgroundColor: 'transparent',
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      // background: varAlpha(theme.vars.palette.common.blackChannel, 0.01), // light shade
-      pointerEvents: 'none',
-    },
 
-    // 👉 Ensure content is above overlay
-    '& > *': {
-      zIndex: 1,
-    },
+    background: varAlpha(theme.palette.primary.mainChannel, 1),
+    backdropFilter: 'blur(20px)',
+
     width: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
-    borderRight: `1px solid var(--layout-nav-border-color, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)})`,
+
+    // borderRight: `1px solid ${varAlpha(theme.vars.palette.primary.mainChannel, 0.12)}`,
+
     transition: theme.transitions.create(['width'], {
       easing: 'var(--layout-transition-easing)',
       duration: 'var(--layout-transition-duration)',
     }),
-    [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
+
+    [theme.breakpoints.up(layoutQuery)]: {
+      display: 'flex',
+    },
   })
 );

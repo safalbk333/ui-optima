@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { Box, Divider, Stack, Typography } from '@mui/material';
+import { Box, Stack, Divider, Typography } from '@mui/material';
 
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
