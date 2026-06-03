@@ -3,27 +3,29 @@
 import * as React from 'react';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import { fetchRFQs } from 'src/store/slices/Rfq/RfqSlice';
 import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
@@ -62,7 +64,15 @@ function CustomFooter() {
 export default function RFQList() {
   const router = useRouter();
   const theme = useTheme();
+const dispatch = useAppDispatch();
 
+const { data: rfqs, loading } = useAppSelector(
+  (state) => state.rfq
+);
+
+React.useEffect(() => {
+  dispatch(fetchRFQs());
+}, [dispatch]);
   const PRIMARY = theme.palette.primary.main;
 
   const columns: GridColDef[] = [
@@ -129,62 +139,24 @@ export default function RFQList() {
     { field: 'rfqDate', headerName: 'RFQ Date', flex: 1 },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      rfqNumber: 'RFQ-2026-001',
-      vendor: 'TechNova Solutions',
-      category: 'Laptop Procurement',
-      buyer: 'Ajith Pradeep',
-      quotationValue: '₹4,50,000',
-      status: 'Awarded',
-      rfqDate: '12 May 2026',
-    },
-
-    {
-      id: 2,
-      rfqNumber: 'RFQ-2026-002',
-      vendor: 'OfficeMart Pvt Ltd',
-      category: 'Office Supplies',
-      buyer: 'Rahul Nair',
-      quotationValue: '₹95,000',
-      status: 'Pending',
-      rfqDate: '14 May 2026',
-    },
-
-    {
-      id: 3,
-      rfqNumber: 'RFQ-2026-003',
-      vendor: 'SecureNet Systems',
-      category: 'Network Equipment',
-      buyer: 'Sneha Kumar',
-      quotationValue: '₹2,80,000',
-      status: 'Under Evaluation',
-      rfqDate: '15 May 2026',
-    },
-
-    {
-      id: 4,
-      rfqNumber: 'RFQ-2026-004',
-      vendor: 'Urban Furnitures',
-      category: 'Office Furniture',
-      buyer: 'Arun George',
-      quotationValue: '₹6,10,000',
-      status: 'Rejected',
-      rfqDate: '16 May 2026',
-    },
-
-    {
-      id: 5,
-      rfqNumber: 'RFQ-2026-005',
-      vendor: 'Prime Electricals',
-      category: 'Electrical Components',
-      buyer: 'Nikhil Raj',
-      quotationValue: '₹1,75,000',
-      status: 'Pending',
-      rfqDate: '18 May 2026',
-    },
-  ];
+const rows =
+  rfqs?.map((rfq) => ({
+    id: rfq.pk_chr_rfq_id,
+    rfqNumber: rfq.chr_rfq_code,
+    vendor: rfq.eoi?.chr_eoi_title || '-',
+    category:
+      rfq.rfq_item_mappings
+        ?.map((item) => item.item?.chr_item_name)
+        .join(', ') || '-',
+    buyer: rfq.request?.chr_request_number || '-',
+    quotationValue:
+      rfq.rfq_item_mappings?.reduce(
+        (sum, item) => sum + (item.flt_total_price || 0),
+        0
+      ) || 0,
+    status: rfq.chr_status,
+    rfqDate: new Date(rfq.dt_issue_date).toLocaleDateString('en-IN'),
+  })) || [];
 
   return (
     <Box>
@@ -283,6 +255,7 @@ export default function RFQList() {
             autoHeight
             rows={rows}
             columns={columns}
+             loading={loading}
             pageSizeOptions={[5, 10]}
             disableColumnFilter
             disableRowSelectionOnClick

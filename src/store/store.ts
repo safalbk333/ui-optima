@@ -1,9 +1,11 @@
 import categoryReducer from './slices/category/Category'
 import { configureStore } from '@reduxjs/toolkit';
 import departmentsReducer from './slices/Department/DepartmentSlice'
+import eoiReducer from './slices/Eoi/EoiSlice'
 import itemReducer from './slices/Item/Items'
 import purchaseRequestReducer from './slices/PurchaseRequests/PurchaseRequestsSlice'
 import purchaseRequestStepperReducer from './slices/PurchaseRequests/PRStepperFormSlice'
+import rfqReducer from './slices/Rfq/RfqSlice'
 import vendorReducer from './slices/vendor/VendorSlice'
 
 export const store = configureStore({
@@ -13,7 +15,9 @@ export const store = configureStore({
      purchaseRequest: purchaseRequestStepperReducer,
       items: itemReducer,
       vendors: vendorReducer,
-      departments:departmentsReducer
+      departments:departmentsReducer,
+        rfq: rfqReducer,
+         eoi: eoiReducer,
   },
 });
 

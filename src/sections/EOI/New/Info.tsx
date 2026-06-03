@@ -1,26 +1,24 @@
 'use client';
 
 import {
+  Autocomplete,
   Box,
-  Chip,
-  Grid,
-  Stack,
   Button,
+  Chip,
   Divider,
+  Grid,
   MenuItem,
+  Stack,
   TextField,
   Typography,
-  Autocomplete,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
-const vendorOptions = [
-  'ABC Technologies',
-  'Global Supplies',
-  'Tech Solutions',
-  'Prime Vendors',
-  'NextGen Systems',
-];
+import { createEOI } from 'src/store/slices/Eoi/EoiSlice';
+import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
+import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
+import { useRouter } from 'next/navigation';
 
 const fieldSx = {
   '& .MuiInputBase-root': {
@@ -33,18 +31,109 @@ const fieldSx = {
 };
 
 export default function EOIBuilder() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  // ------------------------------------------------------------------
+  // FORM STATE
+  // ------------------------------------------------------------------
+
+  const [eoiTitle, setEoiTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [submissionDeadline, setSubmissionDeadline] = useState('');
+
+  const [selectedPR, setSelectedPR] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
+  const [selectedVendor, setSelectedVendor] = useState<{
+    label: string;
+    value: string;
+  } | null>(null);
+
   const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+
+  // ------------------------------------------------------------------
+  // REDUX STATE
+  // ------------------------------------------------------------------
+
+  const { data: purchaseRequests } = useAppSelector(
+    (state) => state.purchaseRequests
+  );
+
+  const { data: vendors } = useAppSelector(
+    (state) => state.vendors
+  );
+
+  // ------------------------------------------------------------------
+  // API CALLS
+  // ------------------------------------------------------------------
+
+  useEffect(() => {
+    dispatch(fetchPurchaseRequests());
+    dispatch(fetchVendors());
+  }, [dispatch]);
+
+  // ------------------------------------------------------------------
+  // DROPDOWN OPTIONS
+  // ------------------------------------------------------------------
+
+  const purchaseRequestOptions =
+    purchaseRequests?.map((pr) => ({
+      label: pr.chr_title,
+      value: pr.pk_chr_request_id,
+    })) || [];
+
+  const vendorOptions =
+    vendors?.map((vendor) => ({
+      label: vendor.chr_vendor_name,
+      value: vendor.pk_chr_vendor_id,
+    })) || [];
+
+  // ------------------------------------------------------------------
+  // FILE HANDLERS
+  // ------------------------------------------------------------------
 
   const handleFileUpload = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const uploadedFiles = Array.from(event.target.files || []);
+
     setFiles((prev) => [...prev, ...uploadedFiles]);
   };
 
   const removeFile = (fileName: string) => {
-    setFiles((prev) => prev.filter((file) => file.name !== fileName));
+    setFiles((prev) =>
+      prev.filter((file) => file.name !== fileName)
+    );
+  };
+
+  // ------------------------------------------------------------------
+  // CREATE EOI
+  // ------------------------------------------------------------------
+
+  const handleCreateEOI = async () => {
+    const payload = {
+      chr_eoi_title: eoiTitle,
+      fk_chr_request_id: selectedPR?.value || '',
+      fk_chr_vendor_id: selectedVendor?.value || '',
+      txt_notes: description,
+      dt_submission_deadline: submissionDeadline
+        ? new Date(submissionDeadline).toISOString()
+        : null,
+    };
+
+    try {
+      await dispatch(createEOI(payload)).unwrap();
+
+      console.log('EOI Payload:', payload);
+
+      router.push('/eoi');
+    } catch (error) {
+      console.error('Failed to create EOI:', error);
+    }
   };
 
   return (
@@ -69,93 +158,85 @@ export default function EOIBuilder() {
 
       <Grid container spacing={1.5}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            label="EOI Title"
-            fullWidth
+<TextField
+  label="EOI Title"
+  fullWidth
+  size="small"
+  value={eoiTitle}
+  onChange={(e) => setEoiTitle(e.target.value)}
+  sx={fieldSx}
+/>
+        </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+          <Autocomplete
+            options={purchaseRequestOptions}
+            value={selectedPR}
+            onChange={(_, newValue) => {
+              setSelectedPR(newValue);
+        
+              console.log('Selected PR ID:', newValue?.value);
+              console.log('Selected PR Title:', newValue?.label);
+            }}
             size="small"
-            sx={fieldSx}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Purchase Request"
+                placeholder="Select Purchase Request"
+                sx={fieldSx}
+              />
+            )}
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            label="Reference Number"
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
-        </Grid>
+
+
+<Grid size={{ xs: 12, md: 6 }}>
+  <Autocomplete
+    options={vendorOptions}
+    value={selectedVendor}
+    onChange={(_, value) => setSelectedVendor(value)}
+    size="small"
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="Vendor"
+        placeholder="Select Vendor"
+        sx={fieldSx}
+      />
+    )}
+  />
+</Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            select
-            label="Category"
-            fullWidth
-            size="small"
-            defaultValue=""
-            sx={fieldSx}
-          >
-            <MenuItem value="IT">IT</MenuItem>
-            <MenuItem value="Services">Services</MenuItem>
-            <MenuItem value="Supply">Supply</MenuItem>
-          </TextField>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            type="date"
-            label="Submission Deadline"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
+<TextField
+  type="date"
+  label="Submission Deadline"
+  InputLabelProps={{ shrink: true }}
+  fullWidth
+  size="small"
+  value={submissionDeadline}
+  onChange={(e) => setSubmissionDeadline(e.target.value)}
+  sx={fieldSx}
+/>
         </Grid>
 
         <Grid size={12}>
-          <TextField
-            label="Description"
-            multiline
-            rows={3}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
+<TextField
+  label="Description"
+  multiline
+  rows={3}
+  fullWidth
+  size="small"
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+  sx={fieldSx}
+/>
         </Grid>
       </Grid>
 
-      <Divider sx={{ my: 2 }} />
 
-      {/* Vendors */}
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: 600,
-          mb: 1.5,
-        }}
-      >
-        Vendors
-      </Typography>
 
-      <Autocomplete
-        multiple
-        size="small"
-        options={vendorOptions}
-        value={selectedVendors}
-        onChange={(_, value) => setSelectedVendors(value)}
-        sx={{
-          '& .MuiInputBase-root': {
-            fontSize: 13,
-          },
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Select Vendors"
-            placeholder="Choose Vendors"
-          />
-        )}
-      />
 
       <Stack
         direction="row"
@@ -258,64 +339,8 @@ export default function EOIBuilder() {
         ))}
       </Stack>
 
-      <Divider sx={{ my: 2 }} />
 
-      {/* Timeline */}
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: 600,
-          mb: 1.5,
-        }}
-      >
-        Timeline
-      </Typography>
 
-      <Grid container spacing={1.5}>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            type="date"
-            label="Published Date"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            type="date"
-            label="Query End Date"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            type="date"
-            label="Submission Deadline"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            type="date"
-            label="Evaluation Date"
-            InputLabelProps={{ shrink: true }}
-            fullWidth
-            size="small"
-            sx={fieldSx}
-          />
-        </Grid>
-      </Grid>
 
       <Divider sx={{ my: 2 }} />
 
@@ -325,20 +350,21 @@ export default function EOIBuilder() {
         spacing={1}
         justifyContent="flex-end"
       >
-        <Button
+        {/* <Button
           variant="outlined"
           size="small"
           color='primary'
           sx={{borderRadius:0.5}}
         >
           Save Draft
-        </Button>
+        </Button> */}
 
         <Button
           variant="contained"
           size="small"
                     color='primary'
           sx={{borderRadius:0.5}}
+            onClick={handleCreateEOI}
 
         >
           Publish EOI

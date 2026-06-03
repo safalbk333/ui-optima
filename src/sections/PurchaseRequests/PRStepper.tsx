@@ -47,15 +47,15 @@ const handleSubmit = async () => {
       strRequestNumber: `PR-${Date.now()}`,
       strTitle: prData.basicInfo.title,
       strDescription: prData.basicInfo.description,
-      strCurrentStatusId: 'status-id-123',
+      strCurrentStatusId: '760cb1f6-d738-405d-818a-975cdb870a22',
       strPriorityId: prData.basicInfo.priorityId,
       intEstimatedValue: Number(prData.basicInfo.estimatedValue),
       strCurrency: prData.basicInfo.currency,
-      strRequestedById: 'user-id-123',
+      strRequestedById: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
       strDepartmentId: prData.basicInfo.departmentId,
       strCategoryId: prData.basicInfo.strCategoryId,
 
-      strCreatedId: 'user-id-123',
+      strCreatedId: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
 
       arrItems: prData.lineItems.map((item) => ({
         strItemId: item.itemId,

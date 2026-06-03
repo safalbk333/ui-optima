@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -284,9 +284,9 @@ const rows =
                 csvOptions: { disableToolbarButton: true },
               },
             }}
-            onRowClick={(params) => {
-              router.push(`/approval/view`);
-            }}
+onRowClick={(params) => {
+  router.push(`/approval/view?PR_ID=${params.row.id}`);
+}}
             initialState={{
               pagination: {
                 paginationModel: {

@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -23,9 +23,11 @@ import type {
 } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import React from 'react';
+import { fetchEOIs } from 'src/store/slices/Eoi/EoiSlice';
 import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
@@ -64,7 +66,17 @@ function CustomFooter() {
 function EOIDashboard() {
   const theme = useTheme();
   const router = useRouter();
-
+  const dispatch=useAppDispatch()
+    const {
+      data: eois,
+      loading: eoiLoading,
+      error,
+    } = useAppSelector((state) => state.eoi);
+  
+  React.useEffect(() => {
+    dispatch(fetchEOIs());
+  }, [dispatch]);
+  console.log(eois,'eois')
   const PRIMARY = theme.palette.primary.main;
 
 const columns: GridColDef[] = [
@@ -103,119 +115,83 @@ const columns: GridColDef[] = [
     headerName: 'EOI Owner',
     flex: 1,
   },
-  {
-    field: 'status',
-    headerName: 'Status',
-    flex: 1,
-    renderCell: (params: GridRenderCellParams) => {
-      const statusStyles: Record<string, any> = {
-        Draft: {
-          color: '#6b7280',
-          bgcolor: '#f3f4f6',
-        },
-        Published: {
-          color: '#1d4ed8',
-          bgcolor: '#dbeafe',
-        },
-        Open: {
-          color: '#15803d',
-          bgcolor: '#dcfce7',
-        },
-        Evaluation: {
-          color: '#b45309',
-          bgcolor: '#fef3c7',
-        },
-        Awarded: {
-          color: '#7c3aed',
-          bgcolor: '#ede9fe',
-        },
-        Closed: {
-          color: '#374151',
-          bgcolor: '#e5e7eb',
-        },
-        Cancelled: {
-          color: '#b91c1c',
-          bgcolor: '#fee2e2',
-        },
-      };
+{
+  field: 'status',
+  headerName: 'Status',
+  flex: 1,
 
-      const style = statusStyles[params.value] || {};
+  renderCell: (params: GridRenderCellParams) => {
+    let bg = '#F1F5F9';
+    let color = '#475569';
 
-      return (
-        <Chip
-          label={params.value}
-          size="small"
-          sx={{
-            height: 26,
-            fontSize: 12,
-            fontWeight: 600,
-            borderRadius: '8px',
-            color: style.color,
-            bgcolor: style.bgcolor,
-          }}
-        />
-      );
-    },
+    if (params.value === 'Published') {
+      bg = '#E3F2FD';
+      color = '#0288D1';
+    }
+
+    if (params.value === 'Open') {
+      bg = '#E8F5E9';
+      color = '#2E7D32';
+    }
+
+    if (params.value === 'Evaluation') {
+      bg = '#FFF8E1';
+      color = '#ED6C02';
+    }
+
+    if (params.value === 'Awarded') {
+      bg = '#F3E5F5';
+      color = '#7B1FA2';
+    }
+
+    if (params.value === 'Closed') {
+      bg = '#ECEFF1';
+      color = '#546E7A';
+    }
+
+    if (params.value === 'Cancelled') {
+      bg = '#FEEBEE';
+      color = '#D32F2F';
+    }
+
+    return (
+      <Chip
+        label={params.value}
+        size="small"
+        sx={{
+          height: 22,
+          fontSize: 11,
+          fontWeight: 600,
+          borderRadius: 1,
+          backgroundColor: bg,
+          color,
+
+          '& .MuiChip-label': {
+            px: 1,
+          },
+        }}
+      />
+    );
   },
+}
 ];
 
-const rows = [
-  {
-    id: 1,
-    eoiNo: 'EOI-2026-1001',
-    title: 'Supply of Enterprise Laptops',
-    category: 'IT Equipment',
-    publishDate: '01 May 2026',
-    closingDate: '15 May 2026',
-    responses: 18,
-    owner: 'Ajith Kumar',
-    status: 'Open',
-  },
-  {
-    id: 2,
-    eoiNo: 'EOI-2026-1002',
-    title: 'Office Furniture Procurement',
-    category: 'Furniture',
-    publishDate: '03 May 2026',
-    closingDate: '18 May 2026',
-    responses: 12,
-    owner: 'Anjali Nair',
-    status: 'Evaluation',
-  },
-  {
-    id: 3,
-    eoiNo: 'EOI-2026-1003',
-    title: 'Logistics Service Providers',
-    category: 'Logistics',
-    publishDate: '06 May 2026',
-    closingDate: '22 May 2026',
-    responses: 24,
-    owner: 'Rahul Menon',
-    status: 'Published',
-  },
-  {
-    id: 4,
-    eoiNo: 'EOI-2026-1004',
-    title: 'Industrial Safety Equipment',
-    category: 'Safety',
-    publishDate: '08 May 2026',
-    closingDate: '25 May 2026',
-    responses: 8,
-    owner: 'Vivek Nair',
-    status: 'Draft',
-  },
-  {
-    id: 5,
-    eoiNo: 'EOI-2026-1005',
-    title: 'Cloud Infrastructure Services',
-    category: 'IT Services',
-    publishDate: '10 May 2026',
-    closingDate: '28 May 2026',
-    responses: 31,
-    owner: 'Ajith Kumar',
-    status: 'Awarded',
-  },
-];
+const rows =
+  eois?.map((eoi, index) => ({
+    id: eoi.pk_chr_eoi_id,
+    eoiNo: eoi.chr_eoi_code,
+    title: eoi.chr_eoi_title,
+    category: eoi.request?.chr_title || '-',
+    publishDate: eoi.tim_created
+      ? new Date(eoi.tim_created).toLocaleDateString('en-GB')
+      : '-',
+    closingDate: eoi.dt_submission_deadline
+      ? new Date(eoi.dt_submission_deadline).toLocaleDateString('en-GB')
+      : '-',
+    responses: 0, // replace if API provides response count
+    owner: eoi.vendor?.chr_vendor_name || '-',
+    status: eoi.chr_status,
+  })) || [];
 
   return (
     <Box>
@@ -230,6 +206,7 @@ const rows = [
           ]}
                     action={
                       <Button
+                      sx={{borderRadius:0.5}}
                         variant="outlined"
                         onClick={() => {
                           router.push('/eoi/eois');
@@ -349,9 +326,9 @@ const rows = [
                 csvOptions: { disableToolbarButton: true },
               },
             }}
-            onRowClick={(params) => {
-              router.push(`/purchase_orders/details`);
-            }}
+            // onRowClick={(params) => {
+            //   router.push(`/purchase_orders/details`);
+            // }}
             initialState={{
               pagination: {
                 paginationModel: {
