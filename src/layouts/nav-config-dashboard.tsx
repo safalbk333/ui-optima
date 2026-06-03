@@ -1,8 +1,12 @@
+import AddTaskIcon from '@mui/icons-material/AddTask';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import { CONFIG } from 'src/global-config';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import InterestsIcon from '@mui/icons-material/Interests';
 import type { NavSectionProps } from 'src/components/nav-section';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import NotesIcon from '@mui/icons-material/Notes';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
@@ -56,6 +60,10 @@ const ICONS = {
   contract: <NotesIcon fontSize="small" />,
   onboarding: <Diversity3Icon fontSize="small" />,
   rfqs: <AttachEmailIcon fontSize="small" />,
+  approve:<AddTaskIcon  fontSize='small'/>,
+  eoi:<InterestsIcon fontSize='small'/>,
+  grn:<EditNoteIcon fontSize='small' />,
+  rfp:<NoteAltIcon fontSize='small'/>
 };
 export const navData: NavSectionProps['data'] = [
   {
@@ -93,22 +101,22 @@ export const navData: NavSectionProps['data'] = [
       {
         title: 'RFP / RFQ',
         path: paths.rfq.roots,
-        icon: ICONS.rfqs,
+        icon: ICONS.rfp,
       },
             {
         title: 'GRN',
         path: paths.grn.roots,
-        icon: ICONS.rfqs,
+        icon: ICONS.grn,
       },
                   {
         title: 'EOI',
-        path: paths.grn.roots,
-        icon: ICONS.rfqs,
+        path: paths.eoi.roots,
+        icon: ICONS.eoi,
       },
                         {
         title: 'Approval',
         path: paths.approval.roots,
-        icon: ICONS.rfqs,
+        icon: ICONS.approve,
       },
     ],
   },

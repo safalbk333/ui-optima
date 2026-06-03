@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { axiosOptima } from 'src/lib/axios';
 
@@ -38,7 +38,7 @@ export const fetchVendors = createAsyncThunk(
   'vendors/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosOptima.get('/vendors');
+      const response = await axiosOptima.get('/vendor');
 
       return response.data.data;
     } catch (error: any) {

@@ -11,6 +11,8 @@ function Index() {
   title="New EOI"
   paths={[
     { label: 'Home', href: '/dashboard' },
+        { label: 'EOIs', href: '/eoi' },
+
     { label: 'EOI', href: '/eoi/eois' },
   ]}
 
