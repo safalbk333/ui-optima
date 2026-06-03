@@ -6,21 +6,17 @@ import {
   Autocomplete,
   Box,
   Button,
-  Checkbox,
   Grid,
   IconButton,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import { Vendor, fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import AddIcon from '@mui/icons-material/Add';
-import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 
 const priorityOptions = ['Low', 'Medium', 'High'];
 
@@ -28,7 +24,6 @@ const currencyOptions = ['USD', 'EUR', 'INR'];
 
 const uomOptions = ['PCS', 'BOX', 'KG', 'LTR'];
 
-const vendorOptions = ['ABC Suppliers', 'Global Tech', 'Prime Industrial', 'Vision Traders'];
 
 export default function POView() {
   const [items, setItems] = React.useState([

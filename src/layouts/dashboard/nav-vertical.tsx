@@ -1,5 +1,5 @@
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
-import { mergeClasses, varAlpha } from 'minimal-shared/utils';
+import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
 import type { Breakpoint } from '@mui/material/styles';

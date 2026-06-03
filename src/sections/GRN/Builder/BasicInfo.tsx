@@ -5,9 +5,6 @@ import * as React from 'react';
 import {
   Autocomplete,
   Box,
-  Button,
-  Checkbox,
-  Chip,
   Grid,
   IconButton,
   Stack,
@@ -15,7 +12,6 @@ import {
   Typography,
 } from '@mui/material';
 
-import AddIcon from '@mui/icons-material/Add';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
@@ -26,7 +22,6 @@ const PO = ['Tst1', 'Tst2'];
 
 const currencyOptions = ['USD', 'EUR', 'INR'];
 
-const uomOptions = ['PCS', 'BOX', 'KG', 'LTR'];
 
 const vendorOptions = ['ABC Suppliers', 'Global Tech', 'Prime Industrial', 'Vision Traders'];
 
@@ -52,20 +47,6 @@ const [items, setItems] = React.useState([
   },
 ]);
 
-const addItem = () => {
-  setItems((prev) => [
-    ...prev,
-    {
-      id: Date.now(),
-      itemCode: '',
-      description: '',
-      orderedQty: 0,
-      receivedQty: 0,
-      remainingQty: 0,
-      uom: '',
-    },
-  ]);
-};
 
 const removeItem = (id: number) => {
   setItems((prev) => prev.filter((item) => item.id !== id));
@@ -83,35 +64,9 @@ const removeItem = (id: number) => {
       padding: '8px 10px',
     },
   };
-  const vendors = [
-  { id: 1, name: 'ABC Suppliers' },
-  { id: 2, name: 'Global Traders' },
-  { id: 3, name: 'Prime Industries' },
-  { id: 4, name: 'Tech Procurement Ltd' },
-  { id: 5, name: 'Elite Manufacturing' },
-];
-const SELECT_ALL = {
-  id: 0,
-  name: 'Select All',
-};
- const [selectedVendors, setSelectedVendors] = React.useState<any[]>([]);
 
-  const options = [SELECT_ALL, ...vendors];
 
-  const handleChange = (_: any, value: any[]) => {
-    const isSelectAllClicked = value.some(
-      (option) => option.id === SELECT_ALL.id
-    );
 
-    if (isSelectAllClicked) {
-      const allSelected = selectedVendors.length === vendors.length;
-
-      setSelectedVendors(allSelected ? [] : vendors);
-      return;
-    }
-
-    setSelectedVendors(value);
-  };
 
 
   return (

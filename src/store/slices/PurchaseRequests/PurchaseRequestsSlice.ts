@@ -1,7 +1,6 @@
-import { axiosInstance, axiosOptima } from 'src/lib/axios';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { axiosOptima } from 'src/lib/axios';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import axios from 'axios';
 
 // ----------------------------------------------------------------------
 

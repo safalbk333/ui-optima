@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 
-import { AppDispatch, RootState } from 'src/store/store';
 import {
   Autocomplete,
   Box,
@@ -26,6 +25,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import type { RootState } from 'src/store/store';
 import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useRouter } from 'next/navigation';
 
@@ -67,7 +67,7 @@ export default function PurchaseRequests() {
   const PRIMARY = theme.palette.primary.main;
   const dispatch = useAppDispatch();
 
-const { data, loading } = useAppSelector(
+const { data } = useAppSelector(
   (state: RootState) => state.purchaseRequests
 );
 

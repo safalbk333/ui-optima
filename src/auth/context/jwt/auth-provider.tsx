@@ -1,8 +1,8 @@
 'use client';
 
-import  { axiosInstance, endpoints } from 'src/lib/axios';
-import { isValidToken, setSession } from './utils';
-import { useCallback, useEffect, useMemo } from 'react';
+import  { endpoints, axiosInstance } from 'src/lib/axios';
+import { setSession, isValidToken } from './utils';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import { AuthContext } from '../auth-context';
 import type { AuthState } from '../../types';

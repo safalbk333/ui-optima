@@ -1,5 +1,4 @@
 import Container from '@mui/material/Container';
-import PRStepper from 'src/sections/PurchaseRequests/PRStepper';
 import PurchaseRequests from 'src/sections/PurchaseRequests/RequestDashboard';
 import React from 'react';
 

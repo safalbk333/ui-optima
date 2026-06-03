@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  Autocomplete,
   Box,
-  Button,
   Chip,
-  Pagination,
   Stack,
+  Button,
   TextField,
+  Pagination,
   Typography,
+  Autocomplete,
 } from '@mui/material';
 import {
   DataGrid,
+  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
-  useGridApiContext,
 } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -26,7 +26,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import React from 'react';
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
 
 function CustomFooter() {

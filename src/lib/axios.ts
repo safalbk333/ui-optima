@@ -52,7 +52,7 @@ axiosOptima.interceptors.response.use(
   }
 );
  
-export { axiosInstance, axiosOptima };
+export { axiosOptima, axiosInstance };
  
 // ----------------------------------------------------------------------
  

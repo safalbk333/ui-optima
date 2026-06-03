@@ -1,8 +1,8 @@
 import 'src/global.css';
 
 import type { Metadata, Viewport } from 'next';
-import { SettingsDrawer, SettingsProvider, defaultSettings } from 'src/components/settings';
-import { ThemeProvider, themeConfig } from 'src/theme';
+import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
+import { themeConfig, ThemeProvider } from 'src/theme';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { AuthProvider } from 'src/auth/context/jwt';

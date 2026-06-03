@@ -2,10 +2,10 @@
 
 import * as React from 'react';
 
-import { Autocomplete, Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Grid, MenuItem, TextField, Typography, Autocomplete } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
-import { RootState } from 'src/store/store';
+import type { RootState } from 'src/store/store';
 import { fetchCategories } from 'src/store/slices/category/Category';
 import { setBasicInfo } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
 

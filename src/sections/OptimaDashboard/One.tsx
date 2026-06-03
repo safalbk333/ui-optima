@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Paper, Stack, useTheme, Typography } from '@mui/material';
 
 const steps = [
   {

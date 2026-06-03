@@ -20,8 +20,6 @@ import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { RootState } from 'src/store/store';
-import { fetchCategories } from 'src/store/slices/category/Category';
 import { fetchItems } from 'src/store/slices/Item/Items';
 import { setLineItems } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
 
@@ -44,7 +42,7 @@ const [items, setItems] = useState<LineItem[]>([
   },
 ]);
   const dispatch = useAppDispatch();
-const { data: item, loading } = useAppSelector(
+const { data: item } = useAppSelector(
   (state) => state.items
 );
 
@@ -54,7 +52,7 @@ useEffect(() => {
 useEffect(() => {
   dispatch(
     setLineItems(
-      items.map((item) => ({
+      items.map((item:any) => ({
         itemId: item.item?.id || '',
         categoryId:
           item.category?.pk_chr_category_id || '',
@@ -64,10 +62,7 @@ useEffect(() => {
     )
   );
 }, [items, dispatch]);
-const itemOptions = [
-  { id: 1, name: 'Laptop' },
-  { id: 2, name: 'Printer' },
-];
+
   const handleChange = (index: number, field: keyof LineItem, value: string | number) => {
     const updated = [...items];
     updated[index][field] = value as never;
@@ -90,9 +85,7 @@ const addRow = () => {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  const getTotal = (item: LineItem) => item.qty * item.unitPrice;
 
-  const subtotal = items.reduce((sum, item) => sum + getTotal(item), 0);
 
   const inputSx = {
     '& .MuiOutlinedInput-root': {

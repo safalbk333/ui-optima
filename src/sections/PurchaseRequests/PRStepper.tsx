@@ -2,12 +2,8 @@
 
 import {
   Box,
-  Button,
   Card,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
+  Button,
 } from '@mui/material';
 import React, { useState } from 'react';
 
