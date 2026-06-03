@@ -13,6 +13,14 @@ const axiosInstance = axios.create({
   },
 });
 
+const axiosOptima = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'https://semantic-pox-fox.ngrok-free.dev',
+  headers: {
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': true,
+  },
+});
+
 /**
  * Optional: Add token (if using auth)
  *
@@ -35,7 +43,18 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+
+axiosOptima.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error?.response?.data?.message || error?.message || 'Something went wrong!';
+    console.error('Axios error:', message);
+    console.error('Axios error:', error);
+    return Promise.reject(new Error(message));
+  }
+);
+
+export { axiosInstance, axiosOptima };
 
 // ----------------------------------------------------------------------
 

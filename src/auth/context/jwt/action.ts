@@ -1,6 +1,6 @@
 'use client';
 
-import axios, { endpoints } from 'src/lib/axios';
+import { axiosInstance, endpoints } from 'src/lib/axios';
 
 import { setSession } from './utils';
 import { JWT_STORAGE_KEY } from './constant';
@@ -26,7 +26,7 @@ export const signInWithPassword = async ({ email, password }: SignInParams): Pro
   try {
     const params = { email, password };
 
-    const res = await axios.post(endpoints.auth.signIn, params);
+    const res = await axiosInstance.post(endpoints.auth.signIn, params);
 
     const { accessToken } = res.data;
 
@@ -58,7 +58,7 @@ export const signUp = async ({
   };
 
   try {
-    const res = await axios.post(endpoints.auth.signUp, params);
+    const res = await axiosInstance.post(endpoints.auth.signUp, params);
 
     const { accessToken } = res.data;
 

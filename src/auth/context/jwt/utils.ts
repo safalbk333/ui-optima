@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import axios from 'src/lib/axios';
+import { axiosInstance } from 'src/lib/axios';
 
 import { JWT_STORAGE_KEY } from './constant';
 
@@ -74,7 +74,7 @@ export async function setSession(accessToken: string | null) {
     if (accessToken) {
       sessionStorage.setItem(JWT_STORAGE_KEY, accessToken);
 
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
       const decodedToken = jwtDecode(accessToken); // ~3 days by minimals server
 
@@ -85,7 +85,7 @@ export async function setSession(accessToken: string | null) {
       }
     } else {
       sessionStorage.removeItem(JWT_STORAGE_KEY);
-      delete axios.defaults.headers.common.Authorization;
+      delete axiosInstance.defaults.headers.common.Authorization;
     }
   } catch (error) {
     console.error('Error during set session:', error);
