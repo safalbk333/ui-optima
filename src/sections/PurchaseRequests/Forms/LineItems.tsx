@@ -1,69 +1,91 @@
 'use client';
 
 import {
+  Autocomplete,
   Box,
+  Button,
+  IconButton,
   Paper,
   Table,
-  Button,
-  TableRow,
   TableBody,
   TableCell,
-  TableHead,
-  TextField,
-  IconButton,
-  Typography,
   TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { RootState } from 'src/store/store';
+import { fetchCategories } from 'src/store/slices/category/Category';
+import { fetchItems } from 'src/store/slices/Item/Items';
+import { setLineItems } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
 
 interface LineItem {
-  item: string;
-  category: string;
+  item: any | null;
+  category: any | null;
   uom: string;
   qty: number;
   unitPrice: number;
 }
 
 export default function LineItemsTable() {
-  const [items, setItems] = useState<LineItem[]>([
-    {
-      item: 'MacBook Pro 14',
-      category: 'Electronics',
-      uom: 'Nos',
-      qty: 2,
-      unitPrice: 2400,
-    },
-    {
-      item: 'Office Chair',
-      category: 'Furniture',
-      uom: 'Nos',
-      qty: 4,
-      unitPrice: 180,
-    },
-  ]);
+const [items, setItems] = useState<LineItem[]>([
+  {
+    item: null,
+    category: null,
+    uom: '',
+    qty: 1,
+    unitPrice: 0,
+  },
+]);
+  const dispatch = useAppDispatch();
+const { data: item, loading } = useAppSelector(
+  (state) => state.items
+);
 
+useEffect(() => {
+  dispatch(fetchItems());
+}, [dispatch]);
+useEffect(() => {
+  dispatch(
+    setLineItems(
+      items.map((item) => ({
+        itemId: item.item?.id || '',
+        categoryId:
+          item.category?.pk_chr_category_id || '',
+        quantity: item.qty,
+        uom: item.uom,
+      }))
+    )
+  );
+}, [items, dispatch]);
+const itemOptions = [
+  { id: 1, name: 'Laptop' },
+  { id: 2, name: 'Printer' },
+];
   const handleChange = (index: number, field: keyof LineItem, value: string | number) => {
     const updated = [...items];
     updated[index][field] = value as never;
     setItems(updated);
   };
 
-  const addRow = () => {
-    setItems([
-      ...items,
-      {
-        item: '',
-        category: '',
-        uom: '',
-        qty: 1,
-        unitPrice: 0,
-      },
-    ]);
-  };
-
+const addRow = () => {
+  setItems([
+    ...items,
+    {
+      item: null,
+      category: null,
+      uom: '',
+      qty: 1,
+      unitPrice: 0,
+    },
+  ]);
+};
   const deleteRow = (index: number) => {
     setItems(items.filter((_, i) => i !== index));
   };
@@ -75,8 +97,7 @@ export default function LineItemsTable() {
   const inputSx = {
     '& .MuiOutlinedInput-root': {
       borderRadius: 1,
-      height: 32,
-      fontSize: 11.5,
+      fontSize: 12,
       transition: 'all 0.2s ease',
 
       '& fieldset': {
@@ -94,9 +115,7 @@ export default function LineItemsTable() {
     },
 
     '& .MuiInputBase-input': {
-      fontSize: 11.5,
-      py: 0.8,
-      px: 1.2,
+      fontSize: 12,
       fontWeight: 500,
       color: '#222',
     },
@@ -180,9 +199,9 @@ export default function LineItemsTable() {
             textTransform: 'none',
             fontSize: 11.5,
             fontWeight: 600,
-            borderRadius: 2,
-            px: 1.5,
-            py: 0.6,
+            borderRadius: 1,
+            py: 1,
+            px:1,
             minHeight: 30,
           }}
         >
@@ -194,9 +213,9 @@ export default function LineItemsTable() {
         <Table>
           <TableHead>
             <TableRow>
+   
               <TableCell sx={{ ...headerCell, minWidth: 240 }}>Item</TableCell>
 
-              <TableCell sx={{ ...headerCell, minWidth: 170 }}>Category</TableCell>
 
               <TableCell sx={{ ...headerCell, width: 90 }}>UOM</TableCell>
 
@@ -204,13 +223,13 @@ export default function LineItemsTable() {
                 Qty
               </TableCell>
 
-              <TableCell align="right" sx={{ ...headerCell, width: 140 }}>
+              {/* <TableCell align="right" sx={{ ...headerCell, width: 140 }}>
                 Unit Price
               </TableCell>
 
               <TableCell align="right" sx={{ ...headerCell, width: 120 }}>
                 Total
-              </TableCell>
+              </TableCell> */}
 
               <TableCell align="center" sx={{ ...headerCell, width: 40 }} />
             </TableRow>
@@ -227,27 +246,22 @@ export default function LineItemsTable() {
                   },
                 }}
               >
-                {/* Item */}
-                <TableCell sx={bodyCell}>
-                  <TextField
-                    fullWidth
-                    value={row.item}
-                    placeholder="Item name"
-                    onChange={(e) => handleChange(index, 'item', e.target.value)}
-                    sx={inputSx}
-                  />
-                </TableCell>
 
-                {/* Category */}
-                <TableCell sx={bodyCell}>
-                  <TextField
-                    fullWidth
-                    value={row.category}
-                    placeholder="Category"
-                    onChange={(e) => handleChange(index, 'category', e.target.value)}
-                    sx={inputSx}
-                  />
-                </TableCell>
+                {/* Item */}
+<TableCell sx={bodyCell}>
+<Autocomplete
+  options={item || []}
+  getOptionLabel={(option) => option?.chr_item_name || ''}
+  isOptionEqualToValue={(option, value) =>
+    option.pk_chr_item_id === value.pk_chr_item_id
+  }
+  renderInput={(params) => (
+    <TextField {...params} label="Item"  />
+  )}
+/>
+</TableCell>
+
+
 
                 {/* UOM */}
                 <TableCell sx={bodyCell}>
@@ -274,7 +288,7 @@ export default function LineItemsTable() {
                 </TableCell>
 
                 {/* Unit Price */}
-                <TableCell align="right" sx={bodyCell}>
+                {/* <TableCell align="right" sx={bodyCell}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -323,10 +337,10 @@ export default function LineItemsTable() {
                       }}
                     />
                   </Box>
-                </TableCell>
+                </TableCell> */}
 
                 {/* Total */}
-                <TableCell
+                {/* <TableCell
                   align="right"
                   sx={{
                     ...bodyCell,
@@ -337,12 +351,12 @@ export default function LineItemsTable() {
                   }}
                 >
                   ${getTotal(row).toFixed(2)}
-                </TableCell>
+                </TableCell> */}
 
                 {/* Delete */}
                 <TableCell align="center" sx={bodyCell}>
                   <IconButton
-                    size="small"
+                    size="medium"
                     onClick={() => deleteRow(index)}
                     sx={{
                       color: '#d32f2f',
@@ -356,7 +370,7 @@ export default function LineItemsTable() {
                   >
                     <DeleteRoundedIcon
                       sx={{
-                        fontSize: 15,
+                        fontSize: 20,
                       }}
                     />
                   </IconButton>
@@ -368,7 +382,7 @@ export default function LineItemsTable() {
       </TableContainer>
 
       {/* Footer */}
-      <Box
+      {/* <Box
         sx={{
           borderTop: '1px solid #f1f1f1',
           px: 2.5,
@@ -406,7 +420,7 @@ export default function LineItemsTable() {
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </Paper>
   );
 }

@@ -3,14 +3,15 @@
 import * as React from 'react';
 
 import {
-  Box,
-  Grid,
-  Stack,
-  Button,
-  TextField,
-  IconButton,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -55,6 +56,36 @@ export default function RFQBuilderForm() {
       padding: '8px 10px',
     },
   };
+  const vendors = [
+  { id: 1, name: 'ABC Suppliers' },
+  { id: 2, name: 'Global Traders' },
+  { id: 3, name: 'Prime Industries' },
+  { id: 4, name: 'Tech Procurement Ltd' },
+  { id: 5, name: 'Elite Manufacturing' },
+];
+const SELECT_ALL = {
+  id: 0,
+  name: 'Select All',
+};
+ const [selectedVendors, setSelectedVendors] = React.useState<any[]>([]);
+
+  const options = [SELECT_ALL, ...vendors];
+
+  const handleChange = (_: any, value: any[]) => {
+    const isSelectAllClicked = value.some(
+      (option) => option.id === SELECT_ALL.id
+    );
+
+    if (isSelectAllClicked) {
+      const allSelected = selectedVendors.length === vendors.length;
+
+      setSelectedVendors(allSelected ? [] : vendors);
+      return;
+    }
+
+    setSelectedVendors(value);
+  };
+
 
   return (
     <Box>
@@ -131,6 +162,46 @@ export default function RFQBuilderForm() {
               placeholder="Warehouse - Chennai"
               sx={smallInputSx}
             />
+          </Grid>
+          <Grid size={{xs:12,md:12}}>
+             <Autocomplete
+        multiple
+        size='small'
+        disableCloseOnSelect
+        options={options}
+        value={selectedVendors}
+                      sx={smallInputSx}
+
+        onChange={handleChange}
+        getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        renderOption={(props, option) => {
+          const allSelected =
+            selectedVendors.length === vendors.length &&
+            vendors.length > 0;
+
+          const checked =
+            option.id === SELECT_ALL.id
+              ? allSelected
+              : selectedVendors.some(
+                  (vendor) => vendor.id === option.id
+                );
+
+          return (
+            <li {...props}>
+              <Checkbox checked={checked} />
+              {option.name}
+            </li>
+          );
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Select Vendors"
+            placeholder="Choose vendors"
+          />
+        )}
+      />
           </Grid>
 
           <Grid size={{ xs: 12 }}>

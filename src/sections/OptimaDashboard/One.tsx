@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, useTheme, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
 
 const steps = [
   {
@@ -77,7 +77,7 @@ export default function ProcessSection() {
           sx={{
             height: 1,
             width: { xs: '100%', md: 220 },
-            borderTop: `1px solid ${theme.palette.primary.main}`,
+            borderTop: `1px solid ${theme.palette.primary.main}25`,
           }}
         />
       </Stack>
@@ -99,7 +99,7 @@ export default function ProcessSection() {
             key={step.id}
             elevation={0}
             sx={{
-              border: `1px solid ${theme.palette.primary.main}`,
+              border: `1px solid ${theme.palette.primary.main}25`,
               borderRadius: 0,
               p: 2,
               minHeight: 185,

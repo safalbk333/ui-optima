@@ -19,19 +19,19 @@ function RFQ() {
             { label: 'RFQ List', href: '/rfq' },
             { label: 'RFQ ', href: '/rfq/rfp' },
           ]}
-          action={
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => router.push('/rfq/rfp')}
-              sx={{
-                borderRadius: 0.5,
-                fontWeight: 600,
-              }}
-            >
-              New RFQ / RFP
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     color="primary"
+          //     variant="outlined"
+          //     onClick={() => router.push('/rfq/rfp')}
+          //     sx={{
+          //       borderRadius: 0.5,
+          //       fontWeight: 600,
+          //     }}
+          //   >
+          //     New RFQ / RFP
+          //   </Button>
+          // }
         />
       </Box>
 

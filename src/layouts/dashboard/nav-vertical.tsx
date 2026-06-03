@@ -1,5 +1,5 @@
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
-import { varAlpha, mergeClasses } from 'minimal-shared/utils';
+import { mergeClasses, varAlpha } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
 import type { Breakpoint } from '@mui/material/styles';
@@ -51,7 +51,7 @@ function Wordmark({ text }: { text: string }) {
                 position: 'relative',
                 display: 'inline-block',
                 px: '0.02em',
-                color: '#fff',
+                color: 'primary.main',
               }}
             >
               {ch}
@@ -75,7 +75,7 @@ function Wordmark({ text }: { text: string }) {
         }
 
         return (
-          <Box key={`${i}-${ch}`} component="span" sx={{ color: '#fff' }}>
+          <Box key={`${i}-${ch}`} component="span" sx={{ color: 'primary.main' }}>
             {ch}
           </Box>
         );
@@ -180,21 +180,25 @@ const NavRoot = styled('div', {
     position: 'fixed',
     flexDirection: 'column',
     zIndex: 'var(--layout-nav-zIndex)',
+    backgroundColor: 'transparent',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      // background: varAlpha(theme.vars.palette.common.blackChannel, 0.01), // light shade
+      pointerEvents: 'none',
+    },
 
-    background: varAlpha(theme.palette.primary.mainChannel, 1),
-    backdropFilter: 'blur(20px)',
-
+    // 👉 Ensure content is above overlay
+    '& > *': {
+      zIndex: 1,
+    },
     width: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
-
-    // borderRight: `1px solid ${varAlpha(theme.vars.palette.primary.mainChannel, 0.12)}`,
-
+    borderRight: `1px solid var(--layout-nav-border-color, ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)})`,
     transition: theme.transitions.create(['width'], {
       easing: 'var(--layout-transition-easing)',
       duration: 'var(--layout-transition-duration)',
     }),
-
-    [theme.breakpoints.up(layoutQuery)]: {
-      display: 'flex',
-    },
+    [theme.breakpoints.up(layoutQuery)]: { display: 'flex' },
   })
 );

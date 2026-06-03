@@ -11,14 +11,14 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
   } = theme;
 
   return {
-    '--nav-item-color':'#fff',
+    '--nav-item-color': palette.text.secondary,
     '--nav-item-hover-bg': palette.action.hover,
     '--nav-item-caption-color': palette.text.disabled,
     // root
-    '--nav-item-root-active-color': '#fff',
+    '--nav-item-root-active-color': palette.primary.main,
     '--nav-item-root-active-color-on-dark': palette.primary.light,
-    '--nav-item-root-active-bg': varAlpha(palette.common.whiteChannel, 0.12),
-    '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.18),
+    '--nav-item-root-active-bg': varAlpha(palette.primary.mainChannel, 0.08),
+    '--nav-item-root-active-hover-bg': varAlpha(palette.primary.mainChannel, 0.16),
     '--nav-item-root-open-color': palette.text.primary,
     '--nav-item-root-open-bg': palette.action.hover,
     // sub
@@ -30,9 +30,6 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
       '--nav-item-sub-active-bg': palette.action.hover,
       '--nav-subheader-color': palette.text.disabled,
       '--nav-subheader-hover-color': palette.text.primary,
-      '--nav-item-active-indicator-width': '5px',
-      '--nav-item-active-indicator-height': '20px',
-      '--nav-item-active-indicator-color': 'transparent',
     }),
   };
 }
@@ -40,7 +37,7 @@ function colorVars(theme: Theme, variant?: 'vertical' | 'mini' | 'horizontal') {
 // ----------------------------------------------------------------------
 
 function verticalVars(theme: Theme) {
-  const { shape } = theme;
+  const { shape, typography } = theme;
 
   return {
     ...colorVars(theme, 'vertical'),
@@ -51,12 +48,14 @@ function verticalVars(theme: Theme) {
     '--nav-item-pb': '4px',
     '--nav-item-pl': '12px',
     // root
-    '--nav-item-root-height': '42px',
+    '--nav-item-root-height': '44px',
     // sub
     '--nav-item-sub-height': '36px',
+    // title (body2 default is 14px)
+    '--nav-item-title-font-size': typography.pxToRem(13),
     // icon
-    '--nav-icon-size': '20px',
-    '--nav-icon-margin': '0 12px 0 0',
+    '--nav-icon-size': typography.pxToRem(18),
+    '--nav-icon-margin': `0 ${typography.pxToRem(10)} 0 0`,
     // bullet
     '--nav-bullet-size': '12px',
     '--nav-bullet-light-color': bulletColor.light,

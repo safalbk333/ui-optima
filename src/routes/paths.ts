@@ -12,6 +12,9 @@ const ROOTS = {
   PR: '/purchase-requests',
   VR: '/vendor-onboarding',
   RFQ: '/rfq',
+  GRN:'/grn',
+  EOI:'/eoi',
+  Approval:'/approval'
 };
 
 // ----------------------------------------------------------------------
@@ -93,5 +96,17 @@ export const paths = {
   },
   rfq: {
     roots: ROOTS.RFQ,
+  },
+    grn: {
+    roots: ROOTS.GRN,
+    new: `${ROOTS.GRN}/build`,
+  },
+      eoi: {
+    roots: ROOTS.EOI,
+    new: `${ROOTS.EOI}/eois`,
+  },
+        approval: {
+    roots: ROOTS.Approval,
+    new: `${ROOTS.EOI}/view`,
   },
 };

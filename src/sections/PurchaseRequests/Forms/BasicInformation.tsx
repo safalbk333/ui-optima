@@ -2,7 +2,12 @@
 
 import * as React from 'react';
 
-import { Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+
+import { RootState } from 'src/store/store';
+import { fetchCategories } from 'src/store/slices/category/Category';
+import { setBasicInfo } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
 
 const commonTextFieldSx = {
   '& .MuiOutlinedInput-root': {
@@ -41,6 +46,25 @@ const commonTextFieldProps = {
 };
 
 export default function PurchaseRequestForm() {
+  const dispatch = useAppDispatch();
+  const [formData, setFormData] = React.useState({
+  title: '',
+  description: '',
+  priorityId: 'HIGH',
+  estimatedValue: 0,
+  currency: 'USD',
+  departmentId: '',
+});
+React.useEffect(() => {
+  dispatch(setBasicInfo(formData));
+}, [formData, dispatch]);
+const { data: categories, loading } = useAppSelector(
+  (state: RootState) => state.categories
+);
+
+React.useEffect(() => {
+  dispatch(fetchCategories());
+}, [dispatch]);
   return (
     <Box sx={{ py: 2 }}>
       <Grid container spacing={3}>
@@ -72,21 +96,33 @@ export default function PurchaseRequestForm() {
         </Box>
         {/* PR Title */}
         <Grid size={{ xs: 12 }}>
-          <TextField
-            label="PR TITLE / DESCRIPTION *"
-            value="HVAC Filter Replacement & Maintenance — Q2 2026"
-            {...commonTextFieldProps}
-          />
+<TextField
+  label="PR TITLE"
+  value={formData.title}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      title: e.target.value,
+    })
+  }
+  {...commonTextFieldProps}
+/>
         </Grid>
 
         {/* Department */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            select
-            label="DEPARTMENT *"
-            value="Network Operations"
-            {...commonTextFieldProps}
-          >
+<TextField
+  select
+  label="DEPARTMENT *"
+  value={formData.departmentId}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      departmentId: e.target.value,
+    })
+  }
+  {...commonTextFieldProps}
+>
             <MenuItem value="Network Operations">Network Operations</MenuItem>
 
             <MenuItem value="Finance">Finance</MenuItem>
@@ -94,43 +130,102 @@ export default function PurchaseRequestForm() {
             <MenuItem value="HR">HR</MenuItem>
           </TextField>
         </Grid>
+        {/* Currency */}
+                <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            select
+            label='Priority'
+value={formData.priorityId}
+onChange={(e) =>
+  setFormData({
+    ...formData,
+    priorityId: e.target.value,
+  })
+}            {...commonTextFieldProps}
+          >
+            <MenuItem value="ca5a78c8-6d50-445d-ab78-1628426c0a3f">Low</MenuItem>
+
+            <MenuItem value="fb316a20-946b-44b8-bb54-d113e2fc3de9">Medium</MenuItem>
+                        <MenuItem value="6da6e09f-e999-490d-947a-d29b65d0e0fe">Hign</MenuItem>
+
+          </TextField>
+        </Grid>
+<Grid size={{ xs: 12, md: 6 }}>
+  <Autocomplete
+    options={categories || []}
+    loading={loading}
+    size="small"
+
+    getOptionLabel={(option) => option?.chr_category_name || ''}
+    isOptionEqualToValue={(option, value) =>
+      option.pk_chr_category_id === value.pk_chr_category_id
+    }
+
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="CATEGORY"
+        {...commonTextFieldProps}
+      />
+    )}
+    sx={{
+      '& .MuiOutlinedInput-root': {
+        fontSize: 13,
+      },
+    }}
+  />
+</Grid>
+<Grid size={{ xs: 12, md: 6 }}>
+  <TextField
+    label="CURRENCY"
+    value="USD"
+    disabled
+    {...commonTextFieldProps}
+  />
+</Grid>
+
+{/* Estimated Value */}
+<Grid size={{ xs: 12, md: 6 }}>
+<TextField
+  label="ESTIMATED VALUE"
+  type="number"
+  value={formData.estimatedValue}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      estimatedValue: Number(e.target.value),
+    })
+  }
+  placeholder="0.00"
+  {...commonTextFieldProps}
+/>
+</Grid>
 
         {/* Required By */}
-        <Grid size={{ xs: 12, md: 6 }}>
+        {/* <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             label="REQUIRED BY *"
             type="date"
-            value="2026-06-15"
             {...commonTextFieldProps}
           />
-        </Grid>
+        </Grid> */}
 
-        {/* Budget Code */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField label="BUDGET CODE *" value="OPEX-2026-FAC-07" {...commonTextFieldProps} />
-        </Grid>
 
         {/* Cost Centre */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <TextField
-            select
-            label="COST CENTRE"
-            value="CCTR-044 · Facilities Mgmt"
-            {...commonTextFieldProps}
-          >
-            <MenuItem value="CCTR-044 · Facilities Mgmt">CCTR-044 · Facilities Mgmt</MenuItem>
 
-            <MenuItem value="CCTR-022 · Finance">CCTR-022 · Finance</MenuItem>
-          </TextField>
-        </Grid>
 
-        {/* Business Justification */}
         <Grid size={{ xs: 12 }}>
           <TextField
-            label="BUSINESS JUSTIFICATION *"
+            label="DESCRIPTION"
             multiline
+              value={formData.description}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      description: e.target.value,
+    })
+  }
             rows={3}
-            value="HVAC filter units across 4 NOC sites are overdue for Q2 replacement per preventive maintenance schedule. Failure to replace will void OEM warranty and risk equipment damage."
             {...commonTextFieldProps}
             sx={{
               ...commonTextFieldSx,

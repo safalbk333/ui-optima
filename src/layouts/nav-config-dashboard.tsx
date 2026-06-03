@@ -70,11 +70,11 @@ export const navData: NavSectionProps['data'] = [
         path: paths.purchaseRequests.root,
         icon: ICONS.rfq,
       },
-      // {
-      //   title: 'Purchase Orders',
-      //   path: paths.purchaseOrders.root,
-      //   icon: ICONS.purchaseOrder,
-      // },
+      {
+        title: 'Purchase Orders',
+        path: paths.purchaseOrders.root,
+        icon: ICONS.purchaseOrder,
+      },
       {
         title: 'Vendor Directory',
         path: paths.vendor.directory,
@@ -93,6 +93,21 @@ export const navData: NavSectionProps['data'] = [
       {
         title: 'RFP / RFQ',
         path: paths.rfq.roots,
+        icon: ICONS.rfqs,
+      },
+            {
+        title: 'GRN',
+        path: paths.grn.roots,
+        icon: ICONS.rfqs,
+      },
+                  {
+        title: 'EOI',
+        path: paths.grn.roots,
+        icon: ICONS.rfqs,
+      },
+                        {
+        title: 'Approval',
+        path: paths.approval.roots,
         icon: ICONS.rfqs,
       },
     ],

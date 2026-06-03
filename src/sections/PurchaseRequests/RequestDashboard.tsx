@@ -2,28 +2,31 @@
 
 import * as React from 'react';
 
+import { AppDispatch, RootState } from 'src/store/store';
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
@@ -62,6 +65,15 @@ export default function PurchaseRequests() {
   const router = useRouter();
   const theme = useTheme();
   const PRIMARY = theme.palette.primary.main;
+  const dispatch = useAppDispatch();
+
+const { data, loading } = useAppSelector(
+  (state: RootState) => state.purchaseRequests
+);
+
+React.useEffect(() => {
+  dispatch(fetchPurchaseRequests());
+}, [dispatch]);
   const columns: GridColDef[] = [
     { field: 'prNumber', headerName: 'PR Number', flex: 1 },
     { field: 'requestType', headerName: 'Request Type', flex: 1 },
@@ -119,48 +131,21 @@ export default function PurchaseRequests() {
     { field: 'createdDate', headerName: 'Created Date', flex: 1 },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      prNumber: 'PR-2026-001',
-      requestType: 'Office Supplies',
-      requester: 'Ajith Pradeep',
-      department: 'Procurement',
-      amount: '₹45,000',
-      status: 'Approved',
-      createdDate: '12 May 2026',
-    },
-    {
-      id: 2,
-      prNumber: 'PR-2026-002',
-      requestType: 'Laptop Purchase',
-      requester: 'Rahul Nair',
-      department: 'IT',
-      amount: '₹1,25,000',
-      status: 'Pending',
-      createdDate: '14 May 2026',
-    },
-    {
-      id: 3,
-      prNumber: 'PR-2026-003',
-      requestType: 'AMC Renewal',
-      requester: 'Sneha Kumar',
-      department: 'Administration',
-      amount: '₹82,000',
-      status: 'In Review',
-      createdDate: '15 May 2026',
-    },
-    {
-      id: 4,
-      prNumber: 'PR-2026-004',
-      requestType: 'Furniture Purchase',
-      requester: 'Arun George',
-      department: 'Facilities',
-      amount: '₹2,10,000',
-      status: 'Rejected',
-      createdDate: '16 May 2026',
-    },
-  ];
+const rows =
+  data?.map((item: any) => ({
+    id: item.pk_chr_request_id,
+    prNumber: item.chr_request_number,
+    requestType: item.category?.chr_category_name || '-',
+    requester: item.requested_by?.chr_user_name || '-',
+    department: item.department?.chr_department_name || '-',
+    amount: `${item.chr_currency} ${Number(item.flt_estimated_value).toLocaleString()}`,
+    status: item.current_status?.chr_status_name || '-',
+    createdDate: new Date(item.tim_created).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }),
+  })) || [];
   return (
     <Box>
       <Box mb={2}>

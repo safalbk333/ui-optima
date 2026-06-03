@@ -1,14 +1,15 @@
-import React from 'react';
 import Box from '@mui/material/Box';
-import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import PrintIcon from '@mui/icons-material/Print';
-import LineItemsTable from './Table';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ContactCard from './ContactCards';
+import Divider from '@mui/material/Divider';
+import LineItemsTable from './Table';
+import POView from './BasicInfo';
+import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import PrintIcon from '@mui/icons-material/Print';
+import React from 'react';
+import Typography from '@mui/material/Typography';
 
 const PurchaseOrderCard = () => (
     <Box
@@ -124,43 +125,17 @@ function DetailedView() {
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Purchase Orders Details"
+          title="New PO"
           paths={[
             { label: 'Home', href: '/dashboard' },
             { label: 'Purchase Orders', href: '/purchase_orders' },
-            { label: 'Details', href: '/purchase_orders/details' },
+            { label: 'New', href: '/purchase_orders/details' },
           ]}
         />
       </Box>
       <Box mb={2} sx={{ borderTop: '1px dashed #d1d5db' }} />
 
-      {/* 2 Side Flex Layout */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          alignItems: 'flex-start',
-        }}
-      >
-        {/* Left Side */}
-        <Box
-          sx={{
-            flex: 1,
-          }}
-        >
-          <PurchaseOrderCard />
-          <LineItemsTable />
-        </Box>
-
-        {/* Right Side */}
-        <Box
-          sx={{
-            width: 320,
-          }}
-        >
-          <ContactCard />
-        </Box>
-      </Box>
+<POView />
     </Box>
   );
 }

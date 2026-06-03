@@ -1,15 +1,13 @@
 'use client';
 
-import type { AuthState } from '../../types';
+import  { axiosInstance, endpoints } from 'src/lib/axios';
+import { isValidToken, setSession } from './utils';
+import { useCallback, useEffect, useMemo } from 'react';
 
-import { useSetState } from 'minimal-shared/hooks';
-import { useMemo, useEffect, useCallback } from 'react';
-
-import axios, { endpoints } from 'src/lib/axios';
-
-import { JWT_STORAGE_KEY } from './constant';
 import { AuthContext } from '../auth-context';
-import { setSession, isValidToken } from './utils';
+import type { AuthState } from '../../types';
+import { JWT_STORAGE_KEY } from './constant';
+import { useSetState } from 'minimal-shared/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +31,7 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get(endpoints.auth.me);
+        const res = await axiosInstance.get(endpoints.auth.me);
 
         const { user } = res.data;
 

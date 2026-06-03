@@ -1,18 +1,24 @@
 import type { AxiosRequestConfig } from 'axios';
-
+import { CONFIG } from 'src/global-config';
 import axios from 'axios';
 
-import { CONFIG } from 'src/global-config';
-
 // ----------------------------------------------------------------------
-
+ 
 const axiosInstance = axios.create({
   baseURL: CONFIG.serverUrl,
   headers: {
     'Content-Type': 'application/json',
   },
 });
-
+ 
+const axiosOptima = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'https://semantic-pox-fox.ngrok-free.dev',
+  headers: {
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': true,
+  },
+});
+ 
 /**
  * Optional: Add token (if using auth)
  *
@@ -25,7 +31,7 @@ const axiosInstance = axios.create({
 });
 *
 */
-
+ 
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -34,28 +40,39 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(new Error(message));
   }
 );
-
-export default axiosInstance;
-
+ 
+ 
+axiosOptima.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error?.response?.data?.message || error?.message || 'Something went wrong!';
+    console.error('Axios error:', message);
+    console.error('Axios error:', error);
+    return Promise.reject(new Error(message));
+  }
+);
+ 
+export { axiosInstance, axiosOptima };
+ 
 // ----------------------------------------------------------------------
-
+ 
 export const fetcher = async <T = unknown>(
   args: string | [string, AxiosRequestConfig]
 ): Promise<T> => {
   try {
     const [url, config] = Array.isArray(args) ? args : [args, {}];
-
+ 
     const res = await axiosInstance.get<T>(url, config);
-
+ 
     return res.data;
   } catch (error) {
     console.error('Fetcher failed:', error);
     throw error;
   }
 };
-
+ 
 // ----------------------------------------------------------------------
-
+ 
 export const endpoints = {
   chat: '/api/chat',
   kanban: '/api/kanban',

@@ -1,33 +1,33 @@
 'use client';
 
-import React from 'react';
 import {
+  Autocomplete,
   Box,
-  Chip,
-  Stack,
   Button,
+  Chip,
+  Pagination,
+  Stack,
   TextField,
   Typography,
-  Pagination,
-  Autocomplete,
 } from '@mui/material';
-
-import type {
-  GridColDef,
-  GridRenderCellParams} from '@mui/x-data-grid';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
-
-import { alpha, useTheme } from '@mui/material/styles';
+import type {
+  GridColDef,
+  GridRenderCellParams
+} from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
-import { useRouter } from 'next/navigation';
+import { alpha, useTheme } from '@mui/material/styles';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import React from 'react';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'next/navigation';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -68,127 +68,151 @@ function PurchaseOrderDashboard() {
 
   const PRIMARY = theme.palette.primary.main;
 
-  const columns: GridColDef[] = [
-    {
-      field: 'poNo',
-      headerName: 'PO No',
-      flex: 1,
+const columns: GridColDef[] = [
+  {
+    field: 'poNo',
+    headerName: 'PO Number',
+    flex: 1,
+  },
+  {
+    field: 'vendor',
+    headerName: 'Vendor',
+    flex: 1.5,
+  },
+  {
+    field: 'category',
+    headerName: 'Category',
+    flex: 1,
+  },
+  {
+    field: 'poDate',
+    headerName: 'PO Date',
+    flex: 1,
+  },
+  {
+    field: 'deliveryDate',
+    headerName: 'Expected Delivery',
+    flex: 1,
+  },
+  {
+    field: 'buyer',
+    headerName: 'Buyer',
+    flex: 1,
+  },
+  {
+    field: 'amount',
+    headerName: 'PO Value',
+    flex: 1,
+  },
+  {
+    field: 'status',
+    headerName: 'Status',
+    flex: 1,
+    renderCell: (params: GridRenderCellParams) => {
+      const statusStyles: Record<string, any> = {
+        Draft: {
+          color: '#6b7280',
+          bgcolor: '#f3f4f6',
+        },
+        Approved: {
+          color: '#15803d',
+          bgcolor: '#dcfce7',
+        },
+        Sent: {
+          color: '#1d4ed8',
+          bgcolor: '#dbeafe',
+        },
+        Partial: {
+          color: '#b45309',
+          bgcolor: '#fef3c7',
+        },
+        Closed: {
+          color: '#374151',
+          bgcolor: '#e5e7eb',
+        },
+        Cancelled: {
+          color: '#b91c1c',
+          bgcolor: '#fee2e2',
+        },
+      };
+
+      const style = statusStyles[params.value] || {};
+
+      return (
+        <Chip
+          label={params.value}
+          size="small"
+          sx={{
+            height: 26,
+            fontSize: 12,
+            fontWeight: 600,
+            borderRadius: '8px',
+            color: style.color,
+            bgcolor: style.bgcolor,
+          }}
+        />
+      );
     },
+  },
+];
 
-    {
-      field: 'title',
-      headerName: 'PO Title',
-      flex: 1.8,
-    },
-
-    {
-      field: 'category',
-      headerName: 'Category',
-      flex: 1,
-    },
-
-    {
-      field: 'poDate',
-      headerName: 'PO Date',
-      flex: 1,
-    },
-
-    {
-      field: 'deliveryDate',
-      headerName: 'Delivery Date',
-      flex: 1,
-    },
-
-    {
-      field: 'buyer',
-      headerName: 'Buyer',
-      flex: 1,
-    },
-
-    {
-      field: 'amount',
-      headerName: 'PO Amount',
-      flex: 1,
-    },
-
-    {
-      field: 'status',
-      headerName: 'Status',
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        let color = 'default';
-
-        if (params.value === 'Open') color = 'info';
-        if (params.value === 'Acknowledged') color = 'success';
-        if (params.value === 'Pending') color = 'warning';
-        if (params.value === 'Closed') color = 'default';
-        if (params.value === 'Rejected') color = 'error';
-
-        return (
-          <Chip
-            label={params.value}
-            sx={{
-              fontSize: 11,
-              height: 24,
-              fontWeight: 600,
-            }}
-            color={color as any}
-            size="small"
-          />
-        );
-      },
-    },
-  ];
-
-  const rows = [
-    {
-      id: 1,
-      poNo: 'PO-2026-1001',
-      title: 'Dell Latitude Laptop Procurement',
-      category: 'IT Equipment',
-      poDate: '01 May 2026',
-      deliveryDate: '10 May 2026',
-      buyer: 'Procurement Team',
-      amount: '$24,500',
-      status: 'Open',
-    },
-
-    {
-      id: 2,
-      poNo: 'PO-2026-1002',
-      title: 'Office Workstation Chairs',
-      category: 'Furniture',
-      poDate: '28 Apr 2026',
-      deliveryDate: '08 May 2026',
-      buyer: 'Admin Department',
-      amount: '$8,200',
-      status: 'Acknowledged',
-    },
-
-    {
-      id: 3,
-      poNo: 'PO-2026-1003',
-      title: 'Warehouse Transportation Services',
-      category: 'Logistics',
-      poDate: '26 Apr 2026',
-      deliveryDate: '06 May 2026',
-      buyer: 'Supply Chain',
-      amount: '$14,000',
-      status: 'Pending',
-    },
-
-    {
-      id: 4,
-      poNo: 'PO-2026-1004',
-      title: 'Industrial Safety Kits',
-      category: 'Safety',
-      poDate: '24 Apr 2026',
-      deliveryDate: '04 May 2026',
-      buyer: 'Operations',
-      amount: '$6,750',
-      status: 'Rejected',
-    },
-  ];
+const rows = [
+  {
+    id: 1,
+    poNo: 'PO-2026-1001',
+    vendor: 'Dell Technologies',
+    category: 'IT Equipment',
+    poDate: '01 May 2026',
+    deliveryDate: '10 May 2026',
+    buyer: 'Ajith Kumar',
+    amount: '$24,500',
+    status: 'Approved',
+  },
+  {
+    id: 2,
+    poNo: 'PO-2026-1002',
+    vendor: 'Godrej Interio',
+    category: 'Furniture',
+    poDate: '05 May 2026',
+    deliveryDate: '18 May 2026',
+    buyer: 'Anjali Nair',
+    amount: '$8,200',
+    status: 'Sent',
+  },
+  {
+    id: 3,
+    poNo: 'PO-2026-1003',
+    vendor: 'DHL Logistics',
+    category: 'Logistics',
+    poDate: '08 May 2026',
+    deliveryDate: '20 May 2026',
+    buyer: 'Rahul Menon',
+    amount: '$14,000',
+    status: 'Partial',
+  },
+  {
+    id: 4,
+    poNo: 'PO-2026-1004',
+    vendor: '3M Safety Solutions',
+    category: 'Safety',
+    poDate: '10 May 2026',
+    deliveryDate: '22 May 2026',
+    buyer: 'Vivek Nair',
+    amount: '$6,750',
+    status: 'Draft',
+  },
+  {
+    id: 5,
+    poNo: 'PO-2026-1005',
+    vendor: 'HP Enterprise',
+    category: 'IT Equipment',
+    poDate: '12 May 2026',
+    deliveryDate: '25 May 2026',
+    buyer: 'Ajith Kumar',
+    amount: '$18,900',
+    status: 'Closed',
+  },
+];
 
   return (
     <Box>
@@ -201,6 +225,16 @@ function PurchaseOrderDashboard() {
             { label: 'Home', href: '/dashboard' },
             { label: 'Purchase Orders', href: '/purchase_orders' },
           ]}
+                    action={
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          router.push(paths.products.products);
+                        }}
+                      >
+                        New PO
+                      </Button>
+                    }
         />
       </Box>
 

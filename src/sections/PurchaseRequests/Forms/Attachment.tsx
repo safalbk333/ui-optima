@@ -1,37 +1,41 @@
 'use client';
 
-import { Box, Chip, Paper, Stack, Button, Divider, IconButton, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, Chip, Divider, IconButton, Paper, Stack, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 import CloudUploadRoundedIcon from '@mui/icons-material/CloudUploadRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
-
-const initialFiles = [
-  {
-    id: 1,
-    name: 'Vendor_Quotation.pdf',
-    size: '1.8 MB',
-    progress: 100,
-    type: 'PDF',
-  },
-  {
-    id: 2,
-    name: 'Technical_Specification.docx',
-    size: '860 KB',
-    progress: 75,
-    type: 'DOCX',
-  },
-];
+import { setAttachments } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
+import { useAppDispatch } from 'src/store/hooks';
 
 export default function StylishDocumentUpload() {
-  const [files, setFiles] = useState(initialFiles);
+  const dispatch = useAppDispatch();
 
+const [files, setFiles] = useState<
+  {
+    id: number;
+    name: string;
+    size: string;
+    progress: number;
+    type: string;
+  }[]
+>([]);
   const removeFile = (id: number) => {
     setFiles((prev) => prev.filter((file) => file.id !== id));
   };
-
+  useEffect(() => {
+  dispatch(
+    setAttachments(
+      files.map((file) => ({
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+      }))
+    )
+  );
+}, [files, dispatch]);
   // Demo Upload
   const handleUpload = () => {
     const newFile = {
@@ -50,19 +54,14 @@ export default function StylishDocumentUpload() {
     <Paper
       elevation={0}
       sx={{
-        borderRadius: 1,
+        borderRadius: 0,
         overflow: 'hidden',
-        mt: 2,
-        border: '1px solid #eef2f7',
       }}
     >
       {/* Header */}
       <Box
         sx={{
-          px: 2,
-          py: 1.5,
           borderBottom: '1px solid #f1f5f9',
-          bgcolor: '#fff',
         }}
       >
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -83,7 +82,7 @@ export default function StylishDocumentUpload() {
                 fontSize: '0.74rem',
               }}
             >
-              Upload quotations, invoices, specs, or approvals
+              Upload invoices, specs
             </Typography>
           </Box>
 
@@ -104,7 +103,45 @@ export default function StylishDocumentUpload() {
       <Box sx={{ p: 2 }}>
         {/* Uploaded Files */}
         <Stack spacing={1.2}>
-          {files.map((file) => (
+            {files.length === 0 ? (
+    <Box
+      sx={{
+        py: 4,
+        textAlign: 'center',
+        border: '1px dashed #e2e8f0',
+        borderRadius: 2,
+      }}
+    >
+      <DescriptionRoundedIcon
+        sx={{
+          fontSize: 40,
+          color: '#94a3b8',
+          mb: 1,
+        }}
+      />
+
+      <Typography
+        sx={{
+          fontSize: '0.8rem',
+          fontWeight: 600,
+          color: '#334155',
+        }}
+      >
+        No documents uploaded
+      </Typography>
+
+      <Typography
+        sx={{
+          fontSize: '0.7rem',
+          color: '#64748b',
+          mt: 0.5,
+        }}
+      >
+        Upload invoices or supporting documents
+      </Typography>
+    </Box>
+  ) : (
+          files.map((file) => (
             <Paper
               key={file.id}
               elevation={0}
@@ -209,7 +246,8 @@ export default function StylishDocumentUpload() {
                 </IconButton>
               </Stack>
             </Paper>
-          ))}
+    ))
+  )}
         </Stack>
 
         {/* Upload Area at Bottom */}
@@ -266,43 +304,10 @@ export default function StylishDocumentUpload() {
                 </Typography>
 
                 <Stack direction="row" spacing={0.8} alignItems="center" flexWrap="wrap">
-                  <Chip
-                    label="PDF"
-                    size="small"
-                    sx={{
-                      height: 18,
-                      fontSize: '0.58rem',
-                      fontWeight: 700,
-                      bgcolor: '#eff6ff',
-                      color: '#2563eb',
-                    }}
-                  />
 
-                  <Chip
-                    label="DOCX"
-                    size="small"
-                    sx={{
-                      height: 18,
-                      fontSize: '0.58rem',
-                      fontWeight: 700,
-                      bgcolor: '#f1f5f9',
-                      color: '#334155',
-                    }}
-                  />
 
-                  <Chip
-                    label="XLSX"
-                    size="small"
-                    sx={{
-                      height: 18,
-                      fontSize: '0.58rem',
-                      fontWeight: 700,
-                      bgcolor: '#fef3c7',
-                      color: '#b45309',
-                    }}
-                  />
 
-                  <Divider orientation="vertical" flexItem sx={{ height: 12 }} />
+
 
                   <Typography
                     sx={{
