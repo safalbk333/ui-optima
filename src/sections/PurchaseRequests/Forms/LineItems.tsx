@@ -25,7 +25,7 @@ import { setLineItems } from 'src/store/slices/PurchaseRequests/PRStepperFormSli
 
 interface LineItem {
   item: any | null;
-  category: any | null;
+  itemId: string;   // REQUIRED
   uom: string;
   qty: number;
   unitPrice: number;
@@ -35,7 +35,7 @@ export default function LineItemsTable() {
 const [items, setItems] = useState<LineItem[]>([
   {
     item: null,
-    category: null,
+    itemId: '',
     uom: '',
     qty: 1,
     unitPrice: 0,
@@ -45,19 +45,16 @@ const [items, setItems] = useState<LineItem[]>([
 const { data: item } = useAppSelector(
   (state) => state.items
 );
-
 useEffect(() => {
   dispatch(fetchItems());
 }, [dispatch]);
 useEffect(() => {
   dispatch(
     setLineItems(
-      items.map((item:any) => ({
-        itemId: item.item?.id || '',
-        categoryId:
-          item.category?.pk_chr_category_id || '',
-        quantity: item.qty,
-        uom: item.uom,
+      items.map((row) => ({
+        itemId: row.itemId,
+        quantity: row.qty,
+        uom: row.uom,
       }))
     )
   );
@@ -74,7 +71,7 @@ const addRow = () => {
     ...items,
     {
       item: null,
-      category: null,
+      itemId: '',
       uom: '',
       qty: 1,
       unitPrice: 0,
@@ -244,13 +241,21 @@ const addRow = () => {
 <TableCell sx={bodyCell}>
 <Autocomplete
   options={item || []}
+  value={row.item}
   getOptionLabel={(option) => option?.chr_item_name || ''}
   isOptionEqualToValue={(option, value) =>
     option.pk_chr_item_id === value.pk_chr_item_id
   }
-  renderInput={(params) => (
-    <TextField {...params} label="Item"  />
-  )}
+  onChange={(_, value) => {
+    const updated = [...items];
+
+    updated[index].item = value;
+    updated[index].itemId = value?.pk_chr_item_id || '';
+    updated[index].uom = value?.chr_unit || '';
+
+    setItems(updated);
+  }}
+  renderInput={(params) => <TextField {...params} label="Item" />}
 />
 </TableCell>
 

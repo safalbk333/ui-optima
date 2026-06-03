@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 
-import { Box, Grid, MenuItem, TextField, Typography, Autocomplete } from '@mui/material';
+import { Autocomplete, Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import type { RootState } from 'src/store/store';
 import { fetchCategories } from 'src/store/slices/category/Category';
+import { fetchDepartments } from 'src/store/slices/Department/DepartmentSlice';
 import { setBasicInfo } from 'src/store/slices/PurchaseRequests/PRStepperFormSlice';
 
 const commonTextFieldSx = {
@@ -47,13 +48,14 @@ const commonTextFieldProps = {
 
 export default function PurchaseRequestForm() {
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = React.useState({
+const [formData, setFormData] = React.useState({
   title: '',
   description: '',
   priorityId: 'HIGH',
   estimatedValue: 0,
   currency: 'USD',
   departmentId: '',
+  strCategoryId: '',
 });
 React.useEffect(() => {
   dispatch(setBasicInfo(formData));
@@ -61,10 +63,17 @@ React.useEffect(() => {
 const { data: categories, loading } = useAppSelector(
   (state: RootState) => state.categories
 );
-
+console.log(categories,'categories')
+const { data: departments, loading: deptLoading } = useAppSelector(
+  (state: RootState) => state.departments
+);
 React.useEffect(() => {
   dispatch(fetchCategories());
 }, [dispatch]);
+React.useEffect(() => {
+  dispatch(fetchDepartments());
+}, [dispatch]);
+
   return (
     <Box sx={{ py: 2 }}>
       <Grid container spacing={3}>
@@ -111,25 +120,35 @@ React.useEffect(() => {
 
         {/* Department */}
         <Grid size={{ xs: 12, md: 6 }}>
-<TextField
-  select
-  label="DEPARTMENT *"
-  value={formData.departmentId}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      departmentId: e.target.value,
-    })
-  }
-  {...commonTextFieldProps}
->
-            <MenuItem value="Network Operations">Network Operations</MenuItem>
-
-            <MenuItem value="Finance">Finance</MenuItem>
-
-            <MenuItem value="HR">HR</MenuItem>
-          </TextField>
-        </Grid>
+  <Autocomplete
+  fullWidth
+    options={departments || []}
+    loading={deptLoading}
+    size="small"
+    value={
+      departments?.find(
+        (d) => d.pk_chr_department_id === formData.departmentId
+      ) || null
+    }
+    getOptionLabel={(option) => option?.chr_department_name || ''}
+    isOptionEqualToValue={(option, value) =>
+      option.pk_chr_department_id === value.pk_chr_department_id
+    }
+    onChange={(_, value) =>
+      setFormData({
+        ...formData,
+        departmentId: value?.pk_chr_department_id || '',
+      })
+    }
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="DEPARTMENT *"
+        {...commonTextFieldProps}
+      />
+    )}
+  />
+</Grid>
         {/* Currency */}
                 <Grid size={{ xs: 12, md: 6 }}>
           <TextField
@@ -151,29 +170,28 @@ onChange={(e) =>
           </TextField>
         </Grid>
 <Grid size={{ xs: 12, md: 6 }}>
-  <Autocomplete
-    options={categories || []}
-    loading={loading}
-    size="small"
-
-    getOptionLabel={(option) => option?.chr_category_name || ''}
-    isOptionEqualToValue={(option, value) =>
-      option.pk_chr_category_id === value.pk_chr_category_id
-    }
-
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label="CATEGORY"
-        {...commonTextFieldProps}
-      />
-    )}
-    sx={{
-      '& .MuiOutlinedInput-root': {
-        fontSize: 13,
-      },
-    }}
-  />
+<Autocomplete
+  options={categories || []}
+  loading={loading}
+  size="small"
+value={
+  categories?.find(
+    (c) => c.pk_chr_category_id === formData.strCategoryId
+  ) || null
+}  getOptionLabel={(option) => option?.chr_category_name || ''}
+  isOptionEqualToValue={(option, value) =>
+    option.pk_chr_category_id === value.pk_chr_category_id
+  }
+onChange={(_, value) => {
+  setFormData((prev) => ({
+    ...prev,
+    strCategoryId: value?.pk_chr_category_id || '',
+  }));
+}}
+  renderInput={(params) => (
+    <TextField {...params} label="CATEGORY" {...commonTextFieldProps} />
+  )}
+/>
 </Grid>
 <Grid size={{ xs: 12, md: 6 }}>
   <TextField

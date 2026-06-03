@@ -2,16 +2,17 @@
 
 import {
   Box,
-  Card,
   Button,
+  Card,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import LineItemsTable from './Forms/LineItems';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import PurchaseRequestForm from './Forms/BasicInformation';
 import StylishDocumentUpload from './Forms/Attachment';
-import { useAppSelector } from 'src/store/hooks';
+import { createPurchaseRequest } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useRouter } from 'next/navigation';
 
 const steps = [
@@ -21,6 +22,7 @@ const steps = [
 ];
 
 export default function PRStepper() {
+  const dispatch = useAppDispatch();
     const prData = useAppSelector(
   (state) => state.purchaseRequest
 );
@@ -43,35 +45,17 @@ const handleSubmit = async () => {
   try {
     const payload = {
       strRequestNumber: `PR-${Date.now()}`,
-
       strTitle: prData.basicInfo.title,
+      strDescription: prData.basicInfo.description,
+      strCurrentStatusId: 'status-id-123',
+      strPriorityId: prData.basicInfo.priorityId,
+      intEstimatedValue: Number(prData.basicInfo.estimatedValue),
+      strCurrency: prData.basicInfo.currency,
+      strRequestedById: 'user-id-123',
+      strDepartmentId: prData.basicInfo.departmentId,
+      strCategoryId: prData.basicInfo.strCategoryId,
 
-      strDescription:
-        prData.basicInfo.description,
-
-      strCurrentStatusId:
-        'status-id-123',
-
-      strPriorityId:
-        prData.basicInfo.priorityId,
-
-      intEstimatedValue:
-        Number(prData.basicInfo.estimatedValue),
-
-      strCurrency:
-        prData.basicInfo.currency,
-
-      strRequestedById:
-        'user-id-123',
-
-      strDepartmentId:
-        prData.basicInfo.departmentId,
-
-      strCategoryId:
-        prData.lineItems[0]?.categoryId || '',
-
-      strCreatedId:
-        'user-id-123',
+      strCreatedId: 'user-id-123',
 
       arrItems: prData.lineItems.map((item) => ({
         strItemId: item.itemId,
@@ -79,15 +63,15 @@ const handleSubmit = async () => {
       })),
     };
 
-    console.log('FINAL PAYLOAD');
-    console.log(payload);
+    console.log('FINAL PAYLOAD', payload);
 
-    // await dispatch(createPurchaseRequest(payload));
+    const resultAction = await dispatch(createPurchaseRequest(payload));
 
-    // alert('Purchase Request Submitted');
-    router.push('/purchase-requests')
-
-    // dispatch(resetPurchaseRequest());
+    if (createPurchaseRequest.fulfilled.match(resultAction)) {
+      router.push('/purchase-requests');
+    } else {
+      console.error('Failed:', resultAction.payload);
+    }
 
   } catch (error) {
     console.error(error);

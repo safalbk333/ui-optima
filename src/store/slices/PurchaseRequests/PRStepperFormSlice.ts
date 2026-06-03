@@ -1,4 +1,4 @@
-import type { PayloadAction} from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface BasicInfo {
@@ -8,15 +8,14 @@ interface BasicInfo {
   estimatedValue: number;
   currency: string;
   departmentId: string;
+  strCategoryId: string;
 }
 
 interface LineItem {
   itemId: string;
-  categoryId: string;
   quantity: number;
   uom: string;
 }
-
 interface PurchaseRequestState {
   basicInfo: BasicInfo;
   lineItems: LineItem[];
@@ -24,14 +23,15 @@ interface PurchaseRequestState {
 }
 
 const initialState: PurchaseRequestState = {
-  basicInfo: {
-    title: '',
-    description: '',
-    priorityId: '',
-    estimatedValue: 0,
-    currency: 'USD',
-    departmentId: '',
-  },
+basicInfo: {
+  title: '',
+  description: '',
+  priorityId: '',
+  estimatedValue: 0,
+  currency: 'USD',
+  departmentId: '',
+  strCategoryId: '',
+},
   lineItems: [],
   attachments: [],
 };

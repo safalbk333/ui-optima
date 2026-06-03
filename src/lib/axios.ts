@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 });
  
 const axiosOptima = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'https://semantic-pox-fox.ngrok-free.dev',
+  baseURL: CONFIG.apiUrl,
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': true,

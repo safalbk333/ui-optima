@@ -1,5 +1,6 @@
 import categoryReducer from './slices/category/Category'
 import { configureStore } from '@reduxjs/toolkit';
+import departmentsReducer from './slices/Department/DepartmentSlice'
 import itemReducer from './slices/Item/Items'
 import purchaseRequestReducer from './slices/PurchaseRequests/PurchaseRequestsSlice'
 import purchaseRequestStepperReducer from './slices/PurchaseRequests/PRStepperFormSlice'
@@ -12,6 +13,7 @@ export const store = configureStore({
      purchaseRequest: purchaseRequestStepperReducer,
       items: itemReducer,
       vendors: vendorReducer,
+      departments:departmentsReducer
   },
 });
 

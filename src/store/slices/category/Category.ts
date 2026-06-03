@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import axios from 'axios';
+import { axiosOptima } from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
 // TYPES
@@ -38,9 +38,7 @@ export const fetchCategories = createAsyncThunk(
   'categories/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/category`
-      );
+      const response = await axiosOptima.get('/category');
 
       return response.data.data;
     } catch (error: any) {

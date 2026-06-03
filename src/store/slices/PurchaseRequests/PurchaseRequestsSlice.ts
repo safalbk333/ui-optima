@@ -1,6 +1,6 @@
-import { axiosOptima } from 'src/lib/axios';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { axiosOptima } from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
 
@@ -60,9 +60,7 @@ export const fetchPurchaseRequests = createAsyncThunk(
   'purchaseRequests/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosOptima.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/purchase-requests`
-      );
+      const response = await axiosOptima.get('/purchase-requests');
 
       return response.data.data;
     } catch (error: any) {
@@ -102,9 +100,43 @@ const purchaseRequestSlice = createSlice({
       .addCase(fetchPurchaseRequests.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(createPurchaseRequest.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+})
+
+.addCase(createPurchaseRequest.fulfilled, (state, action) => {
+  state.loading = false;
+
+  // optionally push new PR into list
+  state.data.unshift(action.payload);
+})
+
+.addCase(createPurchaseRequest.rejected, (state, action: any) => {
+  state.loading = false;
+  state.error = action.payload;
+})
   },
 });
+// ----------------------------------------------------------------------
+// CREATE PURCHASE REQUEST
+// ----------------------------------------------------------------------
+
+export const createPurchaseRequest = createAsyncThunk(
+  'purchaseRequests/create',
+  async (payload: any, { rejectWithValue }) => {
+    try {
+      const response = await axiosOptima.post('/purchase-requests', payload);
+
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message || 'Failed to create purchase request'
+      );
+    }
+  }
+);
 
 export const { clearPurchaseRequests } = purchaseRequestSlice.actions;
 

@@ -1,16 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { axiosOptima } from 'src/lib/axios';
 
 // ----------------------------------------------------------------------
 
-export interface Vendor {
-  pk_chr_vendor_id: string;
-  chr_vendor_name: string;
-  chr_vendor_email: string;
-  chr_vendor_phone: string;
-  fk_chr_country_id: string | null;
-  fk_chr_city_id: string | null;
+export interface Department {
+  pk_chr_department_id: string;
+  chr_department_name: string;
+  chr_department_code: string;
+  txt_description: string;
+  bln_is_active: boolean;
   tim_created: string;
   tim_modified: string | null;
   fk_chr_created_id: string | null;
@@ -18,67 +17,71 @@ export interface Vendor {
   chr_document_status: string;
 }
 
-interface VendorState {
-  data: Vendor[];
+// ----------------------------------------------------------------------
+
+interface DepartmentState {
+  data: Department[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: VendorState = {
+const initialState: DepartmentState = {
   data: [],
   loading: false,
   error: null,
 };
 
 // ----------------------------------------------------------------------
-// FETCH VENDORS
+// GET ALL DEPARTMENTS
 // ----------------------------------------------------------------------
 
-export const fetchVendors = createAsyncThunk(
-  'vendors/fetchAll',
+export const fetchDepartments = createAsyncThunk(
+  'departments/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosOptima.get('/vendors');
+      const response = await axiosOptima.get('/department');
 
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(
-        error?.response?.data?.message || 'Failed to fetch vendors'
+        error?.response?.data?.message || 'Failed to fetch departments'
       );
     }
   }
 );
 
 // ----------------------------------------------------------------------
+// SLICE
+// ----------------------------------------------------------------------
 
-const vendorSlice = createSlice({
-  name: 'vendors',
+const departmentSlice = createSlice({
+  name: 'departments',
   initialState,
   reducers: {
-    clearVendors: (state) => {
+    clearDepartments: (state) => {
       state.data = [];
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchVendors.pending, (state) => {
+      .addCase(fetchDepartments.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
 
-      .addCase(fetchVendors.fulfilled, (state, action) => {
+      .addCase(fetchDepartments.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
 
-      .addCase(fetchVendors.rejected, (state, action: any) => {
+      .addCase(fetchDepartments.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { clearVendors } = vendorSlice.actions;
+export const { clearDepartments } = departmentSlice.actions;
 
-export default vendorSlice.reducer;
+export default departmentSlice.reducer;
