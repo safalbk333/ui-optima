@@ -1,21 +1,23 @@
 'use client';
 
-import { Edit } from '@mui/icons-material';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { alpha } from '@mui/material/styles';
 import React, { useMemo, useRef } from 'react';
-import { ContractValues } from 'src/sections/Contract/ContractGenerator';
+
+import type { ContractValues } from 'src/sections/Contract/ContractGenerator';
+import { Edit } from '@mui/icons-material';
 import EditableInline from './EditableInline';
+import type { RootState } from 'src/store/store';
+import { alpha } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/store/store';
 
-export const parseTemplate = (html: string, data: Record<string, string | number>) => {
-  return html.replace(/{{(.*?)}}/g, (_, key) => {
+export const parseTemplate = (
+  html: string,
+  data: Record<string, string | number>
+) =>
+  html.replace(/{{(.*?)}}/g, (_, key) => {
     const value = data[key.trim()];
-
     return value !== undefined ? String(value) : '';
   });
-};
 
 export const generateRfqCode = (startDate: string) => {
   if (!startDate) return '';
@@ -41,7 +43,7 @@ function ContractDocument({
   editMode: boolean;
 }) {
   const { templateHtmlContentData, templateByCodeLoading } = useSelector(
-    (state: RootState) => state.contractReducer
+    (state: RootState) => state.contract
   );
 
   const templateValues = {

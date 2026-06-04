@@ -175,23 +175,25 @@ const columns: GridColDef[] = [
   },
 }
 ];
-
+console.log(eois,'eois')
 const rows =
-  eois?.map((eoi) => ({
-    id: eoi.pk_chr_eoi_id,
-    eoiNo: eoi.chr_eoi_code,
-    title: eoi.chr_eoi_title,
-    category: eoi.request?.chr_title || '-',
-    publishDate: eoi.tim_created
-      ? new Date(eoi.tim_created).toLocaleDateString('en-GB')
-      : '-',
-    closingDate: eoi.dt_submission_deadline
-      ? new Date(eoi.dt_submission_deadline).toLocaleDateString('en-GB')
-      : '-',
-    responses: 0,
-    owner: eoi.vendor?.chr_vendor_name || '-',
-    status: eoi.chr_status,
-  })) || [];
+  (eois || [])
+    .filter((eoi) => eoi?.pk_chr_eoi_id) // 🔥 ensures id exists
+    .map((eoi) => ({
+      id: eoi.pk_chr_eoi_id,
+      eoiNo: eoi.chr_eoi_code,
+      title: eoi.chr_eoi_title,
+      category: eoi.request?.chr_title || '-',
+      publishDate: eoi.tim_created
+        ? new Date(eoi.tim_created).toLocaleDateString('en-GB')
+        : '-',
+      closingDate: eoi.dt_submission_deadline
+        ? new Date(eoi.dt_submission_deadline).toLocaleDateString('en-GB')
+        : '-',
+      responses: 0,
+      owner: eoi.vendor?.chr_vendor_name || '-',
+      status: eoi.chr_status,
+    }));
 
   return (
     <Box>

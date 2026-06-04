@@ -1,6 +1,6 @@
 'use client';
 
-import { AppDispatch, RootState } from 'src/store/store';
+import { AppDispatch, RootState, } from 'src/store/store';
 import {
   Box,
   Button,
@@ -40,7 +40,7 @@ function ContractPreview() {
     createContractData,
     createContractError,
     createContractErrorMessage,
-  } = useSelector((state: RootState) => state.contractReducer);
+  } = useSelector((state: RootState) => state.contract);
 
   const [values, setValues] = useState<ContractValues>({
     clientEmail: '',

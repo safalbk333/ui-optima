@@ -79,12 +79,13 @@ export default function EOIBuilder() {
   // ------------------------------------------------------------------
   // DROPDOWN OPTIONS
   // ------------------------------------------------------------------
-
-  const purchaseRequestOptions =
-    purchaseRequests?.map((pr) => ({
-      label: pr.chr_title,
-      value: pr.pk_chr_request_id,
-    })) || [];
+console.log(purchaseRequests,'purchaseRequests')
+const purchaseRequestOptions =
+  purchaseRequests?.map((pr) => ({
+    label: `${pr.chr_request_number} - ${pr.chr_title}`,
+    value: pr.pk_chr_request_id,
+    raw: pr,
+  })) || [];
 
   const vendorOptions =
     vendors?.map((vendor) => ({
@@ -168,25 +169,27 @@ export default function EOIBuilder() {
 />
         </Grid>
                   <Grid size={{ xs: 12, md: 6 }}>
-          <Autocomplete
-            options={purchaseRequestOptions}
-            value={selectedPR}
-            onChange={(_, newValue) => {
-              setSelectedPR(newValue);
-        
-              console.log('Selected PR ID:', newValue?.value);
-              console.log('Selected PR Title:', newValue?.label);
-            }}
-            size="small"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Purchase Request"
-                placeholder="Select Purchase Request"
-                sx={fieldSx}
-              />
-            )}
-          />
+<Autocomplete
+  options={purchaseRequestOptions}
+  value={selectedPR}
+  onChange={(_, newValue) => setSelectedPR(newValue)}
+  size="small"
+
+  getOptionLabel={(option) => option?.label || ''}
+
+  isOptionEqualToValue={(option, value) =>
+    option.value === value?.value
+  }
+
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Purchase Request"
+      placeholder="Select Purchase Request"
+      sx={fieldSx}
+    />
+  )}
+/>
         </Grid>
 
 
