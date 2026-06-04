@@ -55,7 +55,7 @@ export interface EOI {
   fk_chr_created_id: string;
   fk_chr_modified_id: string | null;
   chr_document_status: string;
-
+data:any;
   request: EOIRequest;
   vendor: EOIVendor;
 }
@@ -148,10 +148,10 @@ const eoiSlice = createSlice({
         state.error = null;
       })
 
-      .addCase(fetchEOIs.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload;
-      })
+.addCase(fetchEOIs.fulfilled, (state, action) => {
+  state.loading = false;
+  state.data = action.payload.data;
+})
 
       .addCase(fetchEOIs.rejected, (state, action: any) => {
         state.loading = false;

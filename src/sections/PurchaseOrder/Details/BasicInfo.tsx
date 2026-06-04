@@ -16,29 +16,61 @@ import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { createPurchaseOrder } from 'src/store/slices/PurchaseOrder/PRSlice';
+import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
+import { fetchQuotations } from 'src/store/slices/Quotation/Quotation';
+import { fetchRFQs } from 'src/store/slices/Rfq/RfqSlice';
 import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
-
-const priorityOptions = ['Low', 'Medium', 'High'];
+import { useRouter } from 'next/navigation';
 
 const currencyOptions = ['USD', 'EUR', 'INR'];
 
-const uomOptions = ['PCS', 'BOX', 'KG', 'LTR'];
 
 
 export default function POView() {
+  const [selectedRFQ, setSelectedRFQ] = React.useState<any | null>(null);
   const [items, setItems] = React.useState([
     {
       id: 1,
     },
   ]);
+  const [selectedQuotation, setSelectedQuotation] =
+  React.useState<any | null>(null);
+  const [selectedPurchaseRequest, setSelectedPurchaseRequest] =
+  React.useState<any | null>(null);
   const [selectedVendor, setSelectedVendor] = React.useState<any | null>(null);
 const dispatch = useAppDispatch();
+const [issueDate, setIssueDate] = React.useState('');
+const [expectedDelivery, setExpectedDelivery] = React.useState('');
+const [totalValue, setTotalValue] = React.useState('');
+const [currency, setCurrency] = React.useState('USD');
+const [deliveryAddress, setDeliveryAddress] = React.useState('');
 const { data: vendor, loading } = useAppSelector(
   (state) => state.vendors
 );
 React.useEffect(() => {
   dispatch(fetchVendors());
 }, [dispatch]);
+const { data: rfqs } = useAppSelector(
+  (state) => state.rfq
+);
+const { data: purchaseRequests } = useAppSelector(
+  (state) => state.purchaseRequests
+);
+const { data: quotations } = useAppSelector(
+  (state) => state.quotations
+);
+const router=useRouter()
+React.useEffect(() => {
+  dispatch(fetchQuotations());
+}, [dispatch]);
+React.useEffect(() => {
+  dispatch(fetchRFQs());
+}, [dispatch]);
+  React.useEffect(() => {
+    dispatch(fetchPurchaseRequests());
+  }, [dispatch]);
+console.log(quotations,'quotations')
   const addItem = () => {
     setItems((prev) => [...prev, { id: Date.now() }]);
   };
@@ -89,8 +121,45 @@ const SELECT_ALL = {
 
     setSelectedVendors(value);
   };
+const handleSubmit = async () => {
+const payload = {
+  strRequestId: selectedPurchaseRequest?.pk_chr_request_id || '',
 
+  strPoNumber: `PO-${Date.now()}`,
 
+  strVendorId: selectedVendor?.pk_chr_vendor_id || '',
+
+  strQuotationId: selectedQuotation?.pk_chr_quotation_id || '',
+
+  intTotalValue: Number(totalValue) || 0,
+
+  strCurrency: currency,
+
+  strIssuedAt: issueDate ? new Date(issueDate).toISOString() : '',
+
+  strDeliveryAddress: deliveryAddress,
+
+  strExpectedDelivery: expectedDelivery
+    ? new Date(expectedDelivery).toISOString()
+    : '',
+
+  strCreatedId: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
+};
+
+  try {
+    console.log('PO Payload:', payload);
+
+    const result = await dispatch(
+      createPurchaseOrder(payload)
+    ).unwrap();
+
+    console.log('PO Created:', result);
+
+    router.push('/purchase_orders');
+  } catch (error) {
+    console.error('Failed to create purchase order:', error);
+  }
+};
   return (
     <Box>
       <Box maxWidth={700}>
@@ -104,8 +173,28 @@ const SELECT_ALL = {
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
+  <Autocomplete
+    options={purchaseRequests || []}
+    size="small"
+    fullWidth
+    value={selectedPurchaseRequest}
+    onChange={(_, value) => setSelectedPurchaseRequest(value)}
+    getOptionLabel={(option) => option?.chr_title || ''}
+    isOptionEqualToValue={(option, value) =>
+      option.pk_chr_request_id === value.pk_chr_request_id
+    }
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="Purchase Request"
+        placeholder="Select Purchase Request"
+      />
+    )}
+  />
+</Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
 <Autocomplete
-  options={vendors || []}
+  options={vendor || []}
   loading={loading}
   size="small"
   fullWidth
@@ -124,170 +213,118 @@ const SELECT_ALL = {
   )}
 />
           </Grid>
+<Grid size={{ xs: 12, md: 6 }}>
+  <Autocomplete
+    options={quotations || []}
+    size="small"
+    fullWidth
+    value={selectedQuotation}
+    onChange={(_, value) => {
+      console.log(value, 'SELECTED QUOTATION');
+      setSelectedQuotation(value);
+    }}
+    getOptionLabel={(option) =>
+      `${option?.rfq?.chr_rfq_title || ''} - ${option?.vendor?.chr_vendor_name || ''}`
+    }
+    isOptionEqualToValue={(option, value) =>
+      option.pk_chr_quotation_id === value.pk_chr_quotation_id
+    }
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="Quotation"
+        placeholder="Select Quotation"
+      />
+    )}
+  />
+</Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+<TextField
+  fullWidth
+  type="date"
+  size="small"
+  label="Issue Date"
+  value={issueDate}
+  onChange={(e) => setIssueDate(e.target.value)}
+  InputLabelProps={{ shrink: true }}
+/>
+          </Grid>
                     <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Created By"
-              sx={smallInputSx}
-            />
+<TextField
+  fullWidth
+  type="date"
+  size="small"
+  label="Expected Delivery Date"
+  value={expectedDelivery}
+  onChange={(e) => setExpectedDelivery(e.target.value)}
+  InputLabelProps={{ shrink: true }}
+/>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              type="date"
-              size="small"
-              label="Created Date"
-              InputLabelProps={{ shrink: true }}
-              sx={smallInputSx}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              options={priorityOptions}
-              size="small"
-              defaultValue="Medium"
-              renderInput={(params) => <TextField {...params} label="Priority" sx={smallInputSx} />}
-            />
-          </Grid>
+          
 
 
 
+                    <Grid size={{ xs: 12, md: 6 }}>
+<TextField
+  fullWidth
+  size="small"
+  label="Total Value"
+  value={totalValue}
+  onChange={(e) => setTotalValue(e.target.value)}
+/>
+          </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              options={currencyOptions}
-              size="small"
-              defaultValue="USD"
-              renderInput={(params) => <TextField {...params} label="Currency" sx={smallInputSx} />}
-            />
+<Autocomplete
+size='small'
+  options={currencyOptions}
+  value={currency}
+  onChange={(_, value) => setCurrency(value || 'USD')}
+  renderInput={(params) => (
+    <TextField {...params} label="Currency" />
+  )}
+/>
           </Grid>
 
 
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Delivery Location"
-              placeholder="Warehouse - Chennai"
-              sx={smallInputSx}
-            />
+   <TextField
+  fullWidth
+  size="small"
+  label="Delivery Location"
+  value={deliveryAddress}
+  onChange={(e) => setDeliveryAddress(e.target.value)}
+/>
           </Grid>
 
         </Grid>
 
-        {/* Line Items */}
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mt={2.5} mb={1}>
-          <Typography fontSize={13} fontWeight={600}>
-            Line Items
-          </Typography>
-        </Stack>
 
-        <Box
-          sx={{
-            overflow: 'hidden',
-          }}
-        >
-          {/* Table Header */}
-          <Grid
-            container
-            sx={{
-              px: 1,
-              py: 0.8,
-              borderBottom: '1px solid #e2e8f0',
-            }}
-          >
-            {['Item', 'Qty', 'UOM', ''].map((head, index) => (
-              <Grid size={{ xs: index === 0 ? 4 : 2.1 }} key={head}>
-                <Typography fontSize={11} fontWeight={700} color="text.secondary">
-                  {head}
-                </Typography>
-              </Grid>
-            ))}
-          </Grid>
-
-          {/* Rows */}
-          {items.map((row) => (
-            <Grid
-              container
-              spacing={1}
-              key={row.id}
-              sx={{
-                px: 1,
-                py: 1,
-                alignItems: 'center',
-                borderBottom: '1px solid #edf2f7',
-              }}
-            >
-              <Grid size={{ xs: 4 }}>
-                <TextField fullWidth size="small" placeholder="Item name" sx={smallInputSx} />
-              </Grid>
-
-              <Grid size={{ xs: 2 }}>
-                <TextField fullWidth size="small" placeholder="0" sx={smallInputSx} />
-              </Grid>
-
-              <Grid size={{ xs: 5 }}>
-                <Autocomplete
-                  options={uomOptions}
-                  size="small"
-                  renderInput={(params) => (
-                    <TextField {...params} placeholder="UOM" sx={smallInputSx} />
-                  )}
-                />
-              </Grid>
-
-              <Grid size={{ xs: 0.6 }}>
-                <IconButton
-                  size="small"
-                  onClick={() => removeItem(row.id)}
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(244, 67, 54, 0.10)',
-                    color: '#d32f2f',
-                    transition: 'all 0.2s ease',
-
-                    '&:hover': {
-                      backgroundColor: 'rgba(244, 67, 54, 0.18)',
-                    },
-                  }}
-                >
-                  <DeleteOutlineIcon sx={{ fontSize: 18 }} />
-                </IconButton>
-              </Grid>
-            </Grid>
-          ))}
-          <Box
-            sx={{
-              mt: 'auto',
-              pt: 2,
-              display: 'flex',
-              justifyContent: 'flex-start',
-              // borderTop: '1px solid',
-              // borderColor: 'divider',
-            }}
-          >
-            <Button
-              startIcon={<AddIcon sx={{ fontSize: 14 }} />}
-              size="small"
-              variant="outlined"
-              onClick={addItem}
-              sx={{
-                textTransform: 'none',
-                fontSize: 11,
-                minHeight: 28,
-              }}
-            >
-              Add Item
-            </Button>
-          </Box>
-        </Box>
 
 
 
       </Box>
+      <Box
+  sx={{
+    mt: 3,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  }}
+>
+  <Button
+    variant="contained"
+    onClick={handleSubmit}
+    color='primary'
+    sx={{
+      textTransform: 'none',
+      minWidth: 120,
+      borderRadius:0.5
+    }}
+  >
+    Create PO
+  </Button>
+</Box>
     </Box>
   );
 }

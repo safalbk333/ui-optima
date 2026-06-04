@@ -67,7 +67,7 @@ export default function PurchaseRequests() {
   const PRIMARY = theme.palette.primary.main;
   const dispatch = useAppDispatch();
 
-const { data } = useAppSelector(
+const { data,loading } = useAppSelector(
   (state: RootState) => state.purchaseRequests
 );
 
@@ -191,6 +191,7 @@ const rows =
                 background: PRIMARY,
                 px: 3,
                 color: 'white',
+                borderRadius: 0.5
               }}
             >
               Apply
@@ -199,6 +200,7 @@ const rows =
             <Button
               variant="outlined"
               sx={{
+                borderRadius: 0.5,
                 borderColor: alpha(theme.palette.text.primary, 0.2),
               }}
             >
@@ -223,6 +225,7 @@ const rows =
           <DataGrid
             autoHeight
             rows={rows}
+            loading={loading}
             columns={columns}
             pageSizeOptions={[5, 10]}
             disableColumnFilter
@@ -240,36 +243,53 @@ const rows =
             initialState={{
               pagination: { paginationModel: { page: 0, pageSize: 5 } },
             }}
-            sx={{
+          sx={{
+            fontSize: 13,
+
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              minHeight: 36,
+              maxHeight: 36,
+            },
+
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: 'transparent !important',
+            },
+
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'primary.main',
+            },
+
+            '& .MuiDataGrid-cell': {
               fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
+            },
 
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'transparent',
-                minHeight: 36,
-                maxHeight: 36,
-              },
+            '& .MuiDataGrid-row': {
+              minHeight: 34,
+              maxHeight: 34,
+            },
 
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: 'transparent !important',
-              },
+            // Hide scrollbars
+            '& .MuiDataGrid-main': {
+              overflow: 'hidden',
+            },
 
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 14,
-                fontWeight: 500,
-                color: 'primary.main',
-              },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
 
-              '& .MuiDataGrid-cell': {
-                fontSize: 13,
-                letterSpacing: 0.2,
-                fontWeight: 200,
-              },
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none',
+            },
 
-              '& .MuiDataGrid-row': {
-                minHeight: 34,
-                maxHeight: 34,
-              },
-            }}
+            '& ::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
           />
         </Box>
       </Box>

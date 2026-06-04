@@ -1,29 +1,30 @@
 'use client';
 
-import { z as zod } from 'zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useBoolean } from 'minimal-shared/hooks';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { DEFAULT_LOCAL_USERS, getLocalSession } from 'src/auth/local-auth';
+import { Field, Form } from 'src/components/hook-form';
 
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
+import type { AppRole } from 'src/auth/roles';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
-
-import { Iconify } from 'src/components/iconify';
-import { Form, Field } from 'src/components/hook-form';
-
-import { useAuthContext } from '../../hooks';
-import { getErrorMessage } from '../../utils';
 import { FormHead } from '../../components/form-head';
+import IconButton from '@mui/material/IconButton';
+import { Iconify } from 'src/components/iconify';
+import InputAdornment from '@mui/material/InputAdornment';
+import Link from '@mui/material/Link';
+import { ROLE_LABELS } from 'src/auth/roles';
+import { RouterLink } from 'src/routes/components';
+import { Typography } from '@mui/material';
+import { getErrorMessage } from '../../utils';
+import { paths } from 'src/routes/paths';
 import { signInWithPassword } from '../../context/jwt';
+import { useAuthContext } from '../../hooks';
+import { useBoolean } from 'minimal-shared/hooks';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'src/routes/hooks';
+import { useState } from 'react';
+import { z as zod } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 // ----------------------------------------------------------------------
 
@@ -52,8 +53,8 @@ export function JwtSignInView() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const defaultValues: SignInSchemaType = {
-    email: 'demo@minimals.cc',
-    password: '@2Minimal',
+    email: '',
+    password: '',
   };
 
   const methods = useForm<SignInSchemaType>({
@@ -71,7 +72,15 @@ export function JwtSignInView() {
       await signInWithPassword({ email: data.email, password: data.password });
       await checkUserSession?.();
 
-      router.refresh();
+      const role = getLocalSession()?.role as AppRole | undefined;
+
+      const redirectByRole: Record<AppRole, string> = {
+        admin: paths.dashboard.root,
+        approver: paths.approval.roots,
+        enduser: paths.purchaseRequests.root,
+      };
+
+      router.replace(role ? redirectByRole[role] : paths.dashboard.root);
     } catch (error) {
       console.error(error);
       const feedbackMessage = getErrorMessage(error);
@@ -145,14 +154,20 @@ export function JwtSignInView() {
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
 
-      {/* <Alert severity="info" sx={{ mb: 3 }}>
-        Use <strong>{defaultValues.email}</strong>
-        {' with password '}
-        <strong>{defaultValues.password}</strong>
-      </Alert> */}
+      <Alert severity="info" sx={{ mb: 2 }}>
+        <Typography fontSize={12}>       POC accounts (stored in browser):</Typography>
+ 
+        <Box component="ul" sx={{ m: 0, pl: 0,fontSize:12 }}>
+          {DEFAULT_LOCAL_USERS.map((account) => (
+            <li key={account.email}>
+              <strong>{ROLE_LABELS[account.role]}</strong>: {account.email} / {account.password}
+            </li>
+          ))}
+        </Box>
+      </Alert>
 
       {!!errorMessage && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
           {errorMessage}
         </Alert>
       )}

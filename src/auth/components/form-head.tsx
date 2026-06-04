@@ -1,6 +1,5 @@
-import type { BoxProps } from '@mui/material/Box';
-
 import Box from '@mui/material/Box';
+import type { BoxProps } from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 // ----------------------------------------------------------------------
@@ -23,7 +22,7 @@ export function FormHead({ sx, icon, title, description, ...other }: FormHeadPro
       <Box
         sx={[
           () => ({
-            mb: 5,
+            mb: 2,
             gap: 1.5,
             display: 'flex',
             textAlign: 'center',

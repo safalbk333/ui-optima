@@ -8,6 +8,11 @@ import { AuthContext } from '../auth-context';
 import type { AuthState } from '../../types';
 import { JWT_STORAGE_KEY } from './constant';
 import { useSetState } from 'minimal-shared/hooks';
+import {
+  getLocalSession,
+  localSessionToAuthUser,
+  seedLocalUsersIfEmpty,
+} from 'src/auth/local-auth';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +31,15 @@ export function AuthProvider({ children }: Props) {
 
   const checkUserSession = useCallback(async () => {
     try {
+      seedLocalUsersIfEmpty();
+
+      const localSession = getLocalSession();
+
+      if (localSession) {
+        setState({ user: localSessionToAuthUser(localSession), loading: false });
+        return;
+      }
+
       const accessToken = sessionStorage.getItem(JWT_STORAGE_KEY);
 
       if (accessToken && isValidToken(accessToken)) {

@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-
-import { paths } from 'src/routes/paths';
-import { useRouter, usePathname } from 'src/routes/hooks';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'src/routes/hooks';
 
 import { CONFIG } from 'src/global-config';
-
+import { RoleRouteGuard } from './role-route-guard';
 import { SplashScreen } from 'src/components/loading-screen';
-
+import { paths } from 'src/routes/paths';
 import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
@@ -65,6 +63,6 @@ export function AuthGuard({ children }: AuthGuardProps) {
   if (isChecking) {
     return <SplashScreen />;
   }
-
-  return <>{children}</>;
+return <>{children}</>
+  // return <RoleRouteGuard>{children}</RoleRouteGuard>;
 }

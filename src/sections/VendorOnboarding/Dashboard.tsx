@@ -3,28 +3,30 @@
 import * as React from 'react';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Avatar,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useRouter } from 'next/navigation';
 
 // ----------------------------------------------------------------------
@@ -65,7 +67,14 @@ function CustomFooter() {
 
 export default function VendorOnboardingDetails() {
   const router = useRouter();
-
+  const dispatch=useAppDispatch()
+const { data: vendor, loading } = useAppSelector(
+  (state) => state.vendors
+);
+React.useEffect(() => {
+  dispatch(fetchVendors());
+}, [dispatch]);
+console.log(vendor,'vendor')
   const theme = useTheme();
 
   const PRIMARY = theme.palette.primary.main;
@@ -126,17 +135,6 @@ export default function VendorOnboardingDetails() {
       ),
     },
 
-    {
-      field: 'category',
-      headerName: 'Category',
-      flex: 1,
-    },
-
-    {
-      field: 'contactPerson',
-      headerName: 'Contact Person',
-      flex: 1,
-    },
 
     {
       field: 'email',
@@ -150,34 +148,7 @@ export default function VendorOnboardingDetails() {
       flex: 1,
     },
 
-    {
-      field: 'status',
-      headerName: 'Status',
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        let color = 'default';
 
-        if (params.value === 'Approved') color = 'success';
-        if (params.value === 'Pending') color = 'warning';
-        if (params.value === 'Rejected') color = 'error';
-        if (params.value === 'In Review') color = 'info';
-
-        return (
-          <Chip
-            label={params.value}
-            size="small"
-            color={color as any}
-            variant="soft"
-            sx={{
-              height: 22,
-              fontSize: 11,
-              fontWeight: 600,
-              borderRadius: 1,
-            }}
-          />
-        );
-      },
-    },
 
     {
       field: 'submittedDate',
@@ -186,55 +157,31 @@ export default function VendorOnboardingDetails() {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      vendorName: 'TechNova Solutions',
-      vendorCode: 'VND-1001',
-      category: 'IT Services',
-      contactPerson: 'Ajith Pradeep',
-      email: 'contact@technova.com',
-      phone: '+91 98765 43210',
-      status: 'Approved',
-      submittedDate: '12 May 2026',
-    },
-
-    {
-      id: 2,
-      vendorName: 'GreenLeaf Supplies',
-      vendorCode: 'VND-1002',
-      category: 'Office Supplies',
-      contactPerson: 'Rahul Nair',
-      email: 'sales@greenleaf.com',
-      phone: '+91 91234 56789',
-      status: 'Pending',
-      submittedDate: '14 May 2026',
-    },
-
-    {
-      id: 3,
-      vendorName: 'Prime Industrial Works',
-      vendorCode: 'VND-1003',
-      category: 'Manufacturing',
-      contactPerson: 'Sneha Kumar',
-      email: 'info@primeworks.com',
-      phone: '+91 99887 66554',
-      status: 'In Review',
-      submittedDate: '15 May 2026',
-    },
-
-    {
-      id: 4,
-      vendorName: 'BlueWave Logistics',
-      vendorCode: 'VND-1004',
-      category: 'Logistics',
-      contactPerson: 'Arun George',
-      email: 'support@bluewave.com',
-      phone: '+91 90909 80808',
-      status: 'Rejected',
-      submittedDate: '16 May 2026',
-    },
-  ];
+const rows =
+  vendor?.map((item, index) => ({
+    id: item.pk_chr_vendor_id || index,
+    vendorName: item.chr_vendor_name,
+    vendorCode: item.pk_chr_vendor_id?.slice(0, 8), // or your vendor code field if available
+    category: '-', // replace when category exists in API
+    contactPerson: '-', // replace when contact person exists
+    email: item.chr_vendor_email,
+    phone: item.chr_vendor_phone,
+    status:
+      item.chr_document_status === 'A'
+        ? 'Approved'
+        : item.chr_document_status === 'R'
+          ? 'Rejected'
+          : item.chr_document_status === 'P'
+            ? 'Pending'
+            : 'Draft',
+    submittedDate: item.tim_created
+      ? new Date(item.tim_created).toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        })
+      : '-',
+  })) || [];
 
   return (
     <Box>
@@ -288,10 +235,11 @@ export default function VendorOnboardingDetails() {
           />
 
           <Autocomplete
+          
             size="small"
             options={['Approved', 'Pending', 'In Review', 'Rejected']}
             sx={{ minWidth: 180 }}
-            renderInput={(params) => <TextField {...params} label="Status" />}
+            renderInput={(params) => <TextField  {...params} label="Status" />}
           />
 
           <Stack direction="row" spacing={1}>
@@ -303,6 +251,8 @@ export default function VendorOnboardingDetails() {
                 color: 'white',
                 textTransform: 'none',
                 boxShadow: 'none',
+                                borderRadius: 0.5,
+
               }}
             >
               Apply
@@ -313,6 +263,8 @@ export default function VendorOnboardingDetails() {
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.18),
                 textTransform: 'none',
+                                borderRadius: 0.5,
+
               }}
             >
               Reset

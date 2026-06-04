@@ -221,6 +221,7 @@ const rows =
                 background: PRIMARY,
                 px: 3,
                 color: 'white',
+                borderRadius: 0.5,
               }}
             >
               Apply
@@ -229,6 +230,7 @@ const rows =
             <Button
               variant="outlined"
               sx={{
+                borderRadius: 0.5,
                 borderColor: alpha(theme.palette.text.primary, 0.2),
               }}
             >
@@ -280,50 +282,53 @@ const rows =
                 },
               },
             }}
-            sx={{
+          sx={{
+            fontSize: 13,
+
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              minHeight: 36,
+              maxHeight: 36,
+            },
+
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: 'transparent !important',
+            },
+
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'primary.main',
+            },
+
+            '& .MuiDataGrid-cell': {
               fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
+            },
 
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'transparent',
-                minHeight: 38,
-                maxHeight: 38,
-              },
+            '& .MuiDataGrid-row': {
+              minHeight: 34,
+              maxHeight: 34,
+            },
 
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: 'transparent !important',
-              },
+            // Hide scrollbars
+            '& .MuiDataGrid-main': {
+              overflow: 'hidden',
+            },
 
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 14,
-                fontWeight: 600,
-                color: 'primary.main',
-              },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
 
-              '& .MuiDataGrid-cell': {
-                fontSize: 13,
-                letterSpacing: 0.2,
-                fontWeight: 400,
-                borderColor: alpha(theme.palette.text.primary, 0.06),
-              },
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none',
+            },
 
-              '& .MuiDataGrid-row': {
-                minHeight: 42,
-                maxHeight: 42,
-
-                '&:hover': {
-                  backgroundColor: alpha(PRIMARY, 0.03),
-                },
-              },
-
-              '& .MuiDataGrid-footerContainer': {
-                borderTop: `1px solid ${alpha(theme.palette.text.primary, 0.08)}`,
-              },
-
-              '& .MuiDataGrid-toolbarContainer': {
-                px: 1,
-                py: 1,
-              },
-            }}
+            '& ::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
           />
         </Box>
       </Box>

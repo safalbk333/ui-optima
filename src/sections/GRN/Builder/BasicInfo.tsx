@@ -5,45 +5,73 @@ import * as React from 'react';
 import {
   Autocomplete,
   Box,
+  Button,
   Grid,
   IconButton,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
-
-const Warehouse = ['Delu', 'Felu', 'Hylum'];
-const PO = ['Tst1', 'Tst2'];
-
-const currencyOptions = ['USD', 'EUR', 'INR'];
-
-
-const vendorOptions = ['ABC Suppliers', 'Global Tech', 'Prime Industrial', 'Vision Traders'];
+import { createGoodsReceipt } from 'src/store/slices/Grn/GrnSlice';
+import { fetchPurchaseOrders } from 'src/store/slices/PurchaseOrder/PRSlice';
+import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
+import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
+import { useRouter } from 'next/navigation';
 
 export default function GRNBasic() {
+  const router=useRouter()
+  const dispatch=useAppDispatch()
+  const [receivedDate, setReceivedDate] = React.useState<string>('');
+const [notes, setNotes] = React.useState<string>('');
+const [deliveryNotes, setDeliveryNotes] = React.useState<string>('');
+  const { data: purchaseOrders, loading } = useAppSelector(
+    (state) => state.purchaseOrder
+  );
+  const { data: purchaseRequests } = useAppSelector(
+    (state) => state.purchaseRequests
+  );
+  const [selectedPO, setSelectedPO] = React.useState<null | {
+  label: string;
+  id: string;
+}>(null);
+  const [selectedPR, setSelectedPR] = React.useState<null | {
+  label: string;
+  id: string;
+}>(null);
+const [selectedVendor, setSelectedVendor] = React.useState<null | {
+  label: string;
+  id: string;
+}>(null);
+console.log(purchaseRequests,'pr')
+  React.useEffect(() => {
+    dispatch(fetchPurchaseOrders());
+  }, [dispatch]);
+    React.useEffect(() => {
+      dispatch(fetchPurchaseRequests());
+    }, [dispatch]);
+    const { data: vendor } = useAppSelector(
+      (state) => state.vendors
+    );
+    React.useEffect(() => {
+      dispatch(fetchVendors());
+    }, [dispatch]);
+  console.log(vendor,'vendor')
 const [items, setItems] = React.useState([
   {
     id: 1,
-    itemCode: 'ELC-TRN-001',
-    description: 'Power Transformer 500KVA',
-    orderedQty: 10,
-    receivedQty: 10,
-    remainingQty: 0,
-    uom: 'Unit',
-  },
-  {
-    id: 2,
-    itemCode: 'ELC-CBL-002',
-    description: 'Control Cable 4 Core',
-    orderedQty: 50,
-    receivedQty: 45,
-    remainingQty: 5,
-    uom: 'Meter',
+    strItemId: 'FUR-SHELF-001',
+    description: 'Furniture',
+    intQuantityOrdered: 10,
+    intQuantityReceived: 10,
+    intQuantityRejected: 0,
+    strUnitOfMeasure: 'Unit',
+    strRejectionReason: '',
   },
 ]);
 
@@ -64,11 +92,52 @@ const removeItem = (id: number) => {
       padding: '8px 10px',
     },
   };
+const poOptions =
+  purchaseOrders?.map((po) => ({
+    label: po.chr_po_number, // shown in UI
+    id: po.pk_chr_purchase_order_id, // stored value
+  })) || [];
 
+const prOptions =
+  purchaseRequests?.map((pr) => ({
+    label: `${pr.chr_request_number} - ${pr.chr_title}`,
+    id: pr.pk_chr_request_id,
+  })) || [];
+const vendorOptions =
+  vendor?.map((v) => ({
+    label: v.chr_vendor_name,
+    id: v.pk_chr_vendor_id,
+  })) || [];
+const handleSubmit = async () => {
+  const payload = {
+    strGrnCode: `GRN-${Date.now()}`,
+strPurchaseOrderId: selectedPO?.id,
+strRequestId: selectedPR?.id,
+strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
+    strReceivedAt: receivedDate ? new Date(receivedDate).toISOString() : '',
+    strDeliveryNoteNo: deliveryNotes,
+    strNotes: notes,
+    strCreatedId: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
+    arrItems: items.map((item) => ({
+      strItemId: '981026b0-3ca3-48e1-89c5-2b352df2c602',
+      intQuantityOrdered: item.intQuantityOrdered,
+      intQuantityReceived: item.intQuantityReceived,
+      intQuantityRejected: item.intQuantityRejected,
+      strUnitOfMeasure: item.strUnitOfMeasure,
+      strRejectionReason: item.strRejectionReason,
+    })),
+  };
 
+  try {
+    const result = await dispatch(createGoodsReceipt(payload)).unwrap();
 
+    console.log('Created GRN:', result);
 
-
+    router.push('/grn');
+  } catch (error) {
+    console.error('GRN create failed:', error);
+  }
+};
   return (
     <Box>
       <Box maxWidth={700}>
@@ -82,76 +151,91 @@ const removeItem = (id: number) => {
 
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              options={PO}
-              size="small"
-              renderInput={(params) => <TextField {...params} label="PO Selection" sx={smallInputSx} />}
-            />
+<Autocomplete
+  options={poOptions}
+  size="small"
+  value={selectedPO}
+  getOptionLabel={(option) => option.label}
+  isOptionEqualToValue={(option, value) => option.id === value.id}
+  onChange={(e, value) => {
+    setSelectedPO(value); // full object stored
+    console.log('Stored PO ID:', value?.id); // only id if needed
+  }}
+  renderInput={(params) => (
+    <TextField {...params} label="PO Selection" sx={smallInputSx} />
+  )}
+/>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              options={Warehouse}
-              size="small"
-              defaultValue="Medium"
-              renderInput={(params) => <TextField {...params} label="Warehouse Location" sx={smallInputSx} />}
-            />
+<Autocomplete
+  options={prOptions}
+  size="small"
+  value={selectedPR}
+  getOptionLabel={(option) => option.label}
+  isOptionEqualToValue={(option, value) => option.id === value.id}
+  onChange={(e, value) => {
+    setSelectedPR(value);
+    console.log('Selected PR ID:', value?.id);
+  }}
+  renderInput={(params) => (
+    <TextField {...params} label="Purchase Request" sx={smallInputSx} />
+  )}
+/>
           </Grid>
-
+            <Grid size={{ xs: 12, md: 6 }}>
+<Autocomplete
+  options={vendorOptions}
+  size="small"
+  value={selectedVendor}
+  getOptionLabel={(option) => option.label}
+  isOptionEqualToValue={(option, value) => option.id === value.id}
+  onChange={(e, value) => {
+    setSelectedVendor(value);
+    console.log('Selected Vendor ID:', value?.id);
+  }}
+  renderInput={(params) => (
+    <TextField {...params} label="Vendor Name" sx={smallInputSx} />
+  )}
+/>
+</Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              type="date"
-              size="small"
-              label="Delivery Date"
-              InputLabelProps={{ shrink: true }}
-              sx={smallInputSx}
-            />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              options={currencyOptions}
-              size="small"
-              renderInput={(params) => <TextField {...params} label="Vendor Name" sx={smallInputSx} />}
-            />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Autocomplete
-              multiple
-              options={vendorOptions}
-              size="small"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label=" Vendor Name"
-                  sx={smallInputSx}
-                />
-              )}
-            />
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Delivery Challan / Invoice"
-              sx={smallInputSx}
-            />
+<TextField
+  fullWidth
+  type="date"
+  size="small"
+  label="Received Date"
+  value={receivedDate}
+  onChange={(e) => setReceivedDate(e.target.value)}
+  InputLabelProps={{ shrink: true }}
+  sx={smallInputSx}
+/>
           </Grid>
 
 
-          <Grid size={{ xs: 12 }}>
-            <TextField
-              fullWidth
-              multiline
-              minRows={2}
-              size="small"
-              label="Description"
-              placeholder="Enter RFQ description"
-              sx={smallInputSx}
-            />
+          <Grid size={{ xs: 6 }}>
+<TextField
+  fullWidth
+  multiline
+  minRows={2}
+  size="small"
+  label="Notes"
+  value={notes}
+  onChange={(e) => setNotes(e.target.value)}
+  sx={smallInputSx}
+/>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+<TextField
+  fullWidth
+  multiline
+  minRows={2}
+  size="small"
+  label="Delivery Notes"
+  value={deliveryNotes}
+  onChange={(e) => setDeliveryNotes(e.target.value)}
+  sx={smallInputSx}
+/>
           </Grid>
         </Grid>
 
@@ -210,91 +294,86 @@ const removeItem = (id: number) => {
   </Grid>
 
   {/* Rows */}
-{items.map((row) => (
-  <Grid
-    container
-    key={row.id}
-    sx={{
-      py: 1,
-      px: 1,
-      alignItems: 'center',
-      borderBottom: '1px solid #f1f5f9',
-      minHeight: 58,
-    }}
-  >
+{items.map((row, index) => (
+  <Grid container key={row.id} sx={{ py: 1, px: 1, alignItems: 'center' }}>
+    
+    {/* Item */}
     <Grid size={{ xs: 3 }}>
       <Typography fontSize={12} fontWeight={700}>
-        {row.itemCode}
+        {row.strItemId}
       </Typography>
-
-      <Typography
-        fontSize={11}
-        color="text.secondary"
-        sx={{
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-        }}
-      >
+      <Typography fontSize={11} color="text.secondary">
         {row.description}
       </Typography>
     </Grid>
 
+    {/* Ordered */}
     <Grid size={{ xs: 1.5 }}>
       <Typography fontSize={12}>
-        {row.orderedQty}
+        {row.intQuantityOrdered}
       </Typography>
     </Grid>
 
+    {/* Received */}
     <Grid size={{ xs: 1.5 }}>
       <TextField
         size="small"
-        defaultValue={row.receivedQty}
-        sx={{
-          width: 70,
-          '& .MuiInputBase-input': {
-            py: 0.5,
-            px: 1,
-            fontSize: 12,
-            textAlign: 'center',
-          },
+        value={row.intQuantityReceived}
+        onChange={(e) => {
+          const value = Number(e.target.value);
+          setItems((prev) =>
+            prev.map((it, i) =>
+              i === index ? { ...it, intQuantityReceived: value } : it
+            )
+          );
         }}
+        sx={{ width: 70 }}
       />
     </Grid>
 
+    {/* Rejected */}
     <Grid size={{ xs: 1.5 }}>
-      <Typography fontSize={12}>
-        {row.remainingQty}
-      </Typography>
-    </Grid>
-
-    <Grid size={{ xs: 1.5 }}>
-      <Typography fontSize={12}>
-        {row.uom}
-      </Typography>
-    </Grid>
-
-    <Grid size={{ xs: 2 }}>
-      <Typography
-        fontSize={11}
-        fontWeight={600}
-        color="success.main"
-      >
-        Passed
-      </Typography>
-    </Grid>
-
-    <Grid size={{ xs: 1 }}>
-      <IconButton
+      <TextField
         size="small"
-        onClick={() => removeItem(row.id)}
-        sx={{
-          color: '#ef4444',
-          p: 0.5,
+        value={row.intQuantityRejected}
+        onChange={(e) => {
+          const value = Number(e.target.value);
+          setItems((prev) =>
+            prev.map((it, i) =>
+              i === index ? { ...it, intQuantityRejected: value } : it
+            )
+          );
         }}
-      >
-        <DeleteOutlineIcon fontSize="small" />
+        sx={{ width: 70 }}
+      />
+    </Grid>
+
+    {/* UOM */}
+    <Grid size={{ xs: 1.5 }}>
+      <Typography fontSize={12}>{row.strUnitOfMeasure}</Typography>
+    </Grid>
+
+    {/* Rejection Reason */}
+    <Grid size={{ xs: 2 }}>
+      <TextField
+        size="small"
+        value={row.strRejectionReason}
+        onChange={(e) => {
+          const value = e.target.value;
+          setItems((prev) =>
+            prev.map((it, i) =>
+              i === index ? { ...it, strRejectionReason: value } : it
+            )
+          );
+        }}
+        placeholder="Reason"
+      />
+    </Grid>
+
+    {/* Action */}
+    <Grid size={{ xs: 1 }}>
+      <IconButton onClick={() => removeItem(row.id)}>
+        <DeleteOutlineIcon />
       </IconButton>
     </Grid>
   </Grid>
@@ -315,101 +394,7 @@ const removeItem = (id: number) => {
             overflow: 'hidden',
           }}
         >
-          {/* Uploaded Files */}
-          <Stack spacing={1} py={1.5}>
-            {[
-              {
-                name: 'Technical Specification.pdf',
-                size: '2.5 MB',
-                color: '#14b8a6',
-                bg: 'rgba(20,184,166,0.10)',
-              },
-              {
-                name: 'Vendor Requirement.docx',
-                size: '1.2 MB',
-                color: '#f97316',
-                bg: 'rgba(249,115,22,0.10)',
-              },
-              {
-                name: 'Quotation Format.xlsx',
-                size: '850 KB',
-                color: '#8b5cf6',
-                bg: 'rgba(139,92,246,0.10)',
-              },
-            ].map((file, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  py: 1.2,
-                  borderRadius: 1,
-                  border: `1px solid ${file.bg}`,
-                }}
-              >
-                <Stack direction="row" spacing={1.2} alignItems="center">
-                  <Box
-                    sx={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: 1,
-                      bgcolor: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: file.color,
-                    }}
-                  >
-                    <InsertDriveFileOutlinedIcon sx={{ fontSize: 20 }} />
-                  </Box>
 
-                  <Box>
-                    <Typography fontSize={12} fontWeight={600}>
-                      {file.name}
-                    </Typography>
-
-                    <Typography fontSize={10.5} color="text.secondary">
-                      {file.size}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Stack direction="row" spacing={0.5}>
-                  <IconButton
-                    size="small"
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      bgcolor: '#fff',
-
-                      '&:hover': {
-                        bgcolor: 'rgba(255,255,255,0.7)',
-                      },
-                    }}
-                  >
-                    <DownloadRoundedIcon sx={{ fontSize: 17 }} />
-                  </IconButton>
-
-                  <IconButton
-                    size="small"
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      bgcolor: '#fff',
-                      color: '#ef4444',
-
-                      '&:hover': {
-                        bgcolor: 'rgba(255,255,255,0.7)',
-                      },
-                    }}
-                  >
-                    <DeleteOutlineIcon sx={{ fontSize: 17 }} />
-                  </IconButton>
-                </Stack>
-              </Box>
-            ))}
-          </Stack>
 
           {/* Upload Area */}
           <Box
@@ -465,7 +450,16 @@ const removeItem = (id: number) => {
             </Box>
           </Box>
         </Box>
-    
+    <Stack direction="row" justifyContent="flex-end" mt={3}>
+  <Button
+    variant="contained"
+    onClick={handleSubmit}
+    color='primary'
+    sx={{borderRadius:0.5}}
+  >
+    Create GRN
+  </Button>
+</Stack>
       </Box>
     </Box>
   );

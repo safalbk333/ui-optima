@@ -1,31 +1,33 @@
 'use client';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridRenderCellParams
 } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import React, { useEffect, useMemo } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import React from 'react';
+import { fetchGoodsReceipts } from 'src/store/slices/Grn/GrnSlice';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
 
@@ -65,7 +67,15 @@ function CustomFooter() {
 function GRNDashboard() {
   const theme = useTheme();
   const router = useRouter();
+const dispatch = useAppDispatch();
 
+const { data: grns, loading } = useAppSelector(
+  (state) => state.goodsReceipt
+);
+
+useEffect(() => {
+  dispatch(fetchGoodsReceipts());
+}, [dispatch]);
   const PRIMARY = theme.palette.primary.main;
 
 const columns: GridColDef[] = [
@@ -150,51 +160,40 @@ const columns: GridColDef[] = [
 },
 ];
 
-const rows = [
-  {
-    id: 1,
-    grnNo: 'GRN-2026-1001',
-    poNo: 'PO-2026-1001',
-    vendor: 'Dell Technologies',
-    receiptDate: '12 May 2026',
-    receivedBy: 'Warehouse Team',
-    itemsReceived: 25,
-    inspectionStatus: 'Approved',
-  },
+const rows = useMemo(
+  () =>
+    (grns || []).map((grn) => ({
+      id: grn.pk_chr_goods_receipt_id,
 
-  {
-    id: 2,
-    grnNo: 'GRN-2026-1002',
-    poNo: 'PO-2026-1002',
-    vendor: 'Godrej Interio',
-    receiptDate: '09 May 2026',
-    receivedBy: 'Admin Team',
-    itemsReceived: 40,
-    inspectionStatus: 'Approved',
-  },
+      grnNo: grn.chr_grn_code,
 
-  {
-    id: 3,
-    grnNo: 'GRN-2026-1003',
-    poNo: 'PO-2026-1003',
-    vendor: 'ABC Logistics',
-    receiptDate: '08 May 2026',
-    receivedBy: 'Stores Department',
-    itemsReceived: 12,
-    inspectionStatus: 'Pending',
-  },
+      poNo: grn.purchase_order?.chr_po_number || '',
 
-  {
-    id: 4,
-    grnNo: 'GRN-2026-1004',
-    poNo: 'PO-2026-1004',
-    vendor: 'Safety World Pvt Ltd',
-    receiptDate: '05 May 2026',
-    receivedBy: 'Operations Team',
-    itemsReceived: 60,
-    inspectionStatus: 'Rejected',
-  },
-];
+      vendor: '-',
+
+      receiptDate: grn.dt_received_at
+        ? new Date(grn.dt_received_at).toLocaleDateString()
+        : '',
+
+      receivedBy: grn.fk_chr_created_id || 'System',
+
+      itemsReceived:
+        grn.goods_receipt_items?.reduce(
+          (sum, item) => sum + (item.int_quantity_received || 0),
+          0
+        ) || 0,
+
+      inspectionStatus:
+        grn.chr_status === 'PENDING'
+          ? 'Pending'
+          : grn.chr_status === 'APPROVED'
+          ? 'Approved'
+          : grn.chr_status === 'REJECTED'
+          ? 'Rejected'
+          : grn.chr_status,
+    })),
+  [grns]
+);
 
   return (
     <Box>
@@ -209,6 +208,13 @@ const rows = [
   ]}
             action={
               <Button
+                            sx={{
+                borderRadius: 0.5,
+                px: 2,
+                fontWeight: 600,
+                textTransform: 'none',
+              }}
+              color='primary'
                 variant="outlined"
                 onClick={() => {
                   router.push(paths.grn.new);
@@ -267,6 +273,7 @@ const rows = [
                 background: PRIMARY,
                 px: 2.5,
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Apply
@@ -277,6 +284,7 @@ const rows = [
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.2),
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Reset
@@ -319,9 +327,9 @@ const rows = [
                 csvOptions: { disableToolbarButton: true },
               },
             }}
-            onRowClick={(params) => {
-              router.push(`/purchase_orders/details`);
-            }}
+            // onRowClick={(params) => {
+            //   router.push(`/purchase_orders/details`);
+            // }}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -330,47 +338,53 @@ const rows = [
                 },
               },
             }}
-            sx={{
+          sx={{
+            fontSize: 13,
+
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              minHeight: 36,
+              maxHeight: 36,
+            },
+
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: 'transparent !important',
+            },
+
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'primary.main',
+            },
+
+            '& .MuiDataGrid-cell': {
               fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
+            },
 
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'transparent',
-                minHeight: 42,
-                maxHeight: 42,
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-              },
+            '& .MuiDataGrid-row': {
+              minHeight: 34,
+              maxHeight: 34,
+            },
 
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: 'transparent !important',
-              },
+            // Hide scrollbars
+            '& .MuiDataGrid-main': {
+              overflow: 'hidden',
+            },
 
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 13,
-                fontWeight: 700,
-                color: 'primary.main',
-              },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
 
-              '& .MuiDataGrid-cell': {
-                fontSize: 13,
-                alignItems: 'center',
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
-              },
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none',
+            },
 
-              '& .MuiDataGrid-row': {
-                minHeight: 44,
-                maxHeight: 44,
-                cursor: 'pointer',
-              },
-
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.03),
-              },
-
-              '& .MuiDataGrid-toolbarContainer': {
-                px: 1,
-                py: 0.5,
-              },
-            }}
+            '& ::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
           />
         </Box>
       </Box>

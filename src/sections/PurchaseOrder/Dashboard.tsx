@@ -1,31 +1,33 @@
 'use client';
 
 import {
-  Box,
-  Chip,
-  Stack,
-  Button,
-  TextField,
-  Pagination,
-  Typography,
   Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Pagination,
+  Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
 import {
   DataGrid,
-  useGridApiContext,
   GridFooterContainer,
   gridPageCountSelector,
   gridPaginationModelSelector,
+  useGridApiContext,
 } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridRenderCellParams
 } from '@mui/x-data-grid';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
+import React, { useEffect } from 'react';
 import { alpha, useTheme } from '@mui/material/styles';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import React from 'react';
+import { fetchPurchaseOrders } from 'src/store/slices/PurchaseOrder/PRSlice';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
 
@@ -65,7 +67,15 @@ function CustomFooter() {
 function PurchaseOrderDashboard() {
   const theme = useTheme();
   const router = useRouter();
+const dispatch = useAppDispatch();
 
+const { data: purchaseOrders, loading } = useAppSelector(
+  (state) => state.purchaseOrder
+);
+
+useEffect(() => {
+  dispatch(fetchPurchaseOrders());
+}, [dispatch]);
   const PRIMARY = theme.palette.primary.main;
 
 const columns: GridColDef[] = [
@@ -156,63 +166,35 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    poNo: 'PO-2026-1001',
-    vendor: 'Dell Technologies',
-    category: 'IT Equipment',
-    poDate: '01 May 2026',
-    deliveryDate: '10 May 2026',
-    buyer: 'Ajith Kumar',
-    amount: '$24,500',
-    status: 'Approved',
-  },
-  {
-    id: 2,
-    poNo: 'PO-2026-1002',
-    vendor: 'Godrej Interio',
-    category: 'Furniture',
-    poDate: '05 May 2026',
-    deliveryDate: '18 May 2026',
-    buyer: 'Anjali Nair',
-    amount: '$8,200',
-    status: 'Sent',
-  },
-  {
-    id: 3,
-    poNo: 'PO-2026-1003',
-    vendor: 'DHL Logistics',
-    category: 'Logistics',
-    poDate: '08 May 2026',
-    deliveryDate: '20 May 2026',
-    buyer: 'Rahul Menon',
-    amount: '$14,000',
-    status: 'Partial',
-  },
-  {
-    id: 4,
-    poNo: 'PO-2026-1004',
-    vendor: '3M Safety Solutions',
-    category: 'Safety',
-    poDate: '10 May 2026',
-    deliveryDate: '22 May 2026',
-    buyer: 'Vivek Nair',
-    amount: '$6,750',
-    status: 'Draft',
-  },
-  {
-    id: 5,
-    poNo: 'PO-2026-1005',
-    vendor: 'HP Enterprise',
-    category: 'IT Equipment',
-    poDate: '12 May 2026',
-    deliveryDate: '25 May 2026',
-    buyer: 'Ajith Kumar',
-    amount: '$18,900',
-    status: 'Closed',
-  },
-];
+const rows =
+  purchaseOrders?.map((po) => ({
+    id: po.pk_chr_purchase_order_id,
+
+    poNo: po.chr_po_number,
+
+    vendor: po.vendor?.chr_vendor_name || '-',
+
+    category: po.request?.chr_title || '-',
+
+    poDate: po.dt_issued_at
+      ? new Date(po.dt_issued_at).toLocaleDateString()
+      : '-',
+
+    deliveryDate: po.dt_expected_delivery
+      ? new Date(po.dt_expected_delivery).toLocaleDateString()
+      : '-',
+
+    buyer: po.vendor?.chr_vendor_email || '-',
+
+    amount: `${po.chr_currency} ${Number(
+      po.flt_total_value || 0
+    ).toLocaleString()}`,
+
+    status:
+      po.quotation?.chr_status === 'DRAFT'
+        ? 'Draft'
+        : po.quotation?.chr_status || '-',
+  })) || [];
 
   return (
     <Box>
@@ -227,12 +209,20 @@ const rows = [
           ]}
                     action={
                       <Button
+                                    sx={{
+                px: 3,
+                textTransform: 'none',
+                boxShadow: 'none',
+                                borderRadius: 0.5,
+
+              }}
                         variant="outlined"
+                        color='primary'
                         onClick={() => {
-                          router.push(paths.products.products);
+                          router.push('/purchase_orders/details');
                         }}
                       >
-                        New PO
+                        New Purchase Order
                       </Button>
                     }
         />
@@ -276,6 +266,7 @@ const rows = [
                 background: PRIMARY,
                 px: 2.5,
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Apply
@@ -286,6 +277,7 @@ const rows = [
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.2),
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Reset
@@ -328,9 +320,9 @@ const rows = [
                 csvOptions: { disableToolbarButton: true },
               },
             }}
-            onRowClick={(params) => {
-              router.push(`/purchase_orders/details`);
-            }}
+            // onRowClick={(params) => {
+            //   router.push(`/purchase_orders/details`);
+            // }}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -339,47 +331,53 @@ const rows = [
                 },
               },
             }}
-            sx={{
+          sx={{
+            fontSize: 13,
+
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              minHeight: 36,
+              maxHeight: 36,
+            },
+
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: 'transparent !important',
+            },
+
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'primary.main',
+            },
+
+            '& .MuiDataGrid-cell': {
               fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
+            },
 
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'transparent',
-                minHeight: 42,
-                maxHeight: 42,
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-              },
+            '& .MuiDataGrid-row': {
+              minHeight: 34,
+              maxHeight: 34,
+            },
 
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: 'transparent !important',
-              },
+            // Hide scrollbars
+            '& .MuiDataGrid-main': {
+              overflow: 'hidden',
+            },
 
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 13,
-                fontWeight: 700,
-                color: 'primary.main',
-              },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
 
-              '& .MuiDataGrid-cell': {
-                fontSize: 13,
-                alignItems: 'center',
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
-              },
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none',
+            },
 
-              '& .MuiDataGrid-row': {
-                minHeight: 44,
-                maxHeight: 44,
-                cursor: 'pointer',
-              },
-
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.03),
-              },
-
-              '& .MuiDataGrid-toolbarContainer': {
-                px: 1,
-                py: 0.5,
-              },
-            }}
+            '& ::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
           />
         </Box>
       </Box>

@@ -3,6 +3,11 @@
 import { JWT_STORAGE_KEY } from './constant';
 import { axiosInstance, endpoints } from 'src/lib/axios';
 import { setSession } from './utils';
+import {
+  authenticateLocalUser,
+  localSessionToAuthUser,
+  setLocalSession,
+} from 'src/auth/local-auth';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +27,15 @@ export type SignUpParams = {
  * Sign in
  *************************************** */
 export const signInWithPassword = async ({ email, password }: SignInParams): Promise<void> => {
+  const localSession = authenticateLocalUser(email, password);
+
+  if (localSession) {
+    setLocalSession(localSession);
+    sessionStorage.removeItem(JWT_STORAGE_KEY);
+    delete axiosInstance.defaults.headers.common.Authorization;
+    return;
+  }
+
   try {
     const params = { email, password };
 
@@ -33,10 +47,11 @@ export const signInWithPassword = async ({ email, password }: SignInParams): Pro
       throw new Error('Access token not found in response');
     }
 
-    setSession(accessToken);
+    setLocalSession(null);
+    await setSession(accessToken);
   } catch (error) {
     console.error('Error during sign in:', error);
-    throw error;
+    throw new Error('Invalid email or password');
   }
 };
 
@@ -77,6 +92,7 @@ export const signUp = async ({
  *************************************** */
 export const signOut = async (): Promise<void> => {
   try {
+    setLocalSession(null);
     await setSession(null);
   } catch (error) {
     console.error('Error during sign out:', error);

@@ -65,6 +65,8 @@ const ICONS = {
   grn:<EditNoteIcon fontSize='small' />,
   rfp:<NoteAltIcon fontSize='small'/>
 };
+const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
+
 export const navData: NavSectionProps['data'] = [
   {
     items: [
@@ -72,51 +74,56 @@ export const navData: NavSectionProps['data'] = [
         title: 'Dashboard',
         path: paths.dashboard.root,
         icon: ICONS.dashboard,
-      },
-      {
-        title: 'Purchase Requests',
-        path: paths.purchaseRequests.root,
-        icon: ICONS.rfq,
-      },
-      {
-        title: 'Purchase Orders',
-        path: paths.purchaseOrders.root,
-        icon: ICONS.purchaseOrder,
-      },
-      {
-        title: 'Vendor Directory',
-        path: paths.vendor.directory,
-        icon: ICONS.vendorDirectory,
-      },
-      {
-        title: 'Contract Generator',
-        path: paths.contractGenerator.root,
-        icon: ICONS.contract,
+        allowedRoles: [...ALL_ROLES],
       },
       {
         title: 'Vendor Onboarding',
         path: paths.vendorOnboarding.roots,
         icon: ICONS.onboarding,
+                allowedRoles: ['admin'],
+
+},
+      {
+        title: 'Purchase Requests',
+        path: paths.purchaseRequests.root,
+        icon: ICONS.rfq,
+        allowedRoles: ['admin', 'enduser'],
+      },
+      {
+        title: 'Purchase Orders',
+        path: paths.purchaseOrders.root,
+        icon: ICONS.purchaseOrder,
+        allowedRoles: ['admin'],
+      },
+      {
+        title: 'Contract Generator',
+        path: paths.contractGenerator.root,
+        icon: ICONS.contract,
+        allowedRoles: ['admin'],
       },
       {
         title: 'RFP / RFQ',
         path: paths.rfq.roots,
         icon: ICONS.rfp,
+        allowedRoles: ['admin'],
       },
-            {
+      {
         title: 'GRN',
         path: paths.grn.roots,
         icon: ICONS.grn,
+        allowedRoles: ['admin'],
       },
-                  {
+      {
         title: 'EOI',
         path: paths.eoi.roots,
         icon: ICONS.eoi,
+        allowedRoles: ['admin'],
       },
-                        {
+      {
         title: 'Approval',
         path: paths.approval.roots,
         icon: ICONS.approve,
+        allowedRoles: ['approver'],
       },
     ],
   },

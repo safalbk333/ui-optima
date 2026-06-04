@@ -231,6 +231,7 @@ const rows =
                 background: PRIMARY,
                 px: 2.5,
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Apply
@@ -241,6 +242,7 @@ const rows =
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.2),
                 minWidth: 90,
+                borderRadius: 0.5,
               }}
             >
               Reset
@@ -295,47 +297,53 @@ onRowClick={(params) => {
                 },
               },
             }}
-            sx={{
+          sx={{
+            fontSize: 13,
+
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: 'transparent',
+              minHeight: 36,
+              maxHeight: 36,
+            },
+
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: 'transparent !important',
+            },
+
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: 14,
+              fontWeight: 500,
+              color: 'primary.main',
+            },
+
+            '& .MuiDataGrid-cell': {
               fontSize: 13,
+              letterSpacing: 0.2,
+              fontWeight: 200,
+            },
 
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'transparent',
-                minHeight: 42,
-                maxHeight: 42,
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-              },
+            '& .MuiDataGrid-row': {
+              minHeight: 34,
+              maxHeight: 34,
+            },
 
-              '& .MuiDataGrid-columnHeader': {
-                backgroundColor: 'transparent !important',
-              },
+            // Hide scrollbars
+            '& .MuiDataGrid-main': {
+              overflow: 'hidden',
+            },
 
-              '& .MuiDataGrid-columnHeaderTitle': {
-                fontSize: 13,
-                fontWeight: 700,
-                color: 'primary.main',
-              },
+            '& .MuiDataGrid-virtualScroller': {
+              overflow: 'hidden !important',
+            },
 
-              '& .MuiDataGrid-cell': {
-                fontSize: 13,
-                alignItems: 'center',
-                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.4)}`,
-              },
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none',
+            },
 
-              '& .MuiDataGrid-row': {
-                minHeight: 44,
-                maxHeight: 44,
-                cursor: 'pointer',
-              },
-
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.03),
-              },
-
-              '& .MuiDataGrid-toolbarContainer': {
-                px: 1,
-                py: 0.5,
-              },
-            }}
+            '& ::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
           />
         </Box>
       </Box>
