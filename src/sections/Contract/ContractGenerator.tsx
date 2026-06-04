@@ -23,29 +23,35 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { Edit } from '@mui/icons-material';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import ContractDocument from 'src/components/contract/ContractDocument';
+import ValidationPanel from 'src/components/contract/ValidationPanel';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTemplateByCode } from 'src/store/slices/contract/contractSlice';
+import { AppDispatch, RootState } from 'src/store/store';
+import { useRouter } from 'next/navigation';
 
 // ─── Icons (inline SVG components to avoid import issues) ────────────────────
 
-const SparkleIcon = () => (
+export const SparkleIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
   </svg>
 );
-const UploadIcon = () => (
+export const UploadIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
     <polyline points="17 8 12 3 7 8" />
     <line x1="12" y1="3" x2="12" y2="15" />
   </svg>
 );
-const DownloadIcon = () => (
+export const DownloadIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
     <polyline points="7 10 12 15 17 10" />
     <line x1="12" y1="15" x2="12" y2="3" />
   </svg>
 );
-const EyeIcon = () => (
+export const EyeIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
     <circle cx="12" cy="12" r="3" />
@@ -57,7 +63,15 @@ const XIcon = () => (
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
-const CheckIcon = ({ size = 14 }) => (
+export const CreateContractIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="12" y1="11" x2="12" y2="17" />
+    <line x1="9" y1="14" x2="15" y2="14" />
+  </svg>
+);
+export const CheckIcon = ({ size = 14 }) => (
   <svg
     width={size}
     height={size}
@@ -69,7 +83,7 @@ const CheckIcon = ({ size = 14 }) => (
     <polyline points="20 6 9 17 4 12" />
   </svg>
 );
-const WarnIcon = ({ size = 14 }) => (
+export const WarnIcon = ({ size = 14 }) => (
   <svg
     width={size}
     height={size}
@@ -83,14 +97,14 @@ const WarnIcon = ({ size = 14 }) => (
     <line x1="12" y1="17" x2="12.01" y2="17" />
   </svg>
 );
-const PrinterIcon = () => (
+export const PrinterIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <polyline points="6 9 6 2 18 2 18 9" />
     <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
     <rect x="6" y="14" width="12" height="8" />
   </svg>
 );
-const MaximizeIcon = () => (
+export const MaximizeIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
   </svg>
@@ -131,9 +145,9 @@ const GOVERNING_LAW_OPTIONS = [
   'UK (Contracts Act 1999)',
 ];
 
-const CURRENCY_OPTIONS = ['ZIG', 'USD', 'ZWL', 'ZAR', 'EUR', 'GBP', 'KES'];
+export const CURRENCY_OPTIONS = ['ZIG', 'USD', 'ZWL', 'ZAR', 'EUR', 'GBP', 'KES'];
 
-type ContractValues = {
+export type ContractValues = {
   vendor: string;
   contractType: string;
   contractValue: string;
@@ -145,16 +159,19 @@ type ContractValues = {
   scope: string;
   paymentTerms: string;
   contractValueWords: string;
+  contractTitle: string;
+  clientEmail: string;
+  clientPhone: string;
 };
 
-type ValidationSeverity = 'warning' | 'success' | 'default';
+export type ValidationSeverity = 'warning' | 'success' | 'default';
 
-type ValidationCardProps = {
+export type ValidationCardProps = {
   severity?: ValidationSeverity;
 };
 
 // ─── STYLED COMPONENTS ────────────────────────────────────────────────────────
-const GreenChip = styled(Box)(({ theme }) => ({
+export const GreenChip = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   gap: 5,
@@ -167,7 +184,7 @@ const GreenChip = styled(Box)(({ theme }) => ({
   letterSpacing: '0.04em',
 }));
 
-const ValidationCard = styled(Box, {
+export const ValidationCard = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'severity',
 })<ValidationCardProps>(({ theme, severity }) => ({
   padding: '10px 12px',
@@ -188,7 +205,7 @@ const ValidationCard = styled(Box, {
   marginBottom: 8,
 }));
 
-const SectionHeading = styled(Typography)(({ theme }) => ({
+export const SectionHeading = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   fontWeight: 700,
   fontSize: 13,
@@ -198,69 +215,7 @@ const SectionHeading = styled(Typography)(({ theme }) => ({
   marginTop: 22,
 }));
 
-// ─── EDITABLE INLINE SPAN ─────────────────────────────────────────────────────
-// A helper component that renders a contentEditable span for inline text editing
-// in edit mode, and plain text in view mode.
-const EditableInline = ({
-  value,
-  onChange,
-  editMode,
-  bold = false,
-  style = {},
-}: {
-  value: string;
-  onChange: (val: string) => void;
-  editMode: boolean;
-  bold?: boolean;
-  style?: React.CSSProperties;
-}) => {
-  const spanRef = useRef<HTMLSpanElement>(null);
-
-  // Sync external value changes into the DOM without clobbering cursor
-  useEffect(() => {
-    if (spanRef.current && !editMode) {
-      spanRef.current.textContent = value;
-    }
-  }, [value, editMode]);
-
-  // On entering edit mode, set the initial content
-  useEffect(() => {
-    if (spanRef.current && editMode) {
-      if (spanRef.current.textContent !== value) {
-        spanRef.current.textContent = value;
-      }
-    }
-  }, [editMode]);
-
-  if (!editMode) {
-    return bold ? <strong style={style}>{value}</strong> : <span style={style}>{value}</span>;
-  }
-
-  return (
-    <span
-      ref={spanRef}
-      contentEditable
-      suppressContentEditableWarning
-      onBlur={(e) => onChange(e.currentTarget.textContent || '')}
-      style={{
-        outline: 'none',
-        borderBottom: '1.5px dashed #3b82f6',
-        borderRadius: 2,
-        background: alpha('#3b82f6', 0.05),
-        padding: '0 2px',
-        cursor: 'text',
-        fontWeight: bold ? 700 : undefined,
-        minWidth: 40,
-        display: 'inline',
-        ...style,
-      }}
-    />
-  );
-};
-
-// ─── EDITABLE BLOCK PARAGRAPH ─────────────────────────────────────────────────
-// For full-paragraph blocks — renders a contentEditable div in edit mode.
-const EditableBlock = ({
+export const EditableBlock = ({
   value,
   onChange,
   editMode,
@@ -329,347 +284,170 @@ const EditableBlock = ({
   );
 };
 
-// ─── CONTRACT DOCUMENT PREVIEW ────────────────────────────────────────────────
-function ContractDocument({
-  values,
-  setValues,
-  editMode,
-}: {
-  values: ContractValues;
-  setValues: React.Dispatch<React.SetStateAction<ContractValues>>;
-  editMode: boolean;
-}) {
-  // Stable contract ID (memoised so it doesn't re-randomise on every re-render)
-  const contractId = useRef(
-    `CTR-2026-${String(Math.floor(Math.random() * 9000) + 1000).padStart(4, '0')}`
-  ).current;
+export interface TemplateValues {
+  rfq_title: string;
+  linked_purchase_request: string;
+  linked_eoi: string;
+  category: string;
+  department: string;
+  priority: string;
 
-  const today = new Date().toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  buyer_name: string;
+  buyer_email: string;
+  buyer_phone: string;
+  organisation: string;
 
-  // Helper to update a single ContractValues field
-  const field = (key: keyof ContractValues) => (val: string) =>
-    setValues((prev) => ({ ...prev, [key]: val }));
+  vendor_name: string;
 
-  // ── Derived display values ────────────────────────────────────────────────
-  const contractValueFormatted = values.contractValue
-    ? Number(values.contractValue.replace(/,/g, '')).toLocaleString()
-    : '44,200';
+  currency: string;
+  contract_value: string;
 
-  const performanceBond = values.contractValue
-    ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
-    : '4,420';
+  start_date: string;
+  end_date: string;
 
-  // ── Editable section bodies stored in local state so the whole paragraph ──
-  // ── can be edited freely without re-seeding from props on every keystroke ─
-  const [sectionText, setSectionText] = useState({
-    parties: `This ${values.contractType || 'Service Level Agreement'} ("Agreement") is entered into as of ${today} between ${values.clientName || 'Econet Wireless Zimbabwe Limited'}, a company registered under the laws of Zimbabwe (Registration No. ZW-CR-1998-00001), having its principal place of business at 2 Old Mutual Centre, Jason Moyo Avenue, Harare ("the Client"), and ${values.vendor || 'Zimbabwe Cooling Ltd'}, a company registered under the laws of Zimbabwe (Registration No. ZW-CR-2009-04417), having its principal place of business at 14 Industrial Drive, Workington, Harare ("the Service Provider").`,
-    scope:
-      values.scope ||
-      "The Service Provider shall provide comprehensive HVAC maintenance services across the Client's four (4) Network Operation Centre facilities located in Harare, Bulawayo, Gweru and Mutare as detailed in Schedule A attached hereto. Services include preventive maintenance (monthly), deep service (quarterly), emergency corrective maintenance (24/7), and annual certification submissions.",
-    sla: `Emergency callout response: 2 hours maximum from notification to technician on-site, applicable to all four NOC locations. Preventive maintenance completion: within the scheduled month. System uptime contribution target: 99.5% per site. SLA breach penalties: 0.5% of monthly contract value per incident, capped at 10% of annual contract value. The Client reserves the right to terminate this agreement with 30 days notice in the event of 3 or more consecutive SLA breaches.`,
-    commercial: `The total contract value for the initial 12-month term is ${values.currency || 'USD'} ${contractValueFormatted} (${values.contractValueWords || 'forty-four thousand two hundred United States Dollars'}), exclusive of VAT at 15% per ZIMRA regulations. Payment shall be made within ${values.paymentTerms || '30'} days of receipt of a valid tax invoice, subject to GRN acknowledgement via the OPTIMA platform. Withholding tax at 10% shall be deducted from all payments per applicable ZIMRA regulations. A performance bond of ${values.currency || 'USD'} ${performanceBond} (10% of contract value) shall be submitted by the Service Provider within 5 business days of execution of this agreement.`,
-    term: `This Agreement shall commence on ${values.startDate || '1st June 2026'} and continue for an initial term of twelve (12) months, expiring on ${values.endDate || '31st May 2027'}, unless earlier terminated. Either party may terminate this Agreement by providing thirty (30) days' written notice. The Client may terminate immediately in the event of material breach, insolvency of the Service Provider, or debarment under PRAZ regulations.`,
-    governingLaw: `This Agreement shall be governed by and construed in accordance with the laws of ${values.governingLaw || 'Zimbabwe (Chapter 8:01)'}. Any disputes arising out of or in connection with this Agreement shall be referred to arbitration in accordance with the Arbitration Act [Chapter 7:15] of Zimbabwe.`,
-    compliance: `Both parties shall comply with all applicable ZIMRA tax regulations, PRAZ procurement guidelines, and ZACC anti-corruption obligations. The Service Provider warrants that it is duly registered with the relevant regulatory authorities and holds all necessary certifications required to perform the services outlined herein.`,
-  });
-
-  const setSection = (key: keyof typeof sectionText) => (val: string) =>
-    setSectionText((prev) => ({ ...prev, [key]: val }));
-
-  // ── Edit-mode tooltip banner ──────────────────────────────────────────────
-  const EditBanner = editMode ? (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1,
-        mb: 2,
-        p: '6px 12px',
-        borderRadius: 1.5,
-        background: alpha('#3b82f6', 0.08),
-        border: `1px solid ${alpha('#3b82f6', 0.25)}`,
-      }}
-    >
-      <Edit sx={{ fontSize: 13, color: '#3b82f6' }} />
-      <Typography sx={{ fontSize: 11, color: '#1d4ed8', fontWeight: 600 }}>
-        Edit mode — click any text field to edit it directly
-      </Typography>
-    </Box>
-  ) : null;
-
-  return (
-    <Box sx={{ fontFamily: '"Times New Roman", serif', lineHeight: 1.75, color: '#1a1a1a' }}>
-      <Box
-        mb={2}
-        sx={{ bgcolor: '#fff', p: 4, borderRadius: 2, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
-      >
-        {EditBanner}
-
-        {/* ── Header ─────────────────────────────────────────────────────── */}
-        <Typography
-          align="center"
-          sx={{ fontWeight: 800, fontSize: 17, letterSpacing: '0.08em', mb: 0.5 }}
-        >
-          <EditableInline
-            value={values.contractType?.toUpperCase() || 'SERVICE LEVEL AGREEMENT'}
-            onChange={(v) => field('contractType')(v)}
-            editMode={editMode}
-          />
-        </Typography>
-        <Typography align="center" sx={{ fontSize: 11, color: '#555', mb: 3 }}>
-          {contractId} ·{' '}
-          <EditableInline
-            value={values.clientName || 'Econet Zimbabwe'}
-            onChange={field('clientName')}
-            editMode={editMode}
-          />{' '}
-          ·{' '}
-          <EditableInline
-            value={values.vendor || 'Zimbabwe Cooling Ltd'}
-            onChange={field('vendor')}
-            editMode={editMode}
-          />{' '}
-          · {today}
-        </Typography>
-
-        {/* ── Section 1: Parties ─────────────────────────────────────────── */}
-        <SectionHeading>1. Parties &amp; Definitions</SectionHeading>
-        <EditableBlock
-          value={sectionText.parties}
-          onChange={setSection('parties')}
-          editMode={editMode}
-        />
-
-        {/* ── Section 2: Scope ───────────────────────────────────────────── */}
-        <SectionHeading>2. Scope of Services</SectionHeading>
-        <EditableBlock
-          value={sectionText.scope}
-          onChange={setSection('scope')}
-          editMode={editMode}
-        />
-
-        {/* ── Section 3: SLAs ────────────────────────────────────────────── */}
-        <SectionHeading>3. Service Levels &amp; KPIs</SectionHeading>
-        <Box
-          sx={{
-            border: `1px solid ${editMode ? '#93c5fd' : '#e5e7eb'}`,
-            borderRadius: 1.5,
-            p: 2,
-            mb: 2,
-            bgcolor: editMode ? alpha('#3b82f6', 0.03) : '#fafafa',
-            fontSize: 12.5,
-            transition: 'border-color 0.2s, background 0.2s',
-          }}
-        >
-          <EditableBlock
-            value={sectionText.sla}
-            onChange={setSection('sla')}
-            editMode={editMode}
-            sx={{ mb: 0 }}
-          />
-        </Box>
-
-        {/* ── Section 4: Commercial Terms ────────────────────────────────── */}
-        <SectionHeading>4. Commercial Terms</SectionHeading>
-        <EditableBlock
-          value={sectionText.commercial}
-          onChange={setSection('commercial')}
-          editMode={editMode}
-        />
-
-        {/* ── Section 5: Term & Termination ──────────────────────────────── */}
-        <SectionHeading>5. Term &amp; Termination</SectionHeading>
-        <EditableBlock value={sectionText.term} onChange={setSection('term')} editMode={editMode} />
-
-        {/* ── Section 6: Governing Law ───────────────────────────────────── */}
-        <SectionHeading>6. Governing Law</SectionHeading>
-        <EditableBlock
-          value={sectionText.governingLaw}
-          onChange={setSection('governingLaw')}
-          editMode={editMode}
-        />
-
-        {/* ── Section 7: Compliance ──────────────────────────────────────── */}
-        <SectionHeading>7. Compliance &amp; Regulatory</SectionHeading>
-        <EditableBlock
-          value={sectionText.compliance}
-          onChange={setSection('compliance')}
-          editMode={editMode}
-          sx={{ mb: 3 }}
-        />
-
-        {/* ── Signature Block ────────────────────────────────────────────── */}
-        <Box sx={{ borderTop: '1px solid #e5e7eb', pt: 3, mt: 2 }}>
-          <Box display="grid" gridTemplateColumns="1fr 1fr" gap={4}>
-            {['Client', 'Service Provider'].map((party) => (
-              <Box key={party}>
-                <Typography sx={{ fontWeight: 700, fontSize: 12, mb: 2 }}>
-                  For and on behalf of{' '}
-                  {party === 'Client'
-                    ? values.clientName || 'Econet Wireless Zimbabwe Limited'
-                    : values.vendor || 'Zimbabwe Cooling Ltd'}
-                  :
-                </Typography>
-                <Box sx={{ borderBottom: '1px solid #374151', mb: 0.5, height: 32 }} />
-                <Typography sx={{ fontSize: 11, color: '#6b7280' }}>
-                  Authorised Signatory
-                </Typography>
-                <Box sx={{ borderBottom: '1px solid #374151', mb: 0.5, height: 32, mt: 1.5 }} />
-                <Typography sx={{ fontSize: 11, color: '#6b7280' }}>Date</Typography>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
-  );
+  governing_law: string;
 }
 
-// ─── VALIDATION AGENT PANEL ───────────────────────────────────────────────────
-function ValidationPanel({ values }: { values: ContractValues }) {
-  type ValidationCheck = {
-    id: string;
-    severity: ValidationSeverity;
-    title: string;
-    detail: string;
-  };
-
-  const checks: ValidationCheck[] = [
-    {
-      id: 'penalty',
-      severity: 'warning',
-      title: 'Penalty Cap — Review Recommended',
-      detail: `Clause 3 caps penalties at 10% of annual value (${values.currency || 'USD'} ${
-        values.contractValue
-          ? (Number(values.contractValue.replace(/,/g, '')) * 0.1).toLocaleString()
-          : '4,420'
-      }). Industry standard for critical infrastructure SLAs is 15–20%. Consider increasing for NOC environments.`,
-    },
-    {
-      id: 'termination',
-      severity: 'warning',
-      title: 'Termination Notice Period',
-      detail:
-        'Clause 5 specifies 30 days notice. For 4-site operational dependency, 60-day notice is advisable to ensure business continuity during transition.',
-    },
-    {
-      id: 'payment',
-      severity: 'success',
-      title: 'Payment Terms — Compliant',
-      detail: `Net-30 payment with GRN link is standard and defensible. WHT deduction at 10% per ZIMRA is correctly referenced.`,
-    },
-    {
-      id: 'liability',
-      severity: 'success',
-      title: 'Liability Cap — Acceptable',
-      detail:
-        'Liability capped at preceding 12-month contract value. Proportional and standard for service agreements of this nature.',
-    },
-    {
-      id: 'praz',
-      severity: 'success',
-      title: 'PRAZ & Compliance References — Complete',
-      detail:
-        'ZIMRA, PRAZ and ZACC obligations referenced correctly in Clause 7. Consistent with Zimbabwe legal framework.',
-    },
-  ];
-
-  return (
-    <Box>
-      {/* Status badge */}
-      <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-        <Box
-          sx={{
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            bgcolor: '#16a34a',
-            boxShadow: '0 0 0 3px rgba(22,163,74,0.2)',
-          }}
-        />
-        <GreenChip>VALIDATION COMPLETE</GreenChip>
-      </Stack>
-
-      {checks.map((c) => (
-        <ValidationCard key={c.id} severity={c.severity}>
-          <Stack direction="row" spacing={1} alignItems="flex-start">
-            <Box
-              sx={{
-                mt: 0.2,
-                flexShrink: 0,
-                color: c.severity === 'warning' ? '#d97706' : '#16a34a',
-              }}
-            >
-              {c.severity === 'warning' ? <WarnIcon size={13} /> : <CheckIcon size={13} />}
-            </Box>
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: 11.5,
-                  fontWeight: 700,
-                  color: c.severity === 'warning' ? '#92400e' : '#14532d',
-                  mb: 0.4,
-                }}
-              >
-                {c.title}
-              </Typography>
-              <Typography sx={{ fontSize: 11, color: '#4b5563', lineHeight: 1.5 }}>
-                {c.detail}
-              </Typography>
-            </Box>
-          </Stack>
-        </ValidationCard>
-      ))}
-    </Box>
-  );
-}
-
-// ─── MAIN CONTRACT GENERATOR PAGE ────────────────────────────────────────────
 export default function ContractGeneratorPage() {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   const theme = useTheme();
 
+  const [errors, setErrors] = useState<Partial<Record<keyof ContractValues, string>>>({});
+
   const [values, setValues] = useState<ContractValues>({
-    vendor: 'Zimbabwe Cooling Ltd',
-    contractType: 'Service Level Agreement',
-    contractValue: '44,200',
+    vendor: '',
+    contractType: '',
+    contractValue: '',
     currency: 'USD',
-    startDate: '2026-06-01',
-    endDate: '2026-05-31',
-    governingLaw: 'Zimbabwe (Chapter 8:01)',
-    clientName: 'Econet Zimbabwe',
+    startDate: '',
+    endDate: '',
+    governingLaw: '',
+    clientName: '',
     scope: '',
-    paymentTerms: '30',
-    contractValueWords: 'forty-four thousand two hundred United States Dollars',
+    paymentTerms: '',
+    contractValueWords: '',
+    clientEmail: '',
+    clientPhone: '',
+    contractTitle: '',
   });
 
   const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  // ── Edit mode state — false = view (grey icon), true = edit (blue icon) ──
-  const [editMode, setEditMode] = useState(false);
+  const validateForm = () => {
+    const newErrors: Partial<Record<keyof ContractValues, string>> = {};
+
+    if (!values.contractTitle.trim()) {
+      newErrors.contractTitle = 'Contract title is required';
+    }
+
+    if (!values.vendor) {
+      newErrors.vendor = 'Vendor is required';
+    }
+
+    if (!values.contractType) {
+      newErrors.contractType = 'Contract type is required';
+    }
+
+    if (!values.contractValue.trim()) {
+      newErrors.contractValue = 'Contract value is required';
+    }
+
+    if (!values.startDate) {
+      newErrors.startDate = 'Start date is required';
+    }
+
+    if (!values.endDate) {
+      newErrors.endDate = 'End date is required';
+    }
+
+    if (
+      values.startDate &&
+      values.endDate &&
+      new Date(values.endDate) <= new Date(values.startDate)
+    ) {
+      newErrors.endDate = 'End date must be greater than start date';
+    }
+
+    if (!values.governingLaw) {
+      newErrors.governingLaw = 'Governing law is required';
+    }
+
+    if (!values.clientName.trim()) {
+      newErrors.clientName = 'Client name is required';
+    }
+
+    if (!values.clientPhone.trim()) {
+      newErrors.clientPhone = 'Phone number is required';
+    }
+
+    if (!values.clientEmail.trim()) {
+      newErrors.clientEmail = 'Email is required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.clientEmail)) {
+      newErrors.clientEmail = 'Enter a valid email address';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const today = new Date().toISOString().split('T')[0];
 
   const handleChange = (field: keyof ContractValues, val: string) => {
-    setValues((prev) => ({ ...prev, [field]: val }));
-    if (generated) setGenerated(false);
+    setValues((prev) => {
+      const updated = {
+        ...prev,
+        [field]: val,
+      };
+
+      if (field === 'startDate' && updated.endDate && new Date(updated.endDate) <= new Date(val)) {
+        updated.endDate = '';
+      }
+
+      return updated;
+    });
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: '',
+    }));
   };
 
   const handleGenerate = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     setGenerating(true);
+
     await new Promise((r) => setTimeout(r, 1800));
+
     setGenerating(false);
     setGenerated(true);
+
+    const storedData = JSON.stringify(values);
+
+    sessionStorage.setItem('contractDetails', storedData);
+
+    router.replace('/contract-generator/preview');
   };
 
   // Reset edit mode when dialog is closed
   const handleClosePreview = () => {
     setPreviewOpen(false);
-    setEditMode(false);
   };
+
+  useEffect(() => {
+    const payload = {
+      templateCode: 'RFQ',
+    };
+
+    dispatch(fetchTemplateByCode(payload));
+  }, [dispatch]);
 
   return (
     <Box
@@ -702,7 +480,7 @@ export default function ContractGeneratorPage() {
         </Stack>
       </Box>
 
-      <Box display="grid" gridTemplateColumns="1fr" height="calc(100vh - 72px)">
+      <Box display="grid" gridTemplateColumns="1fr">
         <Box
           sx={{
             bgcolor: '#fff',
@@ -711,9 +489,38 @@ export default function ContractGeneratorPage() {
             overflowY: 'auto',
           }}
         >
+          <Box mb={2}>
+            <Typography
+              sx={{
+                fontSize: 10,
+                fontWeight: 700,
+                color: '#374151',
+                letterSpacing: '0.06em',
+                mb: 0.8,
+              }}
+            >
+              CONTRACT TITLE
+            </Typography>
+
+            <TextField
+              size="small"
+              fullWidth
+              value={values.contractTitle}
+              onChange={(e) => handleChange('contractTitle', e.target.value)}
+              sx={{
+                '& .MuiInputBase-input': { fontSize: 12 },
+                '& .MuiOutlinedInput-root': {
+                  bgcolor: '#f9fafb',
+                  '& fieldset': { borderColor: '#e5e7eb' },
+                },
+              }}
+              error={!!errors.contractTitle}
+              helperText={errors.contractTitle}
+            />
+          </Box>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 320px' }} gap={4}>
             {/* Vendor */}
-            <Box mb={2}>
+            <Box>
               <Typography
                 sx={{
                   fontSize: 10,
@@ -725,7 +532,7 @@ export default function ContractGeneratorPage() {
               >
                 VENDOR
               </Typography>
-              <FormControl fullWidth size="small">
+              <FormControl fullWidth size="small" error={!!errors.vendor}>
                 <Select
                   value={values.vendor}
                   onChange={(e) => handleChange('vendor', e.target.value)}
@@ -741,6 +548,11 @@ export default function ContractGeneratorPage() {
                     </MenuItem>
                   ))}
                 </Select>
+                {errors.vendor && (
+                  <Typography color="error" sx={{ fontSize: 12, mt: 0.5 }}>
+                    {errors?.vendor}
+                  </Typography>
+                )}
               </FormControl>
             </Box>
 
@@ -844,13 +656,15 @@ export default function ContractGeneratorPage() {
                   type="date"
                   value={values.startDate}
                   onChange={(e) => handleChange('startDate', e.target.value)}
-                  InputLabelProps={{ shrink: true }}
+                  error={!!errors.startDate}
+                  helperText={errors.startDate}
+                  inputProps={{
+                    min: today,
+                  }}
                   sx={{
                     width: '100%',
-                    '& .MuiInputBase-input': { fontSize: 11 },
-                    '& .MuiOutlinedInput-root': {
-                      bgcolor: '#f9fafb',
-                      '& fieldset': { borderColor: '#e5e7eb' },
+                    '& .MuiInputBase-input': {
+                      fontSize: 11,
                     },
                   }}
                 />
@@ -872,13 +686,15 @@ export default function ContractGeneratorPage() {
                   type="date"
                   value={values.endDate}
                   onChange={(e) => handleChange('endDate', e.target.value)}
-                  InputLabelProps={{ shrink: true }}
+                  error={!!errors.endDate}
+                  helperText={errors.endDate}
+                  inputProps={{
+                    min: values.startDate || today,
+                  }}
                   sx={{
                     width: '100%',
-                    '& .MuiInputBase-input': { fontSize: 11 },
-                    '& .MuiOutlinedInput-root': {
-                      bgcolor: '#f9fafb',
-                      '& fieldset': { borderColor: '#e5e7eb' },
+                    '& .MuiInputBase-input': {
+                      fontSize: 11,
                     },
                   }}
                 />
@@ -945,6 +761,70 @@ export default function ContractGeneratorPage() {
               }}
             />
           </Box>
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} mb={2.5}>
+            <Box flex={1}>
+              <Typography
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: '#374151',
+                  letterSpacing: '0.06em',
+                  mb: 0.8,
+                }}
+              >
+                CLIENT EMAIL
+              </Typography>
+
+              <TextField
+                size="small"
+                fullWidth
+                type="email"
+                value={values.clientEmail}
+                onChange={(e) => handleChange('clientEmail', e.target.value)}
+                placeholder="procurement@company.com"
+                sx={{
+                  '& .MuiInputBase-input': { fontSize: 12 },
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: '#f9fafb',
+                    '& fieldset': { borderColor: '#e5e7eb' },
+                  },
+                }}
+                error={!!errors.clientEmail}
+                helperText={errors.clientEmail}
+              />
+            </Box>
+
+            <Box flex={1}>
+              <Typography
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: '#374151',
+                  letterSpacing: '0.06em',
+                  mb: 0.8,
+                }}
+              >
+                CLIENT PHONE
+              </Typography>
+
+              <TextField
+                size="small"
+                fullWidth
+                value={values.clientPhone}
+                onChange={(e) => handleChange('clientPhone', e.target.value)}
+                placeholder=""
+                sx={{
+                  '& .MuiInputBase-input': { fontSize: 12 },
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: '#f9fafb',
+                    '& fieldset': { borderColor: '#e5e7eb' },
+                  },
+                }}
+                error={!!errors.clientPhone}
+                helperText={errors.clientPhone}
+              />
+            </Box>
+          </Stack>
 
           <Divider sx={{ mb: 2.5, borderColor: '#f3f4f6' }} />
 
@@ -972,73 +852,6 @@ export default function ContractGeneratorPage() {
           >
             {generating ? 'Generating…' : 'Generate Contract'}
           </Button>
-
-          {generated && (
-            <Box display="flex" alignItems="center" gap={2} mb={1.5} mt={1} justifyContent="center">
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<EyeIcon />}
-                onClick={() => setPreviewOpen(true)}
-                sx={{
-                  borderColor: '#d1d5db',
-                  color: '#374151',
-                  textTransform: 'none',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                  },
-                }}
-              >
-                Preview
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<PrinterIcon />}
-                sx={{
-                  borderColor: '#d1d5db',
-                  color: '#374151',
-                  textTransform: 'none',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                  },
-                }}
-              >
-                Print
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<MaximizeIcon />}
-                onClick={() => setPreviewOpen(true)}
-                sx={{
-                  borderColor: '#d1d5db',
-                  color: '#374151',
-                  textTransform: 'none',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                  },
-                }}
-              >
-                Full Screen
-              </Button>
-            </Box>
-          )}
 
           {/* Divider with OR */}
           <Stack direction="row" alignItems="center" spacing={1} mb={1.5}>
@@ -1099,215 +912,6 @@ export default function ContractGeneratorPage() {
           </Button>
         </Box>
       </Box>
-
-      {/* ── PREVIEW POPUP DIALOG ───────────────────────────────────────────── */}
-      <Dialog
-        open={previewOpen}
-        onClose={handleClosePreview}
-        maxWidth="md"
-        fullWidth
-        scroll="paper"
-        TransitionComponent={Fade}
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: { sx: { backdropFilter: 'blur(4px)', bgcolor: alpha('#000', 0.45) } },
-        }}
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            maxHeight: '90vh',
-            boxShadow: '0 24px 64px rgba(0,0,0,0.18)',
-          },
-        }}
-      >
-        {/* ── Dialog Header ──────────────────────────────────────────────── */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            px: 3,
-            py: 1.8,
-            borderBottom: `1px solid ${editMode ? alpha('#3b82f6', 0.3) : '#e5e7eb'}`,
-            position: 'sticky',
-            top: 0,
-            bgcolor: editMode ? alpha('#3b82f6', 0.03) : '#fff',
-            zIndex: 10,
-            transition: 'background 0.25s, border-color 0.25s',
-          }}
-        >
-          <Box>
-            <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-              <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
-                Contract Preview
-              </Typography>
-
-              {/*
-               * ── EDIT MODE TOGGLE BUTTON ────────────────────────────────
-               * Color indicators:
-               *   View mode  → grey  (#6b7280) with grey hover ring
-               *   Edit mode  → blue  (#3b82f6) with blue glow ring
-               * ──────────────────────────────────────────────────────────
-               */}
-              <Tooltip title={editMode ? 'Exit edit mode' : 'Edit contract'} placement="top" arrow>
-                <IconButton
-                  size="small"
-                  onClick={() => setEditMode((prev) => !prev)}
-                  sx={{
-                    // ── Color indicator: icon colour changes by mode ──
-                    color: editMode ? '#3b82f6' : '#6b7280',
-                    bgcolor: editMode ? alpha('#3b82f6', 0.1) : 'transparent',
-                    border: `1.5px solid ${editMode ? alpha('#3b82f6', 0.35) : 'transparent'}`,
-                    borderRadius: 1.5,
-                    p: '4px',
-                    transition: 'color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s',
-                    '&:hover': {
-                      bgcolor: editMode ? alpha('#3b82f6', 0.18) : '#f3f4f6',
-                      boxShadow: editMode
-                        ? `0 0 0 3px ${alpha('#3b82f6', 0.18)}`
-                        : '0 0 0 3px #f3f4f6',
-                    },
-                  }}
-                >
-                  <Edit
-                    sx={{
-                      fontSize: 15,
-                      // Icon itself pulses subtly when in edit mode
-                      animation: editMode ? 'editPulse 2.4s ease-in-out infinite' : 'none',
-                      '@keyframes editPulse': {
-                        '0%, 100%': { opacity: 1 },
-                        '50%': { opacity: 0.65 },
-                      },
-                    }}
-                  />
-                </IconButton>
-              </Tooltip>
-
-              {/* ── Mode label badge next to the icon ────────────────── */}
-              {editMode && (
-                <Box
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                    px: 1,
-                    py: '2px',
-                    borderRadius: 10,
-                    bgcolor: alpha('#3b82f6', 0.1),
-                    border: `1px solid ${alpha('#3b82f6', 0.25)}`,
-                    color: '#1d4ed8',
-                    fontSize: 10,
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                    userSelect: 'none',
-                  }}
-                >
-                  EDITING
-                </Box>
-              )}
-            </Box>
-
-            <Typography sx={{ fontSize: 11, color: '#6b7280' }}>
-              {values.contractType} · {values.vendor} · {values.clientName}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
-              {/* Validation badge inside preview */}
-              <GreenChip>
-                <CheckIcon size={10} />
-                VALIDATED
-              </GreenChip>
-
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<DownloadIcon />}
-                sx={{
-                  borderColor: '#e5e7eb',
-                  color: '#374151',
-                  textTransform: 'none',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  '&:hover': {
-                    borderColor: theme.palette.primary.main,
-                    color: theme.palette.primary.main,
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                  },
-                }}
-              >
-                Download DOCX
-              </Button>
-
-              <Button
-                size="small"
-                variant="contained"
-                startIcon={<PrinterIcon />}
-                sx={{
-                  bgcolor: theme.palette.primary.main,
-                  '&:hover': { bgcolor: theme.palette.primary.dark },
-                  textTransform: 'none',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  borderRadius: 1.5,
-                  boxShadow: 'none',
-                }}
-              >
-                Print
-              </Button>
-
-              <IconButton
-                size="small"
-                onClick={handleClosePreview}
-                sx={{ color: '#6b7280', '&:hover': { bgcolor: '#f3f4f6' } }}
-              >
-                <XIcon />
-              </IconButton>
-            </Stack>
-          </Box>
-        </Box>
-
-        {/* ── Dialog Body — document + side validation ───────────────────── */}
-        <DialogContent sx={{ p: 0, display: 'flex', gap: 0 }}>
-          {/* Document area */}
-          <Box
-            sx={{
-              flex: 1,
-              p: { xs: 3, md: 5 },
-              bgcolor: editMode ? '#f0f4ff' : '#f8f8f8',
-              overflowY: 'auto',
-              display: 'flex',
-              justifyContent: 'center',
-              transition: 'background 0.25s',
-            }}
-          >
-            <ContractDocument values={values} setValues={setValues} editMode={editMode} />
-          </Box>
-
-          {/* Validation sidebar inside modal */}
-          <Box
-            sx={{
-              width: 260,
-              flexShrink: 0,
-              borderLeft: `1px solid ${editMode ? alpha('#3b82f6', 0.2) : '#e5e7eb'}`,
-              p: 2.5,
-              bgcolor: '#fff',
-              overflowY: 'auto',
-              transition: 'border-color 0.25s',
-            }}
-          >
-            <Typography sx={{ fontSize: 12, fontWeight: 800, color: '#111827', mb: 0.3 }}>
-              Validation Agent
-            </Typography>
-            <Typography sx={{ fontSize: 11, color: '#6b7280', mb: 2 }}>
-              Legal &amp; commercial scrutiny
-            </Typography>
-            <ValidationPanel values={values} />
-          </Box>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 }
