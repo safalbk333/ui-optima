@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { AppDispatch, RootState } from 'src/store/store';
 import {
-  alpha,
   Box,
   Button,
   CircularProgress,
@@ -10,9 +9,9 @@ import {
   Stack,
   Tooltip,
   Typography,
+  alpha,
   useTheme,
 } from '@mui/material';
-import { Edit } from '@mui/icons-material';
 import {
   CheckIcon,
   ContractValues,
@@ -22,13 +21,15 @@ import {
   PrinterIcon,
 } from './ContractGenerator';
 import ContractDocument, { generateRfqCode } from 'src/components/contract/ContractDocument';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { Document, Packer, Paragraph } from 'docx';
+import React, { useEffect, useRef, useState } from 'react';
 import { createContract, fetchTemplateByCode } from 'src/store/slices/contract/contractSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from 'src/store/store';
+
+import { Edit } from '@mui/icons-material';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import saveAs from 'file-saver';
-import { Document, Packer, Paragraph } from 'docx';
 import { toast } from 'src/components/snackbar';
 
 function ContractPreview() {

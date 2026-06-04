@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { contractAxiosLib } from 'src/lib/contractAxiosLib';
 import { ContractState, CreateContractPayload, CreateContractResponse } from 'src/types/contracts';
 import { GetTemplateByCodePayload, GetTemplateByCodeResponse } from 'src/types/contractTemplate';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import { contractAxiosLib } from 'src/lib/contractAxiosLib';
 
 const initialState: ContractState = {
   templateByCodeLoading: false,

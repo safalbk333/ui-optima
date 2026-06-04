@@ -1,10 +1,14 @@
 import categoryReducer from './slices/category/Category';
 import { configureStore } from '@reduxjs/toolkit';
+import contractReducer from './slices/contract/contractSlice'
 import departmentsReducer from './slices/Department/DepartmentSlice'
 import eoiReducer from './slices/Eoi/EoiSlice'
+import goodsReceiptReducer from './slices/Grn/GrnSlice'
 import itemReducer from './slices/Item/Items'
+import purchaseOrderReducer from './slices/PurchaseOrder/PRSlice'
 import purchaseRequestReducer from './slices/PurchaseRequests/PurchaseRequestsSlice'
 import purchaseRequestStepperReducer from './slices/PurchaseRequests/PRStepperFormSlice'
+import quotationsReducer from './slices/Quotation/Quotation'
 import rfqReducer from './slices/Rfq/RfqSlice'
 import vendorReducer from './slices/vendor/VendorSlice'
 
@@ -21,7 +25,7 @@ export const store = configureStore({
          purchaseOrder:purchaseOrderReducer,
          quotations:quotationsReducer,
          goodsReceipt:goodsReceiptReducer,
-    contractReducer,
+    contract: contractReducer,
   },
 });
 
