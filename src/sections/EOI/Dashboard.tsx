@@ -319,6 +319,7 @@ const rows =
             rows={rows}
             columns={columns}
             autoHeight
+            loading={eoiLoading}
             pageSizeOptions={[5, 10]}
             disableColumnFilter
             disableRowSelectionOnClick

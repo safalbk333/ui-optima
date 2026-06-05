@@ -66,7 +66,7 @@ export default function RFQBuilderForm() {
   const { data: purchaseRequests, loading } = useAppSelector(
     (state) => state.purchaseRequests
   );
-
+console.log(purchaseRequests,'purchaseRequests')
   const { data: item } = useAppSelector(
     (state) => state.items
   );
@@ -84,7 +84,7 @@ export default function RFQBuilderForm() {
   React.useEffect(() => {
     dispatch(fetchPurchaseRequests());
   }, [dispatch]);
-
+// fetchPurchaseRequestById
   React.useEffect(() => {
     dispatch(fetchItems());
   }, [dispatch]);

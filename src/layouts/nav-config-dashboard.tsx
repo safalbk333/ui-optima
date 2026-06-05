@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import InterestsIcon from '@mui/icons-material/Interests';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import type { NavSectionProps } from 'src/components/nav-section';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import NotesIcon from '@mui/icons-material/Notes';
@@ -63,7 +64,8 @@ const ICONS = {
   approve:<AddTaskIcon  fontSize='small'/>,
   eoi:<InterestsIcon fontSize='small'/>,
   grn:<EditNoteIcon fontSize='small' />,
-  rfp:<NoteAltIcon fontSize='small'/>
+  rfp:<NoteAltIcon fontSize='small'/>,
+  quotation:<MarkEmailReadIcon fontSize='small'/>
 };
 const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
 
@@ -105,6 +107,12 @@ export const navData: NavSectionProps['data'] = [
         title: 'RFP / RFQ',
         path: paths.rfq.roots,
         icon: ICONS.rfp,
+        allowedRoles: ['admin'],
+      },
+      {
+        title: 'Quotations',
+        path: paths.quotation.roots,
+        icon: ICONS.quotation,
         allowedRoles: ['admin'],
       },
       {
