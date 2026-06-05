@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { fetchPurchaseRequestById, fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -20,7 +21,6 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { createRFQ } from 'src/store/slices/Rfq/RfqSlice';
 import { fetchEOIs } from 'src/store/slices/Eoi/EoiSlice';
 import { fetchItems } from 'src/store/slices/Item/Items';
-import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useRouter } from 'next/navigation';
 
 export default function RFQBuilderForm() {
@@ -49,13 +49,7 @@ export default function RFQBuilderForm() {
   const [submissionDeadline, setSubmissionDeadline] = React.useState('');
   const [notes, setNotes] = React.useState('');
 
-  const [items, setItems] = React.useState([
-    {
-      id: Date.now(),
-      itemId: '',
-      quantity: '',
-    },
-  ]);
+
 
   // ----------------------------------------------------------------------
   // REDUX
@@ -63,7 +57,7 @@ export default function RFQBuilderForm() {
 
   const dispatch = useAppDispatch();
 
-  const { data: purchaseRequests, loading } = useAppSelector(
+  const { data: purchaseRequests, selected: selectedPurchaseRequest, loading } = useAppSelector(
     (state) => state.purchaseRequests
   );
 console.log(purchaseRequests,'purchaseRequests')
@@ -71,6 +65,8 @@ console.log(purchaseRequests,'purchaseRequests')
     (state) => state.items
   );
 
+
+console.log(selectedPurchaseRequest);
   const {
     data: eois,
     loading: eoiLoading,
@@ -122,20 +118,8 @@ console.log(purchaseRequests,'purchaseRequests')
   // HELPERS
   // ----------------------------------------------------------------------
 
-  const addItem = () => {
-    setItems((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        itemId: '',
-        quantity: '',
-      },
-    ]);
-  };
 
-  const removeItem = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
+
 
   // ----------------------------------------------------------------------
   // SUBMIT
@@ -154,10 +138,11 @@ console.log(purchaseRequests,'purchaseRequests')
       strNotes: notes,
       strCreatedId: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
 
-      arrItems: items.map((item) => ({
-        strItemId: item.itemId,
-        intQuantity: Number(item.quantity),
-      })),
+arrItems:
+  selectedPurchaseRequest?.pr_item_mappings?.map((item) => ({
+    strItemId: item.fk_chr_item_id,
+    intQuantity: item.int_quantity,
+  })) || [],
     };
 
     try {
@@ -228,25 +213,29 @@ console.log(purchaseRequests,'purchaseRequests')
 />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-  <Autocomplete
-    options={purchaseRequestOptions}
-    value={selectedPR}
-    onChange={(_, newValue) => {
-      setSelectedPR(newValue);
+<Autocomplete
+  options={purchaseRequestOptions}
+  value={selectedPR}
+  onChange={(_, newValue) => {
+    setSelectedPR(newValue);
 
-      console.log('Selected PR ID:', newValue?.value);
-      console.log('Selected PR Title:', newValue?.label);
-    }}
-    size="small"
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label="Purchase Request"
-        placeholder="Select Purchase Request"
-        sx={smallInputSx}
-      />
-    )}
-  />
+    if (newValue?.value) {
+      dispatch(fetchPurchaseRequestById(newValue.value));
+    }
+
+    console.log('Selected PR ID:', newValue?.value);
+    console.log('Selected PR Title:', newValue?.label);
+  }}
+  size="small"
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Purchase Request"
+      placeholder="Select Purchase Request"
+      sx={smallInputSx}
+    />
+  )}
+/>
 </Grid>
 <Grid size={{ xs: 12, md: 6 }}>
   <Autocomplete
@@ -338,109 +327,37 @@ console.log(purchaseRequests,'purchaseRequests')
 </Grid>
 
           {/* Rows */}
-          {items.map((row) => (
-            <Grid
-              container
-              spacing={1}
-              key={row.id}
-              sx={{
-                px: 1,
-                py: 1,
-                alignItems: 'center',
-                borderBottom: '1px solid #edf2f7',
-              }}
-            >
-<Grid size={{ xs: 8 }}>
-<Autocomplete
-  options={itemOptions}
-  getOptionLabel={(option) => option.label}
-  value={
-    itemOptions.find((opt) => opt.value === row.itemId) || null
-  }
-  onChange={(_, value) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === row.id
-          ? { ...item, itemId: value?.value || '' }
-          : item
-      )
-    );
-  }}
-  size="small"
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      placeholder="Select Item"
-      sx={smallInputSx}
-    />
-  )}
-/>
-</Grid>
-
-<Grid size={{ xs: 3 }}>
-<TextField
-  fullWidth
-  size="small"
-  type="number"
-  value={row.quantity}
-  onChange={(e) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === row.id
-          ? { ...item, quantity: e.target.value }
-          : item
-      )
-    );
-  }}
-  sx={smallInputSx}
-/>
-</Grid>
-
-<Grid size={{ xs: 1 }}>
-  <IconButton
-    size="small"
-    onClick={() => removeItem(row.id)}
+{selectedPurchaseRequest?.pr_item_mappings?.map((row) => (
+  <Grid
+    container
+    spacing={1}
+    key={row.pk_chr_pr_item_mapping_id}
     sx={{
-      width: 32,
-      height: 32,
-      borderRadius: '50%',
-      backgroundColor: 'rgba(244, 67, 54, 0.10)',
-      color: '#d32f2f',
-      '&:hover': {
-        backgroundColor: 'rgba(244, 67, 54, 0.18)',
-      },
+      px: 1,
+      py: 1,
+      alignItems: 'center',
     }}
   >
-    <DeleteOutlineIcon sx={{ fontSize: 18 }} />
-  </IconButton>
-</Grid>
-            </Grid>
-          ))}
-          <Box
-            sx={{
-              mt: 'auto',
-              pt: 1,
-              px:1,
-              display: 'flex',
-              justifyContent: 'flex-start',
-              // borderTop: '1px solid',
-              // borderColor: 'divider',
-            }}
-          >
-            <Button
-              startIcon={<AddIcon sx={{ fontSize: 14 }} />}
-              size="small"
-              variant="outlined"
-              onClick={addItem}
-              sx={{
-                textTransform: 'none',
-                fontSize: 11,
-                minHeight: 28,
-              }}
-            >
-              Add Item
-            </Button>
-          </Box>
+    <Grid size={{ xs: 8 }}>
+      <TextField
+        fullWidth
+        size="small"
+        value={row.item?.chr_item_name || ''}
+        sx={smallInputSx}
+      />
+    </Grid>
+
+    <Grid size={{ xs: 3 }}>
+      <TextField
+        fullWidth
+        size="small"
+        value={row.int_quantity}
+        sx={smallInputSx}
+      />
+    </Grid>
+  </Grid>
+))}
+
         </Box>
 
         {/* Attachment Section */}

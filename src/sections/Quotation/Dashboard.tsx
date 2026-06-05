@@ -124,28 +124,7 @@ const columns: GridColDef[] = [
     flex: 1.8,
   },
 
-  {
-    field: 'vendorName',
-    headerName: 'Vendor',
-    flex: 1.4,
-    renderCell: (params: GridRenderCellParams) => (
-      <Stack direction="row" spacing={1.2} alignItems="center" height="100%">
- 
 
-        <Box>
-          <Typography variant="body2" fontWeight={600}>
-            {params.row.vendorName}
-          </Typography>
-        </Box>
-      </Stack>
-    ),
-  },
-
-  {
-    field: 'buyerName',
-    headerName: 'Buyer',
-    flex: 1.2,
-  },
 
   {
     field: 'itemCount',
@@ -155,16 +134,6 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
   },
 
-  {
-    field: 'totalAmount',
-    headerName: 'Amount',
-    flex: 1,
-    renderCell: (params) => (
-      <Typography fontSize={13} fontWeight={500} mt={2}>
-        {params.row.currency} {Number(params.value).toFixed(2)}
-      </Typography>
-    ),
-  },
 
 {
   field: 'status',
@@ -227,6 +196,7 @@ const columns: GridColDef[] = [
             { label: 'Home', href: '/dashboard' },
             { label: 'Quotations', href: '/quotation' },
           ]}
+          
 
         />
       </Box>
@@ -302,7 +272,9 @@ const columns: GridColDef[] = [
           disableColumnFilter
           disableRowSelectionOnClick
           disableColumnMenu
-          disableColumnSelector
+onRowClick={(params) =>
+  router.push(`/quotation/view?id=${params.row.quotationId}`)
+}       disableColumnSelector
           slots={{
             toolbar: GridToolbar,
             footer: CustomFooter,

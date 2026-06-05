@@ -154,17 +154,7 @@ export function JwtSignInView() {
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
 
-      <Alert severity="info" sx={{ mb: 2 }}>
-        <Typography fontSize={12}>       POC accounts (stored in browser):</Typography>
- 
-        <Box component="ul" sx={{ m: 0, pl: 0,fontSize:12 }}>
-          {DEFAULT_LOCAL_USERS.map((account) => (
-            <li key={account.email}>
-              <strong>{ROLE_LABELS[account.role]}</strong>: {account.email} / {account.password}
-            </li>
-          ))}
-        </Box>
-      </Alert>
+
 
       {!!errorMessage && (
         <Alert severity="error" sx={{ mb: 2 }}>

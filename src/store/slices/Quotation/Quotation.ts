@@ -71,18 +71,20 @@ export interface Quotation {
 
 interface QuotationState {
   data: Quotation[];
+  selectedQuotation: Quotation | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: QuotationState = {
   data: [],
+  selectedQuotation: null,
   loading: false,
   error: null,
 };
 
 // ----------------------------------------------------------------------
-// FETCH QUOTATIONS
+// FETCH ALL QUOTATIONS
 // ----------------------------------------------------------------------
 
 export const fetchQuotations = createAsyncThunk(
@@ -94,7 +96,30 @@ export const fetchQuotations = createAsyncThunk(
       return response.data.data;
     } catch (error: any) {
       return rejectWithValue(
-        error?.response?.data?.message || 'Failed to fetch quotations'
+        error?.response?.data?.message ||
+          'Failed to fetch quotations'
+      );
+    }
+  }
+);
+
+// ----------------------------------------------------------------------
+// FETCH QUOTATION BY ID
+// ----------------------------------------------------------------------
+
+export const fetchQuotationById = createAsyncThunk(
+  'quotations/fetchById',
+  async (quotationId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosOptima.get(
+        `/quotation/${quotationId}`
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          'Failed to fetch quotation'
       );
     }
   }
@@ -105,14 +130,22 @@ export const fetchQuotations = createAsyncThunk(
 const quotationSlice = createSlice({
   name: 'quotations',
   initialState,
+
   reducers: {
     clearQuotations: (state) => {
       state.data = [];
+      state.selectedQuotation = null;
       state.error = null;
     },
+
+    clearSelectedQuotation: (state) => {
+      state.selectedQuotation = null;
+    },
   },
+
   extraReducers: (builder) => {
     builder
+      // Fetch All Quotations
       .addCase(fetchQuotations.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -126,10 +159,31 @@ const quotationSlice = createSlice({
       .addCase(fetchQuotations.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Fetch Quotation By ID
+      .addCase(fetchQuotationById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchQuotationById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedQuotation = action.payload;
+      })
+
+      .addCase(fetchQuotationById.rejected, (state, action: any) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearQuotations } = quotationSlice.actions;
+// ----------------------------------------------------------------------
+
+export const {
+  clearQuotations,
+  clearSelectedQuotation,
+} = quotationSlice.actions;
 
 export default quotationSlice.reducer;

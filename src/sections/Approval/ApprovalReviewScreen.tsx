@@ -16,11 +16,13 @@ import {
 import React, { useEffect } from 'react';
 import { fetchPurchaseRequestById, updatePurchaseRequest } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import { useSearchParams } from 'next/navigation';
+import { SplashScreen } from 'src/components/loading-screen';
 
 export default function ApprovalReviewScreen() {
+  const router=useRouter()
   const searchParams = useSearchParams();
 const prId = searchParams.get('PR_ID');
   const dispatch = useAppDispatch();
@@ -63,10 +65,14 @@ const payload = {
     ).unwrap();
 
     console.log('Status updated successfully');
+    router.push('/approval')
   } catch (error) {
     console.error(error);
   }
 };
+if (loading){
+  return <SplashScreen />
+}
   return (
     <Box
 
