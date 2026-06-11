@@ -44,5 +44,5 @@ const createDirectAxios = (baseURL: string): AxiosInstance => {
 }
 
 export const contractAxiosLib = createDirectAxios(
-    process.env.NEXT_PUBLIC_API_BASE_URL as string
+    process.env.NEXT_PUBLIC_API_BASE_URL as string ?? 'https://semantic-pox-fox.ngrok-free.dev'
 )

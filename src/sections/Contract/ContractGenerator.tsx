@@ -23,12 +23,12 @@ import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { Edit } from '@mui/icons-material';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-import ContractDocument from 'src/components/contract/ContractDocument';
-import ValidationPanel from 'src/components/contract/ValidationPanel';
-import { useDispatch, useSelector } from 'react-redux';
+// import ContractDocument from 'src/components/contract/ContractDocument';
+// import ValidationPanel from 'src/components/contract/ValidationPanel';
 import { fetchTemplateByCode } from 'src/store/slices/contract/contractSlice';
-import { AppDispatch, RootState } from 'src/store/store';
+import { fetchVendors, clearVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 // ─── Icons (inline SVG components to avoid import issues) ────────────────────
 
@@ -111,17 +111,6 @@ export const MaximizeIcon = () => (
 );
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
-const VENDOR_OPTIONS = [
-  'Zimbabwe Cooling Ltd',
-  'TechNova Solutions',
-  'Prime Industrial Supplies',
-  'GreenLeaf Traders',
-  'Skyline Logistics',
-  'Delta Security Systems',
-  'Vertex Infra Pvt Ltd',
-  'ClearWave Telecom',
-  'PowerGen Services',
-];
 
 const CONTRACT_TYPE_OPTIONS = [
   'Service Level Agreement',
@@ -189,13 +178,12 @@ export const ValidationCard = styled(Box, {
 })<ValidationCardProps>(({ theme, severity }) => ({
   padding: '10px 12px',
   borderRadius: 8,
-  border: `1px solid ${
-    severity === 'warning'
-      ? alpha(theme.palette.warning.main, 0.35)
-      : severity === 'success'
-        ? alpha(theme.palette.success.main, 0.3)
-        : alpha(theme.palette.text.primary, 0.08)
-  }`,
+  border: `1px solid ${severity === 'warning'
+    ? alpha(theme.palette.warning.main, 0.35)
+    : severity === 'success'
+      ? alpha(theme.palette.success.main, 0.3)
+      : alpha(theme.palette.text.primary, 0.08)
+    }`,
   backgroundColor:
     severity === 'warning'
       ? alpha(theme.palette.warning.main, 0.05)
@@ -310,9 +298,14 @@ export interface TemplateValues {
 
 export default function ContractGeneratorPage() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const theme = useTheme();
+
+  // ─── Vendor state from Redux ───────────────────────────────────────────────
+  const { data: vendorList, loading: vendorsLoading } = useAppSelector(
+    (state) => state.vendors
+  );
 
   const [errors, setErrors] = useState<Partial<Record<keyof ContractValues, string>>>({});
 
@@ -437,9 +430,9 @@ export default function ContractGeneratorPage() {
   };
 
   // Reset edit mode when dialog is closed
-  const handleClosePreview = () => {
-    setPreviewOpen(false);
-  };
+  // const handleClosePreview = () => {
+  //   setPreviewOpen(false);
+  // };
 
   useEffect(() => {
     const payload = {
@@ -447,6 +440,15 @@ export default function ContractGeneratorPage() {
     };
 
     dispatch(fetchTemplateByCode(payload));
+  }, [dispatch]);
+
+  // ─── Fetch vendors on mount, clear on unmount ──────────────────────────────
+  useEffect(() => {
+    dispatch(fetchVendors());
+
+    return () => {
+      dispatch(clearVendors());
+    };
   }, [dispatch]);
 
   return (
@@ -519,7 +521,7 @@ export default function ContractGeneratorPage() {
             />
           </Box>
           <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 320px' }} gap={4}>
-            {/* Vendor */}
+            {/* Vendor — populated from fetchVendors API */}
             <Box>
               <Typography
                 sx={{
@@ -536,17 +538,41 @@ export default function ContractGeneratorPage() {
                 <Select
                   value={values.vendor}
                   onChange={(e) => handleChange('vendor', e.target.value)}
+                  displayEmpty
                   sx={{
                     fontSize: 12,
                     bgcolor: '#f9fafb',
                     '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                   }}
                 >
-                  {VENDOR_OPTIONS.map((v) => (
-                    <MenuItem key={v} value={v} sx={{ fontSize: 12 }}>
-                      {v}
+                  {/* Loading state */}
+                  {vendorsLoading && (
+                    <MenuItem disabled sx={{ fontSize: 12 }}>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <CircularProgress size={12} />
+                        <span>Loading vendors…</span>
+                      </Stack>
                     </MenuItem>
-                  ))}
+                  )}
+
+                  {/* Empty state — only shown after load completes */}
+                  {!vendorsLoading && vendorList.length === 0 && (
+                    <MenuItem disabled sx={{ fontSize: 12 }}>
+                      No vendors available
+                    </MenuItem>
+                  )}
+
+                  {/* Vendor list from API */}
+                  {!vendorsLoading &&
+                    vendorList.map((vendor) => (
+                      <MenuItem
+                        key={vendor.pk_chr_vendor_id}
+                        value={vendor.chr_vendor_name}
+                        sx={{ fontSize: 12 }}
+                      >
+                        {vendor.chr_vendor_name}
+                      </MenuItem>
+                    ))}
                 </Select>
                 {errors.vendor && (
                   <Typography color="error" sx={{ fontSize: 12, mt: 0.5 }}>
@@ -569,7 +595,7 @@ export default function ContractGeneratorPage() {
               >
                 CONTRACT TYPE
               </Typography>
-              <FormControl fullWidth size="small">
+              <FormControl fullWidth size="small" error={!!errors.contractType}>
                 <Select
                   value={values.contractType}
                   onChange={(e) => handleChange('contractType', e.target.value)}
@@ -579,11 +605,14 @@ export default function ContractGeneratorPage() {
                     '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                   }}
                 >
-                  {CONTRACT_TYPE_OPTIONS.map((v) => (
-                    <MenuItem key={v} value={v} sx={{ fontSize: 12 }}>
-                      {v}
-                    </MenuItem>
-                  ))}
+                  {
+                    CONTRACT_TYPE_OPTIONS.map((v) => (
+                      <MenuItem key={v} value={v} sx={{ fontSize: 12 }}>
+                        {v}
+                      </MenuItem>
+                    ))
+                  }
+
                 </Select>
               </FormControl>
             </Box>
@@ -606,6 +635,8 @@ export default function ContractGeneratorPage() {
               <TextField
                 size="small"
                 value={values.contractValue}
+                error={!!errors.contractValue}
+                helperText={errors.contractValue}
                 onChange={(e) => handleChange('contractValue', e.target.value)}
                 sx={{
                   flex: 1,
@@ -715,7 +746,7 @@ export default function ContractGeneratorPage() {
             >
               GOVERNING LAW
             </Typography>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth size="small" error={!!errors.governingLaw}>
               <Select
                 value={values.governingLaw}
                 onChange={(e) => handleChange('governingLaw', e.target.value)}
@@ -751,6 +782,8 @@ export default function ContractGeneratorPage() {
               size="small"
               fullWidth
               value={values.clientName}
+              error={!!errors.clientName}
+              helperText={errors.clientName}
               onChange={(e) => handleChange('clientName', e.target.value)}
               sx={{
                 '& .MuiInputBase-input': { fontSize: 12 },

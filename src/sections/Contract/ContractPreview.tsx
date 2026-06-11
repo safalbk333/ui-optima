@@ -320,7 +320,7 @@ function ContractPreview() {
             p: 2,
           }}
         >
-          {createContractErrorMessage}
+          Error generating Contract! {/* {createContractErrorMessage} */}
         </Typography>
       )}
       <Box
