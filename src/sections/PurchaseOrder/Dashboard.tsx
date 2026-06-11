@@ -304,6 +304,7 @@ const rows =
             rows={rows}
             columns={columns}
             autoHeight
+            loading={loading}
             pageSizeOptions={[5, 10]}
             disableColumnFilter
             disableRowSelectionOnClick

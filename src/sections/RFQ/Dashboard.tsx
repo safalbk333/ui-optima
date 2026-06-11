@@ -80,10 +80,6 @@ React.useEffect(() => {
 
     { field: 'vendor', headerName: 'Vendor', flex: 1 },
 
-    { field: 'category', headerName: 'Category', flex: 1 },
-
-    { field: 'buyer', headerName: 'Buyer', flex: 1 },
-
     { field: 'quotationValue', headerName: 'Quotation Value', flex: 1 },
 
     {

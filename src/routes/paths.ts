@@ -14,7 +14,8 @@ const ROOTS = {
   RFQ: '/rfq',
   GRN:'/grn',
   EOI:'/eoi',
-  Approval:'/approval'
+  Approval:'/approval',
+  Quotation:'/quotation'
 };
 
 // ----------------------------------------------------------------------
@@ -109,4 +110,7 @@ export const paths = {
     roots: ROOTS.Approval,
     new: `${ROOTS.EOI}/view`,
   },
+  quotation:{
+    roots:ROOTS.Quotation
+  }
 };

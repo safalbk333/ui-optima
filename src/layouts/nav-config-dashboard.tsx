@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import InterestsIcon from '@mui/icons-material/Interests';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import type { NavSectionProps } from 'src/components/nav-section';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import NotesIcon from '@mui/icons-material/Notes';
@@ -60,10 +61,11 @@ const ICONS = {
   contract: <NotesIcon fontSize="small" />,
   onboarding: <Diversity3Icon fontSize="small" />,
   rfqs: <AttachEmailIcon fontSize="small" />,
-  approve: <AddTaskIcon fontSize='small' />,
-  eoi: <InterestsIcon fontSize='small' />,
-  grn: <EditNoteIcon fontSize='small' />,
-  rfp: <NoteAltIcon fontSize='small' />
+  approve:<AddTaskIcon  fontSize='small'/>,
+  eoi:<InterestsIcon fontSize='small'/>,
+  grn:<EditNoteIcon fontSize='small' />,
+  rfp:<NoteAltIcon fontSize='small'/>,
+  quotation:<MarkEmailReadIcon fontSize='small'/>
 };
 const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
 
@@ -96,6 +98,26 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.rfq,
         allowedRoles: ['admin', 'enduser'],
       },
+                  {
+        title: 'EOI',
+        path: paths.eoi.roots,
+        icon: ICONS.eoi,
+        allowedRoles: ['admin'],
+      },
+      {
+        title: 'RFP / RFQ',
+        path: paths.rfq.roots,
+        icon: ICONS.rfp,
+        allowedRoles: ['admin'],
+      },
+            {
+        title: 'Quotations',
+        path: paths.quotation.roots,
+        icon: ICONS.quotation,
+        allowedRoles: ['admin'],
+      },
+
+
       {
         title: 'Purchase Orders',
         path: paths.purchaseOrders.root,
@@ -108,24 +130,15 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.contract,
         allowedRoles: ['admin'],
       },
-      {
-        title: 'RFP / RFQ',
-        path: paths.rfq.roots,
-        icon: ICONS.rfp,
-        allowedRoles: ['admin'],
-      },
+
+
       {
         title: 'GRN',
         path: paths.grn.roots,
         icon: ICONS.grn,
         allowedRoles: ['admin'],
       },
-      {
-        title: 'EOI',
-        path: paths.eoi.roots,
-        icon: ICONS.eoi,
-        allowedRoles: ['admin'],
-      },
+
       {
         title: 'Approval',
         path: paths.approval.roots,

@@ -26,6 +26,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+import { fetchQuotations } from 'src/store/slices/Quotation/Quotation';
 import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useRouter } from 'next/navigation';
 
@@ -65,149 +66,138 @@ function CustomFooter() {
 
 // ----------------------------------------------------------------------
 
-export default function VendorOnboardingDetails() {
+export default function Quotation() {
   const router = useRouter();
-  const dispatch = useAppDispatch()
-  const { data: vendor, loading } = useAppSelector(
-    (state) => state.vendors
-  );
-  React.useEffect(() => {
-    dispatch(fetchVendors());
-  }, [dispatch]);
-  console.log(vendor, 'vendor')
-  const theme = useTheme();
+  const dispatch=useAppDispatch()
+const { data: quotations } = useAppSelector(
+  (state) => state.quotations
+);
 
+React.useEffect(() => {
+  dispatch(fetchQuotations());
+}, [dispatch]);
+const rows = React.useMemo(
+  () =>
+    (quotations || []).map((item: any) => ({
+      id: item.pk_chr_quotation_id,
+
+      quotationId: item.pk_chr_quotation_id,
+
+      rfqCode: item.rfq?.chr_rfq_code || '',
+
+      rfqTitle: item.rfq?.chr_rfq_title || '',
+
+      vendorName: item.vendor?.chr_vendor_name || '',
+
+      vendorEmail: item.vendor?.chr_vendor_email || '',
+
+      buyerName: item.buyer?.chr_user_name || '',
+
+      status: item.chr_status?.trim() || '',
+
+      totalAmount: item.flt_total_amount || 0,
+
+      currency: item.chr_currency || '',
+
+      itemCount: item.quotation_items?.length || 0,
+
+      submittedDate: item.tim_created
+        ? new Date(item.tim_created).toLocaleDateString()
+        : '',
+    })),
+  [quotations]
+);
+  const theme = useTheme();
+console.log(quotations,'quotations')
   const PRIMARY = theme.palette.primary.main;
 
-  const columns: GridColDef[] = [
-    {
-      field: 'vendorName',
-      headerName: 'Vendor',
-      flex: 1.5,
-      renderCell: (params: GridRenderCellParams) => (
-        <Stack direction="row" spacing={1.2} alignItems="center" height="100%">
-          <Avatar
-            sx={{
-              width: 26,
-              height: 26,
-              fontSize: 11,
-              bgcolor: alpha(PRIMARY, 0.12),
-              color: PRIMARY,
-              fontWeight: 700,
-            }}
-          >
-            {params.row.vendorName?.charAt(0)}
-          </Avatar>
+const columns: GridColDef[] = [
+  {
+    field: 'rfqCode',
+    headerName: 'RFQ Code',
+    flex: 2,
+  },
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0.1,
-              justifyContent: 'center',
-            }}
-          >
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: 12,
-                fontWeight: 600,
-                lineHeight: 1.5,
-                m: 0,
-              }}
-            >
-              {params.row.vendorName}
-            </Typography>
-
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{
-                fontSize: 11,
-                lineHeight: 1,
-                m: 0,
-              }}
-            >
-              {params.row.vendorCode}
-            </Typography>
-          </Box>
-        </Stack>
-      ),
-    },
-
-
-    {
-      field: 'email',
-      headerName: 'Email',
-      flex: 1.4,
-    },
-
-    {
-      field: 'phone',
-      headerName: 'Phone',
-      flex: 1,
-    },
+  {
+    field: 'rfqTitle',
+    headerName: 'RFQ Title',
+    flex: 1.8,
+  },
 
 
 
-    {
-      field: 'submittedDate',
-      headerName: 'Submitted Date',
-      flex: 1,
-    },
-  ];
+  {
+    field: 'itemCount',
+    headerName: 'Items',
+    width: 90,
+    align: 'center',
+    headerAlign: 'center',
+  },
 
-  const rows =
-    vendor?.map((item, index) => ({
-      id: item.pk_chr_vendor_id || index,
-      vendorName: item.chr_vendor_name,
-      vendorCode: item.pk_chr_vendor_id?.slice(0, 8), // or your vendor code field if available
-      category: '-', // replace when category exists in API
-      contactPerson: '-', // replace when contact person exists
-      email: item.chr_vendor_email,
-      phone: item.chr_vendor_phone,
-      status:
-        item.chr_document_status === 'A'
-          ? 'Approved'
-          : item.chr_document_status === 'R'
-            ? 'Rejected'
-            : item.chr_document_status === 'P'
-              ? 'Pending'
-              : 'Draft',
-      submittedDate: item.tim_created
-        ? new Date(item.tim_created).toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        })
-        : '-',
-    })) || [];
+
+{
+  field: 'status',
+  headerName: 'Status',
+  flex: 1,
+  renderCell: (params) => {
+    const status = params.value;
+
+    const chipStyles =
+      status === 'APPROVED'
+        ? {
+            bgcolor: 'success.lighter',
+            color: 'success.dark',
+          }
+        : status === 'REJECTED'
+          ? {
+              bgcolor: 'error.lighter',
+              color: 'error.dark',
+            }
+          : {
+              bgcolor: 'warning.lighter',
+              color: 'warning.dark',
+            };
+
+    return (
+      <Chip
+        size="small"
+        label={status}
+        sx={{
+          ...chipStyles,
+          fontWeight: 500,
+          fontSize: '12px',
+          textTransform: 'capitalize',
+          border: 'none',
+          '& .MuiChip-label': {
+            px: 1.5,
+          },
+        }}
+      />
+    );
+  },
+},
+
+  {
+    field: 'submittedDate',
+    headerName: 'Created Date',
+    flex: 1,
+  },
+];
+
+
 
   return (
     <Box>
       {/* Breadcrumb */}
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Vendor Onboarding"
+          title="Quotations"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor Onboarding', href: '/vendor-onboarding' },
+            { label: 'Quotations', href: '/quotation' },
           ]}
-          action={
-            <Button
-              color="primary"
-              onClick={() => router.push('/vendor-onboarding/vendor')}
-              variant="outlined"
-              sx={{
-                borderRadius: 0.5,
-                px: 2,
-                fontWeight: 600,
-                textTransform: 'none',
-              }}
-            >
-              New Vendor Registration
-            </Button>
-          }
+          
+
         />
       </Box>
 
@@ -235,7 +225,7 @@ export default function VendorOnboardingDetails() {
           />
 
           <Autocomplete
-
+          
             size="small"
             options={['Approved', 'Pending', 'In Review', 'Rejected']}
             sx={{ minWidth: 180 }}
@@ -251,7 +241,7 @@ export default function VendorOnboardingDetails() {
                 color: 'white',
                 textTransform: 'none',
                 boxShadow: 'none',
-                borderRadius: 0.5,
+                                borderRadius: 0.5,
 
               }}
             >
@@ -263,7 +253,7 @@ export default function VendorOnboardingDetails() {
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.18),
                 textTransform: 'none',
-                borderRadius: 0.5,
+                                borderRadius: 0.5,
 
               }}
             >
@@ -277,13 +267,14 @@ export default function VendorOnboardingDetails() {
       <Box>
         <DataGrid
           rows={rows}
-          loading={loading}
           columns={columns}
           pageSizeOptions={[5, 10]}
           disableColumnFilter
           disableRowSelectionOnClick
           disableColumnMenu
-          disableColumnSelector
+onRowClick={(params) =>
+  router.push(`/quotation/view?id=${params.row.quotationId}`)
+}       disableColumnSelector
           slots={{
             toolbar: GridToolbar,
             footer: CustomFooter,

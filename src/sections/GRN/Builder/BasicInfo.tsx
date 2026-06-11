@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { fetchPurchaseRequestById, fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
@@ -20,7 +21,6 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { createGoodsReceipt } from 'src/store/slices/Grn/GrnSlice';
 import { fetchPurchaseOrders } from 'src/store/slices/PurchaseOrder/PRSlice';
-import { fetchPurchaseRequests } from 'src/store/slices/PurchaseRequests/PurchaseRequestsSlice';
 import { fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useRouter } from 'next/navigation';
 
@@ -33,9 +33,10 @@ const [deliveryNotes, setDeliveryNotes] = React.useState<string>('');
   const { data: purchaseOrders, loading } = useAppSelector(
     (state) => state.purchaseOrder
   );
-  const { data: purchaseRequests } = useAppSelector(
+  const { data: purchaseRequests ,selected: selectedPurchaseRequest} = useAppSelector(
     (state) => state.purchaseRequests
   );
+  console.log(selectedPurchaseRequest,'selectedPurchaseRequest')
   const [selectedPO, setSelectedPO] = React.useState<null | {
   label: string;
   id: string;
@@ -62,20 +63,28 @@ console.log(purchaseRequests,'pr')
       dispatch(fetchVendors());
     }, [dispatch]);
   console.log(vendor,'vendor')
-const [items, setItems] = React.useState([
-  {
-    id: 1,
-    strItemId: 'FUR-SHELF-001',
-    description: 'Furniture',
-    intQuantityOrdered: 10,
-    intQuantityReceived: 10,
+const [items, setItems] = React.useState<any[]>([]);
+
+React.useEffect(() => {
+  if (!selectedPurchaseRequest?.pr_item_mappings) return;
+
+  const mappedItems = selectedPurchaseRequest.pr_item_mappings.map((row, index) => ({
+    id: index + 1,
+
+    strItemId: row.item?.pk_chr_item_id || '',
+    description: row.item?.chr_item_name || row.chr_item_description || '',
+
+    intQuantityOrdered: row.int_quantity || 0,
+    intQuantityReceived: row.int_quantity || 0,
     intQuantityRejected: 0,
-    strUnitOfMeasure: 'Unit',
+
+    strUnitOfMeasure: row.item?.chr_unit || row.chr_unit_of_measure || '',
+
     strRejectionReason: '',
-  },
-]);
+  }));
 
-
+  setItems(mappedItems);
+}, [selectedPurchaseRequest]);
 const removeItem = (id: number) => {
   setItems((prev) => prev.filter((item) => item.id !== id));
 };
@@ -174,10 +183,17 @@ strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
   value={selectedPR}
   getOptionLabel={(option) => option.label}
   isOptionEqualToValue={(option, value) => option.id === value.id}
+  // onChange={(e, value) => {
+  //   setSelectedPR(value);
+  //   console.log('Selected PR ID:', value?.id);
+  // }}
   onChange={(e, value) => {
-    setSelectedPR(value);
-    console.log('Selected PR ID:', value?.id);
-  }}
+  setSelectedPR(value);
+
+  if (value?.id) {
+    dispatch(fetchPurchaseRequestById(value.id));
+  }
+}}
   renderInput={(params) => (
     <TextField {...params} label="Purchase Request" sx={smallInputSx} />
   )}
@@ -286,11 +302,7 @@ strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
         Status
       </Typography>
     </Grid>
-    <Grid size={{ xs: 1 }}>
-      <Typography fontSize={11} fontWeight={600}>
-        Action
-      </Typography>
-    </Grid>
+
   </Grid>
 
   {/* Rows */}
@@ -299,10 +311,7 @@ strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
     
     {/* Item */}
     <Grid size={{ xs: 3 }}>
-      <Typography fontSize={12} fontWeight={700}>
-        {row.strItemId}
-      </Typography>
-      <Typography fontSize={11} color="text.secondary">
+      <Typography fontSize={13} fontWeight={600}>
         {row.description}
       </Typography>
     </Grid>
@@ -370,12 +379,6 @@ strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
       />
     </Grid>
 
-    {/* Action */}
-    <Grid size={{ xs: 1 }}>
-      <IconButton onClick={() => removeItem(row.id)}>
-        <DeleteOutlineIcon />
-      </IconButton>
-    </Grid>
   </Grid>
 ))}
 </Box>

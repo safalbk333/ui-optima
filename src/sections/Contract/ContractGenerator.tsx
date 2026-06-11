@@ -1,26 +1,29 @@
 'use client';
 
+import { AppDispatch, RootState } from 'src/store/store';
 import {
-  Box,
-  Fade,
-  Stack,
-  Button,
-  Dialog,
-  Select,
-  Divider,
-  Tooltip,
   Backdrop,
-  MenuItem,
-  TextField,
-  IconButton,
-  Typography,
-  FormControl,
-  DialogContent,
+  Box,
+  Button,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  Divider,
+  Fade,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
 } from '@mui/material';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
 
+import ContractDocument from 'src/components/contract/ContractDocument';
 import { Edit } from '@mui/icons-material';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 // import ContractDocument from 'src/components/contract/ContractDocument';
@@ -486,7 +489,6 @@ export default function ContractGeneratorPage() {
         <Box
           sx={{
             bgcolor: '#fff',
-            borderRight: '1px solid #e5e7eb',
             p: 2.5,
             overflowY: 'auto',
           }}
@@ -511,10 +513,7 @@ export default function ContractGeneratorPage() {
               onChange={(e) => handleChange('contractTitle', e.target.value)}
               sx={{
                 '& .MuiInputBase-input': { fontSize: 12 },
-                '& .MuiOutlinedInput-root': {
-                  bgcolor: '#f9fafb',
-                  '& fieldset': { borderColor: '#e5e7eb' },
-                },
+
               }}
               error={!!errors.contractTitle}
               helperText={errors.contractTitle}
@@ -541,8 +540,6 @@ export default function ContractGeneratorPage() {
                   displayEmpty
                   sx={{
                     fontSize: 12,
-                    bgcolor: '#f9fafb',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                   }}
                 >
                   {/* Loading state */}
@@ -601,8 +598,6 @@ export default function ContractGeneratorPage() {
                   onChange={(e) => handleChange('contractType', e.target.value)}
                   sx={{
                     fontSize: 12,
-                    bgcolor: '#f9fafb',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                   }}
                 >
                   {
@@ -641,10 +636,7 @@ export default function ContractGeneratorPage() {
                 sx={{
                   flex: 1,
                   '& .MuiInputBase-input': { fontSize: 12 },
-                  '& .MuiOutlinedInput-root': {
-                    bgcolor: '#f9fafb',
-                    '& fieldset': { borderColor: '#e5e7eb' },
-                  },
+
                 }}
               />
               <FormControl size="small" sx={{ minWidth: 60 }}>
@@ -653,8 +645,6 @@ export default function ContractGeneratorPage() {
                   onChange={(e) => handleChange('currency', e.target.value)}
                   sx={{
                     fontSize: 11,
-                    bgcolor: '#f9fafb',
-                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                   }}
                 >
                   {CURRENCY_OPTIONS.map((c) => (
@@ -752,8 +742,6 @@ export default function ContractGeneratorPage() {
                 onChange={(e) => handleChange('governingLaw', e.target.value)}
                 sx={{
                   fontSize: 11,
-                  bgcolor: '#f9fafb',
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#e5e7eb' },
                 }}
               >
                 {GOVERNING_LAW_OPTIONS.map((v) => (
@@ -787,10 +775,7 @@ export default function ContractGeneratorPage() {
               onChange={(e) => handleChange('clientName', e.target.value)}
               sx={{
                 '& .MuiInputBase-input': { fontSize: 12 },
-                '& .MuiOutlinedInput-root': {
-                  bgcolor: '#f9fafb',
-                  '& fieldset': { borderColor: '#e5e7eb' },
-                },
+
               }}
             />
           </Box>
@@ -817,10 +802,7 @@ export default function ContractGeneratorPage() {
                 placeholder="procurement@company.com"
                 sx={{
                   '& .MuiInputBase-input': { fontSize: 12 },
-                  '& .MuiOutlinedInput-root': {
-                    bgcolor: '#f9fafb',
-                    '& fieldset': { borderColor: '#e5e7eb' },
-                  },
+
                 }}
                 error={!!errors.clientEmail}
                 helperText={errors.clientEmail}
@@ -848,10 +830,7 @@ export default function ContractGeneratorPage() {
                 placeholder=""
                 sx={{
                   '& .MuiInputBase-input': { fontSize: 12 },
-                  '& .MuiOutlinedInput-root': {
-                    bgcolor: '#f9fafb',
-                    '& fieldset': { borderColor: '#e5e7eb' },
-                  },
+
                 }}
                 error={!!errors.clientPhone}
                 helperText={errors.clientPhone}
@@ -878,8 +857,7 @@ export default function ContractGeneratorPage() {
               fontWeight: 700,
               fontSize: 13,
               py: 1.2,
-              borderRadius: 1.5,
-              boxShadow: '0 2px 8px rgba(22,163,74,0.25)',
+              borderRadius: 0.5,
               mb: 1.5,
             }}
           >

@@ -26,13 +26,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createContract, fetchTemplateByCode } from 'src/store/slices/contract/contractSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Edit } from '@mui/icons-material';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import saveAs from 'file-saver';
 import { toast } from 'src/components/snackbar';
+import { useRouter } from 'next/navigation';
 
 function ContractPreview() {
+  const router=useRouter()
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
   const {
@@ -166,9 +169,15 @@ function ContractPreview() {
       >
         <Box>
           <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-            <Typography sx={{ fontWeight: 800, fontSize: 15, color: '#111827' }}>
-              Contract Preview
-            </Typography>
+<Stack direction="row" alignItems="center" spacing={1}>
+  <IconButton onClick={() => router.back()} size="small">
+    <ArrowBackIcon fontSize="small" />
+  </IconButton>
+
+  <Typography sx={{ fontWeight: 600, fontSize: 15, color: '#111827' }}>
+    Contract Preview
+  </Typography>
+</Stack>
 
             <Tooltip title={editMode ? 'Exit edit mode' : 'Edit contract'} placement="top" arrow>
               <IconButton
@@ -252,20 +261,16 @@ function ContractPreview() {
               }
               disabled={createContractLoading}
               onClick={handleCreateContract}
+              color='primary'
               sx={{
                 minWidth: 140,
                 justifyContent: 'center',
-                bgcolor: '#16a34a',
-                color: '#fff',
                 textTransform: 'none',
                 fontSize: 11,
                 fontWeight: 600,
-                borderRadius: 1.5,
+                borderRadius: 0.5,
                 boxShadow: 'none',
-                '&:hover': {
-                  bgcolor: '#15803d',
-                  boxShadow: 'none',
-                },
+
               }}
             >
               {createContractLoading ? 'Creating...' : 'Create Contract'}
@@ -283,7 +288,7 @@ function ContractPreview() {
                 textTransform: 'none',
                 fontSize: 11,
                 fontWeight: 600,
-                borderRadius: 1.5,
+                borderRadius: 0.5,
               }}
               onClick={handleDownloadDocx}
             >
@@ -301,7 +306,7 @@ function ContractPreview() {
                 textTransform: 'none',
                 fontSize: 11,
                 fontWeight: 600,
-                borderRadius: 1.5,
+                borderRadius: 0.5,
                 boxShadow: 'none',
               }}
               onClick={handleDownloadPdf}
