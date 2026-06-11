@@ -60,10 +60,10 @@ const ICONS = {
   contract: <NotesIcon fontSize="small" />,
   onboarding: <Diversity3Icon fontSize="small" />,
   rfqs: <AttachEmailIcon fontSize="small" />,
-  approve:<AddTaskIcon  fontSize='small'/>,
-  eoi:<InterestsIcon fontSize='small'/>,
-  grn:<EditNoteIcon fontSize='small' />,
-  rfp:<NoteAltIcon fontSize='small'/>
+  approve: <AddTaskIcon fontSize='small' />,
+  eoi: <InterestsIcon fontSize='small' />,
+  grn: <EditNoteIcon fontSize='small' />,
+  rfp: <NoteAltIcon fontSize='small' />
 };
 const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
 
@@ -80,9 +80,16 @@ export const navData: NavSectionProps['data'] = [
         title: 'Vendor Onboarding',
         path: paths.vendorOnboarding.roots,
         icon: ICONS.onboarding,
-                allowedRoles: ['admin'],
+        allowedRoles: ['admin'],
 
-},
+      },
+      // {
+      //   title: 'Vendors List',
+      //   path: paths.vendor.root,
+      //   icon: ICONS.onboarding,
+      //   allowedRoles: ['admin'],
+
+      // },
       {
         title: 'Purchase Requests',
         path: paths.purchaseRequests.root,

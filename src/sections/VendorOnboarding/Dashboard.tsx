@@ -67,14 +67,14 @@ function CustomFooter() {
 
 export default function VendorOnboardingDetails() {
   const router = useRouter();
-  const dispatch=useAppDispatch()
-const { data: vendor, loading } = useAppSelector(
-  (state) => state.vendors
-);
-React.useEffect(() => {
-  dispatch(fetchVendors());
-}, [dispatch]);
-console.log(vendor,'vendor')
+  const dispatch = useAppDispatch()
+  const { data: vendor, loading } = useAppSelector(
+    (state) => state.vendors
+  );
+  React.useEffect(() => {
+    dispatch(fetchVendors());
+  }, [dispatch]);
+  console.log(vendor, 'vendor')
   const theme = useTheme();
 
   const PRIMARY = theme.palette.primary.main;
@@ -157,31 +157,31 @@ console.log(vendor,'vendor')
     },
   ];
 
-const rows =
-  vendor?.map((item, index) => ({
-    id: item.pk_chr_vendor_id || index,
-    vendorName: item.chr_vendor_name,
-    vendorCode: item.pk_chr_vendor_id?.slice(0, 8), // or your vendor code field if available
-    category: '-', // replace when category exists in API
-    contactPerson: '-', // replace when contact person exists
-    email: item.chr_vendor_email,
-    phone: item.chr_vendor_phone,
-    status:
-      item.chr_document_status === 'A'
-        ? 'Approved'
-        : item.chr_document_status === 'R'
-          ? 'Rejected'
-          : item.chr_document_status === 'P'
-            ? 'Pending'
-            : 'Draft',
-    submittedDate: item.tim_created
-      ? new Date(item.tim_created).toLocaleDateString('en-GB', {
+  const rows =
+    vendor?.map((item, index) => ({
+      id: item.pk_chr_vendor_id || index,
+      vendorName: item.chr_vendor_name,
+      vendorCode: item.pk_chr_vendor_id?.slice(0, 8), // or your vendor code field if available
+      category: '-', // replace when category exists in API
+      contactPerson: '-', // replace when contact person exists
+      email: item.chr_vendor_email,
+      phone: item.chr_vendor_phone,
+      status:
+        item.chr_document_status === 'A'
+          ? 'Approved'
+          : item.chr_document_status === 'R'
+            ? 'Rejected'
+            : item.chr_document_status === 'P'
+              ? 'Pending'
+              : 'Draft',
+      submittedDate: item.tim_created
+        ? new Date(item.tim_created).toLocaleDateString('en-GB', {
           day: '2-digit',
           month: 'short',
           year: 'numeric',
         })
-      : '-',
-  })) || [];
+        : '-',
+    })) || [];
 
   return (
     <Box>
@@ -191,7 +191,7 @@ const rows =
           title="Vendor Onboarding"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor Management', href: '/vendor-onboarding' },
+            { label: 'Vendor Onboarding', href: '/vendor-onboarding' },
           ]}
           action={
             <Button
@@ -205,7 +205,7 @@ const rows =
                 textTransform: 'none',
               }}
             >
-              Add New Vendor
+              New Vendor Registration
             </Button>
           }
         />
@@ -235,7 +235,7 @@ const rows =
           />
 
           <Autocomplete
-          
+
             size="small"
             options={['Approved', 'Pending', 'In Review', 'Rejected']}
             sx={{ minWidth: 180 }}
@@ -251,7 +251,7 @@ const rows =
                 color: 'white',
                 textTransform: 'none',
                 boxShadow: 'none',
-                                borderRadius: 0.5,
+                borderRadius: 0.5,
 
               }}
             >
@@ -263,7 +263,7 @@ const rows =
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.18),
                 textTransform: 'none',
-                                borderRadius: 0.5,
+                borderRadius: 0.5,
 
               }}
             >

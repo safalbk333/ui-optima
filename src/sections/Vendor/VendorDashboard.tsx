@@ -131,10 +131,10 @@ function VendorDashboard() {
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Vendor Management"
+          title="Vendors List"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendor Dashboard', href: '/products' },
+            { label: 'Vendors List', href: '/products' },
           ]}
           action={
             <Button
