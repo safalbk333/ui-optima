@@ -1,33 +1,20 @@
 'use client';
-
-import { AppDispatch, RootState } from 'src/store/store';
 import {
   Backdrop,
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogContent,
   Divider,
-  Fade,
   FormControl,
-  IconButton,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { alpha, styled, useTheme } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-
-import ContractDocument from 'src/components/contract/ContractDocument';
-import { Edit } from '@mui/icons-material';
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
-// import ContractDocument from 'src/components/contract/ContractDocument';
-// import ValidationPanel from 'src/components/contract/ValidationPanel';
 import { fetchTemplateByCode } from 'src/store/slices/contract/contractSlice';
 import { fetchVendors, clearVendors } from 'src/store/slices/vendor/VendorSlice';
 import { useRouter } from 'next/navigation';

@@ -14,6 +14,7 @@ import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SvgColor } from 'src/components/svg-color';
 import { paths } from 'src/routes/paths';
+import { Store } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +66,8 @@ const ICONS = {
   eoi:<InterestsIcon fontSize='small'/>,
   grn:<EditNoteIcon fontSize='small' />,
   rfp:<NoteAltIcon fontSize='small'/>,
-  quotation:<MarkEmailReadIcon fontSize='small'/>
+  quotation:<MarkEmailReadIcon fontSize='small'/>,
+  vendorlist:<Store fontSize='small'/>
 };
 const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
 
@@ -85,13 +87,13 @@ export const navData: NavSectionProps['data'] = [
         allowedRoles: ['admin'],
 
       },
-      // {
-      //   title: 'Vendors List',
-      //   path: paths.vendor.root,
-      //   icon: ICONS.onboarding,
-      //   allowedRoles: ['admin'],
+      {
+        title: 'Approved Vendors',
+        path: paths.vendor.root,
+        icon: ICONS.vendorlist,
+        allowedRoles: ['admin'],
 
-      // },
+      },
       {
         title: 'Purchase Requests',
         path: paths.purchaseRequests.root,

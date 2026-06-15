@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
-import { Box, Stack, Button, TextField, Typography, Pagination, Autocomplete } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Stack, Button, TextField, Typography, Pagination, Autocomplete, CircularProgress, Alert, Chip, Rating } from '@mui/material';
 import type {
   GridColDef,
-  GridRenderCellParams} from '@mui/x-data-grid';
+  GridRenderCellParams
+} from '@mui/x-data-grid';
 import {
   DataGrid,
   useGridApiContext,
@@ -18,6 +19,8 @@ import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import { GridToolbar, useGridSelector } from '@mui/x-data-grid/internals';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { clearVendors, fetchVendors } from 'src/store/slices/vendor/VendorSlice';
 
 function CustomFooter() {
   const apiRef = useGridApiContext();
@@ -55,10 +58,50 @@ function CustomFooter() {
 function VendorDashboard() {
   const theme = useTheme();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const PRIMARY = theme.palette.primary.main;
 
+  // ----------------------------------------------------------------------
+  // REDUX STATE
+  // ----------------------------------------------------------------------
+
+  const { data: vendors, loading, error } = useAppSelector((state) => state.vendors);
+
+  // ----------------------------------------------------------------------
+  // FETCH ON MOUNT — cleanup on unmount
+  // ----------------------------------------------------------------------
+
+  useEffect(() => {
+    dispatch(fetchVendors());
+
+    return () => {
+      dispatch(clearVendors());
+    };
+  }, [dispatch]);
+
+  // ----------------------------------------------------------------------
+  // MAP API DATA → DataGrid rows
+  // ----------------------------------------------------------------------
+
+  const rows = vendors.map((vendor, index) => ({
+    id: vendor.pk_chr_vendor_id,
+    vendorId: vendor.pk_chr_vendor_id,
+    vendorCode: `VEN-${String(index + 1).padStart(3, '0')}`,
+    vendorName: vendor.chr_vendor_name,
+    category: 'N/A',                          // not in API payload; extend when available
+    contactPerson: vendor.chr_vendor_email,
+    location: vendor.fk_chr_city_id ?? 'N/A',
+    status:
+      vendor.chr_document_status === 'active'
+        ? 'Active'
+        : vendor.chr_document_status === 'pending'
+          ? 'Pending'
+          : 'Inactive',
+    rating: '0.0',                            // not in API payload; extend when available
+  }));
+
   const columns: GridColDef[] = [
-    { field: 'vendorId', headerName: 'Vendor ID', flex: 1 },
+    { field: 'vendorCode', headerName: 'Vendor Code', flex: 1 },
     { field: 'vendorName', headerName: 'Vendor Name', flex: 1.4 },
     { field: 'category', headerName: 'Category', flex: 1 },
     { field: 'contactPerson', headerName: 'Contact Person', flex: 1 },
@@ -68,73 +111,66 @@ function VendorDashboard() {
       headerName: 'Status',
       flex: 1,
       renderCell: (params: GridRenderCellParams) => {
-        let color = 'text.primary';
+        let bg = '#EEF2FF';
+        let color = '#4338CA';
 
-        if (params.value === 'Active') color = 'success.main';
-        if (params.value === 'Pending') color = 'warning.main';
-        if (params.value === 'Inactive') color = 'error.main';
+        if (params.value === 'Active') {
+          bg = '#E8F5E9';
+          color = '#2E7D32';
+        };
+        if (params.value === 'Pending') {
+          bg = '#FFF8E1';
+          color = '#ED6C02';
+        };
+        if (params.value === 'Inactive') {
+          bg = '#FEEBEE';
+          color = '#D32F2F';
+        };
 
         return (
-          <Typography variant="caption" sx={{ color, fontWeight: 600 }}>
-            {params.value}
-          </Typography>
+          <Chip
+            label={params.value}
+            size="small"
+            sx={{
+              height: 22,
+              fontSize: 11,
+              fontWeight: 600,
+              borderRadius: 1,
+              backgroundColor: bg,
+              color,
+              '& .MuiChip-label': {
+                px: 1,
+              },
+            }}
+          />
         );
       },
     },
-    { field: 'rating', headerName: 'Rating', flex: 0.8 },
-  ];
-
-  const rows = [
     {
-      id: 1,
-      vendorId: 'VEN-1001',
-      vendorName: 'TechNova Solutions',
-      category: 'IT Services',
-      contactPerson: 'Arun Kumar',
-      location: 'Kochi',
-      status: 'Active',
-      rating: '4.8',
-    },
-    {
-      id: 2,
-      vendorId: 'VEN-1002',
-      vendorName: 'Prime Industrial Supplies',
-      category: 'Manufacturing',
-      contactPerson: 'Sneha Raj',
-      location: 'Chennai',
-      status: 'Active',
-      rating: '4.5',
-    },
-    {
-      id: 3,
-      vendorId: 'VEN-1003',
-      vendorName: 'GreenLeaf Traders',
-      category: 'Office Supplies',
-      contactPerson: 'Rahul Nair',
-      location: 'Bengaluru',
-      status: 'Inactive',
-      rating: '4.2',
-    },
-    {
-      id: 4,
-      vendorId: 'VEN-1004',
-      vendorName: 'Skyline Logistics',
-      category: 'Logistics',
-      contactPerson: 'Anjali Menon',
-      location: 'Mumbai',
-      status: 'Active',
-      rating: '4.9',
-    },
+      field: 'rating',
+      headerName: 'Rating',
+      flex: 1.5,
+      renderCell: (params) => (
+        <Stack direction='row' alignItems='flex-end' height='100%' justifyItems='center'>
+          <Rating
+          name="read-only"
+          value={params.value}
+          readOnly
+        />
+        <Typography fontSize='small'>{params.value}</Typography>
+        </Stack>
+      ),
+    }
   ];
 
   return (
     <Box>
       <Box mb={2}>
         <PremiumBreadcrumbs
-          title="Vendors List"
+          title="Approved Vendors"
           paths={[
             { label: 'Home', href: '/dashboard' },
-            { label: 'Vendors List', href: '/products' },
+            { label: 'Approved Vendors', href: '/vendor' },
           ]}
           action={
             <Button
@@ -190,6 +226,16 @@ function VendorDashboard() {
         </Stack>
       </Box>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* ERROR STATE                                                          */}
+      {/* ------------------------------------------------------------------ */}
+
+      {error && (
+        <Box mt={2}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      )}
+
       <Box sx={{ borderRadius: 1 }}>
         <Box
           sx={{
@@ -205,12 +251,24 @@ function VendorDashboard() {
             rows={rows}
             columns={columns}
             autoHeight
+            loading={loading}
             pageSizeOptions={[5, 10]}
             disableColumnFilter
+            onRowClick={(params) =>
+              router.push(`/vendor/details/details?id=${params.row.vendorId}`)
+            }
             disableRowSelectionOnClick
             disableColumnMenu
             disableColumnSelector
-            slots={{ toolbar: GridToolbar, footer: CustomFooter }}
+            slots={{
+              toolbar: GridToolbar,
+              footer: CustomFooter,
+              loadingOverlay: () => (
+                <Box display="flex" alignItems="center" justifyContent="center" height="100%">
+                  <CircularProgress size={28} />
+                </Box>
+              ),
+            }}
             slotProps={{
               toolbar: {
                 showQuickFilter: false,
