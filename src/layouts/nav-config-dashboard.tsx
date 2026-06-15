@@ -14,6 +14,7 @@ import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { SvgColor } from 'src/components/svg-color';
 import { paths } from 'src/routes/paths';
+import { Store } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
 
@@ -61,11 +62,12 @@ const ICONS = {
   contract: <NotesIcon fontSize="small" />,
   onboarding: <Diversity3Icon fontSize="small" />,
   rfqs: <AttachEmailIcon fontSize="small" />,
-  approve:<AddTaskIcon  fontSize='small'/>,
-  eoi:<InterestsIcon fontSize='small'/>,
-  grn:<EditNoteIcon fontSize='small' />,
-  rfp:<NoteAltIcon fontSize='small'/>,
-  quotation:<MarkEmailReadIcon fontSize='small'/>
+  approve: <AddTaskIcon fontSize='small' />,
+  eoi: <InterestsIcon fontSize='small' />,
+  grn: <EditNoteIcon fontSize='small' />,
+  rfp: <NoteAltIcon fontSize='small' />,
+  quotation: <MarkEmailReadIcon fontSize='small' />,
+  vendorlist: <Store fontSize='small' />
 };
 const ALL_ROLES = ['admin', 'approver', 'enduser'] as const;
 
@@ -85,20 +87,20 @@ export const navData: NavSectionProps['data'] = [
         allowedRoles: ['admin'],
 
       },
-      // {
-      //   title: 'Vendors List',
-      //   path: paths.vendor.root,
-      //   icon: ICONS.onboarding,
-      //   allowedRoles: ['admin'],
+      {
+        title: 'Approved Vendors',
+        path: paths.vendor.root,
+        icon: ICONS.vendorlist,
+        allowedRoles: ['admin'],
 
-      // },
+      },
       {
         title: 'Purchase Requests',
         path: paths.purchaseRequests.root,
         icon: ICONS.rfq,
         allowedRoles: ['admin', 'enduser'],
       },
-                  {
+      {
         title: 'EOI',
         path: paths.eoi.roots,
         icon: ICONS.eoi,
@@ -110,14 +112,12 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.rfp,
         allowedRoles: ['admin'],
       },
-            {
+      {
         title: 'Quotations',
         path: paths.quotation.roots,
         icon: ICONS.quotation,
         allowedRoles: ['admin'],
       },
-
-
       {
         title: 'Purchase Orders',
         path: paths.purchaseOrders.root,
@@ -130,15 +130,12 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.contract,
         allowedRoles: ['admin'],
       },
-
-
       {
         title: 'GRN',
         path: paths.grn.roots,
         icon: ICONS.grn,
         allowedRoles: ['admin'],
       },
-
       {
         title: 'Approval',
         path: paths.approval.roots,

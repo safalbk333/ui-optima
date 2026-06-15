@@ -68,121 +68,121 @@ function CustomFooter() {
 
 export default function Quotation() {
   const router = useRouter();
-  const dispatch=useAppDispatch()
-const { data: quotations } = useAppSelector(
-  (state) => state.quotations
-);
+  const dispatch = useAppDispatch()
+  const { data: quotations } = useAppSelector(
+    (state) => state.quotations
+  );
 
-React.useEffect(() => {
-  dispatch(fetchQuotations());
-}, [dispatch]);
-const rows = React.useMemo(
-  () =>
-    (quotations || []).map((item: any) => ({
-      id: item.pk_chr_quotation_id,
+  React.useEffect(() => {
+    dispatch(fetchQuotations());
+  }, [dispatch]);
+  const rows = React.useMemo(
+    () =>
+      (quotations || []).map((item: any) => ({
+        id: item.pk_chr_quotation_id,
 
-      quotationId: item.pk_chr_quotation_id,
+        quotationId: item.pk_chr_quotation_id,
 
-      rfqCode: item.rfq?.chr_rfq_code || '',
+        rfqCode: item.rfq?.chr_rfq_code || '',
 
-      rfqTitle: item.rfq?.chr_rfq_title || '',
+        rfqTitle: item.rfq?.chr_rfq_title || '',
 
-      vendorName: item.vendor?.chr_vendor_name || '',
+        vendorName: item.vendor?.chr_vendor_name || '',
 
-      vendorEmail: item.vendor?.chr_vendor_email || '',
+        vendorEmail: item.vendor?.chr_vendor_email || '',
 
-      buyerName: item.buyer?.chr_user_name || '',
+        buyerName: item.buyer?.chr_user_name || '',
 
-      status: item.chr_status?.trim() || '',
+        status: item.chr_status?.trim() || '',
 
-      totalAmount: item.flt_total_amount || 0,
+        totalAmount: item.flt_total_amount || 0,
 
-      currency: item.chr_currency || '',
+        currency: item.chr_currency || '',
 
-      itemCount: item.quotation_items?.length || 0,
+        itemCount: item.quotation_items?.length || 0,
 
-      submittedDate: item.tim_created
-        ? new Date(item.tim_created).toLocaleDateString()
-        : '',
-    })),
-  [quotations]
-);
+        submittedDate: item.tim_created
+          ? new Date(item.tim_created).toLocaleDateString()
+          : '',
+      })),
+    [quotations]
+  );
   const theme = useTheme();
-console.log(quotations,'quotations')
+  console.log(quotations, 'quotations')
   const PRIMARY = theme.palette.primary.main;
 
-const columns: GridColDef[] = [
-  {
-    field: 'rfqCode',
-    headerName: 'RFQ Code',
-    flex: 2,
-  },
+  const columns: GridColDef[] = [
+    {
+      field: 'rfqCode',
+      headerName: 'RFQ Code',
+      flex: 2,
+    },
 
-  {
-    field: 'rfqTitle',
-    headerName: 'RFQ Title',
-    flex: 1.8,
-  },
-
-
-
-  {
-    field: 'itemCount',
-    headerName: 'Items',
-    width: 90,
-    align: 'center',
-    headerAlign: 'center',
-  },
+    {
+      field: 'rfqTitle',
+      headerName: 'RFQ Title',
+      flex: 1.8,
+    },
 
 
-{
-  field: 'status',
-  headerName: 'Status',
-  flex: 1,
-  renderCell: (params) => {
-    const status = params.value;
 
-    const chipStyles =
-      status === 'APPROVED'
-        ? {
-            bgcolor: 'success.lighter',
-            color: 'success.dark',
-          }
-        : status === 'REJECTED'
-          ? {
-              bgcolor: 'error.lighter',
-              color: 'error.dark',
+    {
+      field: 'itemCount',
+      headerName: 'Items',
+      width: 90,
+      align: 'center',
+      headerAlign: 'center',
+    },
+
+
+    {
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      renderCell: (params) => {
+        const status = params.value;
+
+        const chipStyles =
+          status === 'APPROVED'
+            ? {
+              bgcolor: 'success.lighter',
+              color: 'success.dark',
             }
-          : {
-              bgcolor: 'warning.lighter',
-              color: 'warning.dark',
-            };
+            : status === 'REJECTED'
+              ? {
+                bgcolor: 'error.lighter',
+                color: 'error.dark',
+              }
+              : {
+                bgcolor: 'warning.lighter',
+                color: 'warning.dark',
+              };
 
-    return (
-      <Chip
-        size="small"
-        label={status}
-        sx={{
-          ...chipStyles,
-          fontWeight: 500,
-          fontSize: '12px',
-          textTransform: 'capitalize',
-          border: 'none',
-          '& .MuiChip-label': {
-            px: 1.5,
-          },
-        }}
-      />
-    );
-  },
-},
+        return (
+          <Chip
+            size="small"
+            label={status}
+            sx={{
+              ...chipStyles,
+              fontWeight: 500,
+              fontSize: '12px',
+              textTransform: 'capitalize',
+              border: 'none',
+              '& .MuiChip-label': {
+                px: 1.5,
+              },
+            }}
+          />
+        );
+      },
+    },
 
-  {
-    field: 'submittedDate',
-    headerName: 'Created Date',
-    flex: 1,
-  },
-];
+    {
+      field: 'submittedDate',
+      headerName: 'Created Date',
+      flex: 1,
+    },
+  ];
 
 
 
@@ -196,7 +196,7 @@ const columns: GridColDef[] = [
             { label: 'Home', href: '/dashboard' },
             { label: 'Quotations', href: '/quotation' },
           ]}
-          
+
 
         />
       </Box>
@@ -225,7 +225,7 @@ const columns: GridColDef[] = [
           />
 
           <Autocomplete
-          
+
             size="small"
             options={['Approved', 'Pending', 'In Review', 'Rejected']}
             sx={{ minWidth: 180 }}
@@ -241,7 +241,7 @@ const columns: GridColDef[] = [
                 color: 'white',
                 textTransform: 'none',
                 boxShadow: 'none',
-                                borderRadius: 0.5,
+                borderRadius: 0.5,
 
               }}
             >
@@ -253,7 +253,7 @@ const columns: GridColDef[] = [
               sx={{
                 borderColor: alpha(theme.palette.text.primary, 0.18),
                 textTransform: 'none',
-                                borderRadius: 0.5,
+                borderRadius: 0.5,
 
               }}
             >
@@ -272,9 +272,9 @@ const columns: GridColDef[] = [
           disableColumnFilter
           disableRowSelectionOnClick
           disableColumnMenu
-onRowClick={(params) =>
-  router.push(`/quotation/view?id=${params.row.quotationId}`)
-}       disableColumnSelector
+          onRowClick={(params) =>
+            router.push(`/quotation/view?id=${params.row.quotationId}`)
+          } disableColumnSelector
           slots={{
             toolbar: GridToolbar,
             footer: CustomFooter,
