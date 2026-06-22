@@ -4,10 +4,12 @@ import { useCallback } from 'react';
 
 import Button from '@mui/material/Button';
 
+import { CONFIG } from 'src/global-config';
 import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
-import { signOut } from 'src/auth/context/jwt/action';
+import { signOut as jwtSignOut } from 'src/auth/context/jwt/action';
+import { signOut as keycloakSignOut } from 'src/auth/context/keycloak/action';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +24,12 @@ export function SignOutButton({ onClose, sx, ...other }: Props) {
 
   const handleLogout = useCallback(async () => {
     try {
-      await signOut();
+      if (CONFIG.auth.method === 'keycloak') {
+        await keycloakSignOut();
+        return;
+      }
+
+      await jwtSignOut();
       await checkUserSession?.();
 
       onClose?.();

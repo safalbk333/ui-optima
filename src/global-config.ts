@@ -12,7 +12,7 @@ export type ConfigValue = {
   assetsDir: string;
   isStaticExport: boolean;
   auth: {
-    method: 'jwt' | 'amplify' | 'firebase' | 'supabase' | 'auth0';
+    method: 'jwt' | 'amplify' | 'firebase' | 'supabase' | 'auth0' | 'keycloak';
     skip: boolean;
     redirectPath: string;
   };
@@ -28,6 +28,15 @@ export type ConfigValue = {
   };
   amplify: { userPoolId: string; userPoolWebClientId: string; region: string };
   auth0: { clientId: string; domain: string; callbackUrl: string };
+  keycloak: {
+    url: string;
+    realm: string;
+    clientId: string;
+    clientSecret: string;
+    scope: string;
+    callbackPath: string;
+    callbackUrl: string;
+  };
   supabase: { url: string; key: string };
 };
 
@@ -42,10 +51,13 @@ export const CONFIG: ConfigValue = {
   isStaticExport: JSON.parse(process.env.BUILD_STATIC_EXPORT ?? 'false'),
   /**
    * Auth
-   * @method jwt | amplify | firebase | supabase | auth0
+   * @method jwt | amplify | firebase | supabase | auth0 | keycloak
    */
   auth: {
-    method: 'jwt',
+    method: (process.env.NEXT_PUBLIC_AUTH_METHOD ??
+      (process.env.NEXT_PUBLIC_KEYCLOAK_URL || process.env.NEXT_KEYCLOAK_URL
+        ? 'keycloak'
+        : 'jwt')) as ConfigValue['auth']['method'],
     skip: false,
     redirectPath: paths.dashboard.root,
   },
@@ -80,6 +92,28 @@ export const CONFIG: ConfigValue = {
     clientId: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID ?? '',
     domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN ?? '',
     callbackUrl: process.env.NEXT_PUBLIC_AUTH0_CALLBACK_URL ?? '',
+  },
+  /**
+   * Keycloak (OIDC Authorization Code + PKCE)
+   */
+  keycloak: {
+    url:
+      process.env.NEXT_PUBLIC_KEYCLOAK_URL ??
+      process.env.NEXT_KEYCLOAK_URL ??
+      'http://localhost:8080',
+    realm:
+      process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? process.env.NEXT_REALM ?? 'optima',
+    clientId:
+      process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ??
+      process.env.NEXT_CLIENT_ID ??
+      'react-web-client',
+    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET ?? '',
+    scope: process.env.NEXT_PUBLIC_KEYCLOAK_SCOPE ?? 'openid profile email',
+    callbackPath: paths.auth.keycloak.loginRedirect,
+    callbackUrl:
+      process.env.NEXT_PUBLIC_KEYCLOAK_CALLBACK_URL ??
+      process.env.NEXT_REDIRECT_URL ??
+      `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:4000'}${paths.auth.keycloak.loginRedirect}`,
   },
   /**
    * Supabase

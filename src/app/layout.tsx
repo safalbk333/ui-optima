@@ -5,7 +5,7 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/component
 import { themeConfig, ThemeProvider } from 'src/theme';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { AuthProvider } from 'src/auth/context/jwt';
+import { AuthProvider } from 'src/auth/context/auth-provider';
 import { CONFIG } from 'src/global-config';
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
 import { MotionLazy } from 'src/components/animate/motion-lazy';

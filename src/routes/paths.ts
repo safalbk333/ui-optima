@@ -52,6 +52,11 @@ export const paths = {
     auth0: {
       signIn: `${ROOTS.AUTH}/auth0/sign-in`,
     },
+    keycloak: {
+      signIn: `${ROOTS.AUTH}/keycloak/sign-in`,
+      callback: `${ROOTS.AUTH}/keycloak/callback`,
+      loginRedirect: '/pages/auth/login-redirect',
+    },
     supabase: {
       signIn: `${ROOTS.AUTH}/supabase/sign-in`,
       verify: `${ROOTS.AUTH}/supabase/verify`,
