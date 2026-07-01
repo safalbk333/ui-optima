@@ -1,8 +1,13 @@
 // ----------------------------------------------------------------------
 
+import UserManagement from "src/sections/UserManagement/UserManagement";
+
 const ROOTS = {
   AUTH: '/auth',
   DASHBOARD: '/dashboard',
+  USER: '/user-management',
+  TENANT: '/tenant-management',
+  ITEM_MASTER: '/item-master',
   REQUEST: '/request',
   VENDOR: '/vendor',
   PRODUCTS: '/products',
@@ -12,10 +17,10 @@ const ROOTS = {
   PR: '/purchase-requests',
   VR: '/vendor-onboarding',
   RFQ: '/rfq',
-  GRN:'/grn',
-  EOI:'/eoi',
-  Approval:'/approval',
-  Quotation:'/quotation'
+  GRN: '/grn',
+  EOI: '/eoi',
+  APPROVAL: '/approval',
+  QUOTATION: '/quotation'
 };
 
 // ----------------------------------------------------------------------
@@ -82,6 +87,18 @@ export const paths = {
     directory: `${ROOTS.VENDOR}/directory`,
     details: `${ROOTS.VENDOR}/details`,
   },
+  userManagement: {
+    root: ROOTS.USER,
+    addUser: `${ROOTS.USER}/add-user`,  
+    details: `${ROOTS.USER}/details`
+  },
+  tenantManagement: {
+    root: ROOTS.TENANT,
+    addTenant: `${ROOTS.TENANT}/add-tenant`
+  },
+  itemMaster: {
+    root: ROOTS.ITEM_MASTER
+  },
   products: {
     root: ROOTS.PRODUCTS,
     products: `${ROOTS.PRODUCTS}/details`,
@@ -103,19 +120,19 @@ export const paths = {
   rfq: {
     roots: ROOTS.RFQ,
   },
-    grn: {
+  grn: {
     roots: ROOTS.GRN,
     new: `${ROOTS.GRN}/build`,
   },
-      eoi: {
+  eoi: {
     roots: ROOTS.EOI,
     new: `${ROOTS.EOI}/eois`,
   },
-        approval: {
-    roots: ROOTS.Approval,
+  approval: {
+    roots: ROOTS.APPROVAL,
     new: `${ROOTS.EOI}/view`,
   },
-  quotation:{
-    roots:ROOTS.Quotation
+  quotation: {
+    roots: ROOTS.QUOTATION
   }
 };

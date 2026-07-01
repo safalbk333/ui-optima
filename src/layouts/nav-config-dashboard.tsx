@@ -47,6 +47,24 @@ export const navData: NavSectionProps['data'] = [
         allowedRoles: [...ALL_ROLES],
       },
       {
+        title: 'User Management',
+        path: paths.userManagement.root,
+        icon: ICONS.onboarding,
+        allowedRoles: ['admin'],
+      },
+      {
+        title: 'Tenant Management',
+        path: paths.tenantManagement.root,
+        icon: ICONS.onboarding,
+        allowedRoles: ['admin'],
+      },
+      {
+        title: 'Item Master',
+        path: paths.itemMaster.root,
+        icon: ICONS.onboarding,
+        allowedRoles: ['admin'],
+      },
+      {
         title: 'Vendor Onboarding',
         path: paths.vendorOnboarding.roots,
         icon: ICONS.onboarding,
