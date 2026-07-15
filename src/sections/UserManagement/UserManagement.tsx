@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Stack,
@@ -42,6 +42,14 @@ import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'next/navigation';
 
+// NOTE: Adjust these two import paths to match your actual store setup
+import { useDispatch, useSelector } from 'react-redux';
+// import type { AppDispatch, RootState } from 'src/redux/store';
+// import { fetchUsers, type User as ApiUser } from 'src/redux/slices/userManagementSlice';
+import { fetchUsers, type User as ApiUser } from 'src/store/slices/UserManagement/UserManagementSlice';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
+import { RootState } from 'src/store/store';
+
 // ----------------------------------------------------------------------
 // TYPES
 // ----------------------------------------------------------------------
@@ -67,226 +75,26 @@ interface UserRow {
 }
 
 // ----------------------------------------------------------------------
-// HARDCODED USER DATA — Procurement2Pay context
-// Users can be internal staff (buyers, finance, approvers) OR vendor contacts
+// MAPPER: API User -> UserRow
+// TODO: Update this mapping once backend adds employeeCode, department,
+// vendor-linking fields, and group-role assignments to the /user response.
 // ----------------------------------------------------------------------
 
-const HARDCODED_USERS: UserRow[] = [
-  // ── Internal Staff ──────────────────────────────────────────────────
-  {
-    id: '1',
-    userId: 'USR-0001',
-    employeeCode: 'EMP001',
-    userName: 'Tendai Moyo',
-    email: 'tendai.moyo@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Procurement Officer',
-    department: 'Procurement & Supply',
-    groupRoles: ['Buyer', 'Approver'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '2',
-    userId: 'USR-0002',
-    employeeCode: 'EMP002',
-    userName: 'Chiedza Mutasa',
-    email: 'chiedza.mutasa@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Finance Manager',
-    department: 'Finance',
-    groupRoles: ['Finance', 'Approver'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '3',
-    userId: 'USR-0003',
-    employeeCode: 'EMP003',
-    userName: 'Takumi F',
-    email: 'takumi.f@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Procurement Manager',
-    department: 'Procurement & Supply',
-    groupRoles: ['Approver', 'Admin'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '4',
-    userId: 'USR-0004',
-    employeeCode: 'EMP004',
-    userName: 'Farai Ncube',
-    email: 'farai.ncube@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Stores Keeper',
-    department: 'Warehouse & Logistics',
-    groupRoles: ['GRN Officer'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '5',
-    userId: 'USR-0005',
-    employeeCode: 'EMP005',
-    userName: 'Rutendo Dube',
-    email: 'rutendo.dube@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Accounts Payable Officer',
-    department: 'Finance',
-    groupRoles: ['Finance', 'Invoice Processor'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '6',
-    userId: 'USR-0006',
-    employeeCode: 'EMP006',
-    userName: 'Blessing Chikwanda',
-    email: 'blessing.chikwanda@optima.co.zw',
-    status: 'Pending',
-    jobRole: 'Procurement Assistant',
-    department: 'Procurement & Supply',
-    groupRoles: ['Buyer'],
-    adUser: false,
-    isVendor: false,
-  },
-  {
-    id: '7',
-    userId: 'USR-0007',
-    employeeCode: 'EMP007',
-    userName: 'Munyaradzi Hove',
-    email: 'munyaradzi.hove@optima.co.zw',
-    status: 'Inactive',
-    jobRole: 'IT Administrator',
-    department: 'Information Technology',
-    groupRoles: ['Admin', 'Viewer'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '8',
-    userId: 'USR-0008',
-    employeeCode: 'EMP008',
-    userName: 'Tatenda Zimba',
-    email: 'tatenda.zimba@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Contract Manager',
-    department: 'Legal & Contracts',
-    groupRoles: ['Contract Manager', 'Approver'],
-    adUser: true,
-    isVendor: false,
-  },
-
-  // ── Vendor Users ─────────────────────────────────────────────────────
-  // Vendors are given portal accounts to submit invoices, respond to RFQs, etc.
-  {
-    id: '9',
-    userId: 'USR-0009',
-    employeeCode: 'VND-EMP001',
-    userName: 'Simba Chigova',
-    email: 'procurement@zcl.co.zw',
-    status: 'Active',
-    jobRole: 'Vendor Contact',
-    department: 'External',
-    groupRoles: ['Vendor'],
-    adUser: false,
-    isVendor: true,
-    vendorId: 'VND-0014',
-    vendorName: 'Zimbabwe Cooling Ltd',
-    prazStatus: 'Verified',
-  },
-  {
-    id: '10',
-    userId: 'USR-0010',
-    employeeCode: 'VND-EMP002',
-    userName: 'Nomsa Dlamini',
-    email: 'nomsa@saftech.co.zw',
-    status: 'Active',
-    jobRole: 'Vendor Contact',
-    department: 'External',
-    groupRoles: ['Vendor'],
-    adUser: false,
-    isVendor: true,
-    vendorId: 'VND-0021',
-    vendorName: 'Safire Technologies',
-    prazStatus: 'Verified',
-  },
-  {
-    id: '11',
-    userId: 'USR-0011',
-    employeeCode: 'VND-EMP003',
-    userName: 'Elias Banda',
-    email: 'elias@zimprintworks.co.zw',
-    status: 'Pending',
-    jobRole: 'Vendor Contact',
-    department: 'External',
-    groupRoles: ['Vendor'],
-    adUser: false,
-    isVendor: true,
-    vendorId: 'VND-0033',
-    vendorName: 'Zimbabwe Print Works',
-    prazStatus: 'Pending',
-  },
-  {
-    id: '12',
-    userId: 'USR-0012',
-    employeeCode: 'VND-EMP004',
-    userName: 'Precious Mokoena',
-    email: 'precious@transzim.co.zw',
-    status: 'Active',
-    jobRole: 'Vendor Contact',
-    department: 'External',
-    groupRoles: ['Vendor'],
-    adUser: false,
-    isVendor: true,
-    vendorId: 'VND-0007',
-    vendorName: 'TransZim Logistics',
-    prazStatus: 'Verified',
-  },
-  {
-    id: '13',
-    userId: 'USR-0013',
-    employeeCode: 'VND-EMP005',
-    userName: 'Charles Osei',
-    email: 'charles@afrobuild.co.zw',
-    status: 'Inactive',
-    jobRole: 'Vendor Contact',
-    department: 'External',
-    groupRoles: ['Vendor'],
-    adUser: false,
-    isVendor: true,
-    vendorId: 'VND-0042',
-    vendorName: 'Afro Build Supplies',
-    prazStatus: 'Expired',
-  },
-  {
-    id: '14',
-    userId: 'USR-0014',
-    employeeCode: 'EMP009',
-    userName: 'Vimbai Chirwa',
-    email: 'vimbai.chirwa@optima.co.zw',
-    status: 'Active',
-    jobRole: 'RFQ Coordinator',
-    department: 'Procurement & Supply',
-    groupRoles: ['Buyer', 'RFQ Manager'],
-    adUser: true,
-    isVendor: false,
-  },
-  {
-    id: '15',
-    userId: 'USR-0015',
-    employeeCode: 'EMP010',
-    userName: 'Kudakwashe Marimo',
-    email: 'kudakwashe.marimo@optima.co.zw',
-    status: 'Active',
-    jobRole: 'Chief Finance Officer',
-    department: 'Finance',
-    groupRoles: ['Finance', 'Approver', 'Admin'],
-    adUser: true,
-    isVendor: false,
-  },
-];
+function mapApiUserToRow(user: ApiUser): UserRow {
+  return {
+    id: user.pk_user_id,
+    userId: user.pk_user_id,
+    employeeCode: user.pk_user_id, // TODO: replace with real employee code field once API provides it
+    userName: user.user_name,
+    email: user.user_email,
+    status: user.is_active ? 'Active' : 'Inactive',
+    jobRole: user.roles?.role_name ?? 'N/A',
+    department: 'N/A', // TODO: map once API returns department
+    groupRoles: user.roles?.role_name ? [user.roles.role_name] : [],
+    adUser: true, // TODO: derive from API once AD-linkage field is available
+    isVendor: user.roles?.role_code === 'VENDOR', // TODO: confirm vendor role code with backend
+  };
+}
 
 // ----------------------------------------------------------------------
 // HELPERS
@@ -643,6 +451,12 @@ function UserManagement() {
   const router = useRouter();
   const PRIMARY = theme.palette.primary.main;
 
+  // ---- Redux: fetchUsers integration ----
+  const dispatch = useAppDispatch();
+  const { data: apiUsers, loading, error } = useAppSelector(
+    (state: RootState) => state.userManagement
+  );
+
   // ---- View mode state ----
   const [viewMode, setViewMode] = useState<ViewMode>('table');
 
@@ -652,23 +466,22 @@ function UserManagement() {
   // Additional P2P filter: show only vendor users
   const [vendorFilter, setVendorFilter] = useState<'All' | 'Vendor' | 'Internal'>('All');
 
-  // ---- Loading state (for simulation) ----
-  const [loading, setLoading] = useState(false);
-
-  // ---- Error state ----
-  const [error, setError] = useState<string | null>(null);
-
   // ----------------------------------------------------------------------
-  // USE HARDCODED DATA INSTEAD OF API
+  // FETCH USERS FROM API ON MOUNT
   // ----------------------------------------------------------------------
 
-  const users = HARDCODED_USERS;
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   // ----------------------------------------------------------------------
-  // MAP DATA → rows (already in correct format)
+  // MAP API DATA → rows
   // ----------------------------------------------------------------------
 
-  const rows: UserRow[] = users;
+  const rows: UserRow[] = useMemo(
+    () => apiUsers.map(mapApiUserToRow),
+    [apiUsers]
+  );
 
   // ---- Apply client-side search/filter ----
   const filteredRows = rows.filter((row) => {
@@ -700,7 +513,7 @@ function UserManagement() {
   // ----------------------------------------------------------------------
 
   const handleViewDetails = (userId: string) => {
-    router.push(paths.userManagement.details);
+    router.push(paths.userManagement.details(userId));
   };
 
   const handleEdit = (userId: string) => {
@@ -718,11 +531,6 @@ function UserManagement() {
   // ----------------------------------------------------------------------
 
   const columns: GridColDef[] = [
-    {
-      field: 'employeeCode',
-      headerName: 'Employee Code',
-      flex: 1,
-    },
     {
       field: 'userName',
       headerName: 'User Name',

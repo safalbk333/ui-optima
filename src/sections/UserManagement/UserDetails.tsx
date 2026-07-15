@@ -26,7 +26,9 @@ import {
   Dialog,
   InputAdornment,
 } from '@mui/material';
-import React, { useEffect, useReducer, useCallback, useState } from 'react';
+import React, { useEffect, useReducer, useCallback, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'next/navigation';
 import { alpha } from '@mui/material/styles';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -54,6 +56,17 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 import PremiumBreadcrumbs from 'src/components/DynamicBreadcrumbs/page';
+
+// import {
+  // fetchUserById,
+  // clearSelectedUser,
+  // type User as ApiUser,
+// } from 'src/redux/slices/userManagementSlice';
+// import type { AppDispatch, RootState } from 'src/redux/store';
+
+import { fetchUserById, clearSelectedUser, type User as ApiUser } from 'src/store/slices/UserManagement/UserManagementSlice';
+import { RootState } from 'src/store/store';
+import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -213,209 +226,80 @@ function userDetailReducer(state: UserDetailState, action: UserDetailAction): Us
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MOCK DATA
-// ─────────────────────────────────────────────────────────────────────────────
+// ── Reference data (permission groups / roles available to assign) ─────────
+// TODO: API - these currently have no dedicated backend endpoint. Once
+// GET /permissions and GET /roles (or equivalent) are available, fetch them
+// here (e.g. via a thunk on mount) instead of defaulting to empty arrays.
+const AVAILABLE_PERMISSION_GROUPS: PermissionGroup[] = [];
+const AVAILABLE_ROLES: GroupRole[] = [];
 
-const MOCK_USER: UserDetail = {
-  userId: 'USR-0042',
-  initials: 'TM',
-  fullName: 'Tendai Moyo',
-  email: 'tendai.moyo@procurement.co.zw',
-  status: 'Active',
-  employee: {
-    employeeCode: 'EMP042',
-    jobRole: 'Procurement Officer',
-    department: 'Procurement & Supply',
-    phone: '+263 77 234 5678',
-    email: 'tendai.moyo@procurement.co.zw',
-    joinDate: '10 Jan 2024',
-  },
-  vendor: {
-    vendorId: 'VND-0014',
-    vendorName: 'Zimbabwe Cooling Ltd',
-    category: 'Facilities / HVAC',
-    country: 'Zimbabwe',
-    prazStatus: 'Verified',
-  },
-  groupRoles: [
-    { id: 1, label: 'Approver', description: 'Can approve purchase orders and requisitions' },
-    { id: 2, label: 'Vendor', description: 'Vendor portal access and submission rights' },
-  ],
-  directPermissions: [
-    'Category Branch Update',
-    'Ld Gurukul Course Read',
-    'Ld Training Read',
-    'User Role Update',
-    'User Role Read',
-    'System Dataupload Upload',
-    'Recruitment Vendor Read',
-    'User User Create',
-    'Exit Read',
-    'System Jobrole Read',
-    'PO Read',
-    'PO Approve',
-    'RFQ Read',
-    'RFQ Create',
-    'Invoice Read',
-  ],
-  inheritedPermissions: [
-    'Home Read',
-    'Recruitment Vacancy Approval',
-    'Recruitment Read',
-    'Recruitment Vacancy Read',
-    'Recruitment Cvpool Upload',
-    'Recruitment Cvpool Read',
-    'Dashboard Read',
-    'Vendor Directory Read',
-    'Contract Read',
-    'GRN Read',
-  ],
-  allAvailablePermissions: [
-    {
-      id: 1,
-      module: 'Purchase Orders',
-      permissions: ['PO Read', 'PO Create', 'PO Approve', 'PO Cancel', 'PO Export'],
-    },
-    {
-      id: 2,
-      module: 'Vendor Management',
-      permissions: [
-        'Vendor Read',
-        'Vendor Create',
-        'Vendor Update',
-        'Vendor Delete',
-        'Recruitment Vendor Read',
-      ],
-    },
-    {
-      id: 3,
-      module: 'Contracts',
-      permissions: [
-        'Contract Read',
-        'Contract Create',
-        'Contract Update',
-        'Contract Approve',
-        'Contract Terminate',
-      ],
-    },
-    {
-      id: 4,
-      module: 'RFQ',
-      permissions: [
-        'RFQ Read',
-        'RFQ Create',
-        'RFQ Update',
-        'RFQ Approve',
-        'RFQ Close',
-      ],
-    },
-    {
-      id: 5,
-      module: 'Invoices',
-      permissions: ['Invoice Read', 'Invoice Submit', 'Invoice Approve', 'Invoice Reject'],
-    },
-    {
-      id: 6,
-      module: 'User Management',
-      permissions: [
-        'User Role Read',
-        'User Role Update',
-        'User User Create',
-        'System Jobrole Read',
-      ],
-    },
-    {
-      id: 7,
-      module: 'Goods Receipt',
-      permissions: ['GRN Read', 'GRN Create', 'GRN Approve'],
-    },
-    {
-      id: 8,
-      module: 'System',
-      permissions: [
-        'System Dataupload Upload',
-        'Dashboard Read',
-        'Home Read',
-        'Exit Read',
-      ],
-    },
-    {
-      id: 9,
-      module: 'Recruitment',
-      permissions: [
-        'Recruitment Read',
-        'Recruitment Vacancy Read',
-        'Recruitment Vacancy Approval',
-        'Recruitment Cvpool Read',
-        'Recruitment Cvpool Upload',
-      ],
-    },
-    {
-      id: 10,
-      module: 'Learning & Development',
-      permissions: ['Ld Training Read', 'Ld Gurukul Course Read', 'Category Branch Update'],
-    },
-  ],
-  allAvailableRoles: [
-    { id: 1, label: 'Admin', description: 'Full system access and configuration rights' },
-    { id: 2, label: 'Approver', description: 'Can approve purchase orders and requisitions' },
-    { id: 3, label: 'Vendor', description: 'Vendor portal access and submission rights' },
-    { id: 4, label: 'Buyer', description: 'Can create and manage purchase requisitions' },
-    { id: 5, label: 'Finance', description: 'Invoice processing and financial reporting access' },
-    { id: 6, label: 'Viewer', description: 'Read-only access across all modules' },
-  ],
-  activityLog: [
-    {
-      id: 1,
-      type: 'Role Assigned',
-      title: 'Role "Approver" Assigned',
-      date: '15 Jun 2025',
-      time: '09:12 AM',
-      description: 'Role Approver was assigned by Admin User',
-      performedBy: 'Admin User',
-    },
-    {
-      id: 2,
-      type: 'Permission Updated',
-      title: 'Permissions Updated',
-      date: '10 Jun 2025',
-      time: '02:30 PM',
-      description: 'PO Approve and RFQ Create permissions added',
-      performedBy: 'Admin User',
-    },
-    {
-      id: 3,
-      type: 'Profile Updated',
-      title: 'Profile Updated',
-      date: '05 May 2025',
-      time: '11:00 AM',
-      description: 'Job role updated from Assistant to Procurement Officer',
-      performedBy: 'HR Admin',
-    },
-    {
-      id: 4,
-      type: 'Login',
-      title: 'User Login',
-      date: '24 Jun 2025',
-      time: '08:55 AM',
-      description: 'Successful login from 102.130.4.22',
-      performedBy: 'System',
-    },
-    {
-      id: 5,
-      type: 'Status Changed',
-      title: 'Status Set to Active',
-      date: '10 Jan 2024',
-      time: '09:00 AM',
-      description: 'User account activated on onboarding',
-      performedBy: 'System',
-    },
-  ],
-};
+// ── API → UI mapping ─────────────────────────────────────────────────────────
+// Maps the Redux `User` shape (as returned by fetchUserById) onto the local
+// `UserDetail` shape this component/UI was built around. Fields the API
+// doesn't return (vendor, direct/inherited permissions, activity log) are
+// defaulted until dedicated endpoints for them are wired up.
 
-function fetchUserDetailMock(_userId: string): Promise<UserDetail> {
-  return new Promise((resolve) => setTimeout(() => resolve(MOCK_USER), 800));
+const KNOWN_USER_ROLES: UserRole[] = ['Admin', 'Approver', 'Vendor', 'Buyer', 'Finance', 'Viewer'];
+
+function resolveUserRoleLabel(roleCodeOrName: string | undefined | null): UserRole {
+  if (!roleCodeOrName) return 'Viewer';
+  const match = KNOWN_USER_ROLES.find(
+    (r) => r.toLowerCase() === roleCodeOrName.toLowerCase()
+  );
+  return match ?? 'Viewer';
+}
+
+function getInitials(name: string | undefined | null): string {
+  if (!name) return 'NA';
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function formatDate(dateString: string | undefined | null): string {
+  if (!dateString) return '—';
+  const parsed = new Date(dateString);
+  if (Number.isNaN(parsed.getTime())) return '—';
+  return parsed.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function mapUserToDetail(user: ApiUser): UserDetail {
+  const roleLabel = resolveUserRoleLabel(user.roles?.role_code ?? user.roles?.role_name);
+
+  return {
+    userId: user.pk_user_id,
+    initials: getInitials(user.user_name),
+    fullName: user.user_name,
+    email: user.user_email,
+    status: user.is_active ? 'Active' : 'Inactive',
+    employee: {
+      employeeCode: user.pk_user_id,
+      jobRole: user.roles?.role_name || '—',
+      department: '—', // not returned by this endpoint
+      phone: user.user_phone,
+      email: user.user_email,
+      joinDate: formatDate(user.created),
+    },
+    vendor: null, // this endpoint doesn't return vendor details
+    groupRoles: user.roles
+      ? [
+          {
+            id: 1,
+            label: roleLabel,
+            description: user.roles.description || 'Role assigned to this user',
+          },
+        ]
+      : [],
+    directPermissions: [], // not returned by this endpoint
+    inheritedPermissions: [], // not returned by this endpoint
+    allAvailablePermissions: AVAILABLE_PERMISSION_GROUPS,
+    allAvailableRoles: AVAILABLE_ROLES,
+    activityLog: [], // not returned by this endpoint
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1556,50 +1440,129 @@ function EditableEmployeePanel({ data, onSave, showSuccess }: EditableEmployeePa
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface UserDetailPageProps {
-  userId?: string;
-}
-
-function UserDetailPage({ userId = 'USR-0042' }: UserDetailPageProps) {
-  const [state, dispatch] = useReducer(userDetailReducer, initialState);
+function UserDetailPage() {
+  const [state, localDispatch] = useReducer(userDetailReducer, initialState);
   const { data, loading, error } = state;
   const [activeTab, setActiveTab] = useState(0);
   const [rolesDialogOpen, setRolesDialogOpen] = useState(false);
   const [permissionsDialogOpen, setPermissionsDialogOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
 
+  // ── Redux wiring for fetchUserById ──────────────────────────────────────────
+  const dispatch = useAppDispatch();
+  const { selectedUser, selectedUserLoading, selectedUserError } = useAppSelector(
+    (rootState: RootState) => rootState.userManagement
+  );
+
+  // userId always comes from the URL's search params (e.g. ?userId=...) —
+  // no hardcoded fallback, this page is only ever reached with an id in the URL.
+  const searchParams = useSearchParams();
+  const resolvedUserId = searchParams.get('userId');
+
   // ── Data fetch ─────────────────────────────────────────────────────────────
   const loadDetail = useCallback(() => {
-    dispatch({ type: 'userDetail/fetchPending' });
-    fetchUserDetailMock(userId)
-      .then((d) => dispatch({ type: 'userDetail/fetchFulfilled', payload: d }))
-      .catch((err: Error) =>
-        dispatch({ type: 'userDetail/fetchRejected', payload: err.message })
-      );
-  }, [userId]);
+    if (!resolvedUserId) {
+      localDispatch({ type: 'userDetail/fetchRejected', payload: 'No user id was provided in the URL.' });
+      return;
+    }
+    localDispatch({ type: 'userDetail/fetchPending' });
+    dispatch(fetchUserById(resolvedUserId));
+  }, [dispatch, resolvedUserId]);
 
   useEffect(() => {
     loadDetail();
-  }, [loadDetail]);
+
+    // Clear the selected user from the slice when leaving this page/changing user
+    return () => {
+      dispatch(clearSelectedUser());
+    };
+  }, [loadDetail, dispatch]);
+
+  // ── FIX: sync the Redux fetch lifecycle (loading/error/data) into the local
+  // reducer, so every bit of edit/dialog logic further down keeps working
+  // unchanged against `data` / `loading` / `error`.
+  //
+  // Why the skeleton could get stuck forever even though the API call
+  // completes (visible in the network tab):
+  //   `loadDetail()` sets local `loading = true` the moment the thunk is
+  //   dispatched. That flag is only ever cleared by *this* effect below,
+  //   which reacts to `selectedUser` / `selectedUserLoading` /
+  //   `selectedUserError` coming from `rootState.userManagement`. If that
+  //   selector path doesn't match how the slice is actually registered in
+  //   the store (e.g. after the recent import path change to
+  //   `src/store/slices/UserManagement/UserManagementSlice`), these three
+  //   values are permanently `undefined` — none of the branches below ever
+  //   fire, `fetchFulfilled`/`fetchRejected` never dispatch, and the page is
+  //   stuck showing <DetailSkeleton /> forever, even though the thunk's
+  //   actual network request completed successfully.
+  //
+  // Two things below harden this:
+  //   1. Check `selectedUser` FIRST (a successful fetch should never stay
+  //      masked behind a stale loading flag).
+  //   2. A one-time dev-only warning if the fetch was started but the
+  //      selector never produced any of the three expected values — this is
+  //      the exact fingerprint of a store-key mismatch, so surface it loudly
+  //      instead of silently hanging.
+  const hasWarnedRef = useRef(false);
+
+  useEffect(() => {
+    if (selectedUser) {
+      localDispatch({ type: 'userDetail/fetchFulfilled', payload: mapUserToDetail(selectedUser) });
+      return;
+    }
+
+    if (selectedUserError) {
+      localDispatch({ type: 'userDetail/fetchRejected', payload: selectedUserError });
+      return;
+    }
+
+    if (selectedUserLoading) {
+      localDispatch({ type: 'userDetail/fetchPending' });
+      return;
+    }
+
+    // Diagnostic: if we've already kicked off a fetch (local loading is true)
+    // but selectedUser / selectedUserLoading / selectedUserError are ALL
+    // falsy/undefined, the selector almost certainly isn't reading from the
+    // slice's real location in the store. Surface this once, in dev only.
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      loading &&
+      resolvedUserId &&
+      selectedUser === undefined &&
+      selectedUserLoading === undefined &&
+      selectedUserError === undefined &&
+      !hasWarnedRef.current
+    ) {
+      hasWarnedRef.current = true;
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UserDetailPage] fetchUserById was dispatched, but rootState.userManagement.selectedUser/' +
+          'selectedUserLoading/selectedUserError are all undefined. This usually means the ' +
+          '"userManagement" key in useAppSelector((rootState) => rootState.userManagement) does not ' +
+          'match the key this slice is registered under in configureStore({ reducer: { ... } }). ' +
+          'Fix the store key so the UI stops waiting on data that will never arrive.'
+      );
+    }
+  }, [selectedUser, selectedUserLoading, selectedUserError, loading, resolvedUserId]);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleSaveRoles = (newRoles: GroupRole[]) => {
     // Remove all current roles and re-add selected ones via individual actions
-    // For mock: update via direct state replacement using add/remove cycle
     if (!data) return;
 
     // Remove roles no longer in newRoles
     data.groupRoles.forEach((role) => {
       if (!newRoles.find((r) => r.id === role.id)) {
-        dispatch({ type: 'userDetail/removeRole', payload: role.id });
+        localDispatch({ type: 'userDetail/removeRole', payload: role.id });
       }
     });
 
     // Add newly selected roles
     newRoles.forEach((role) => {
       if (!data.groupRoles.find((r) => r.id === role.id)) {
-        dispatch({ type: 'userDetail/addRole', payload: role });
+        localDispatch({ type: 'userDetail/addRole', payload: role });
       }
     });
 
@@ -1607,22 +1570,22 @@ function UserDetailPage({ userId = 'USR-0042' }: UserDetailPageProps) {
   };
 
   const handleSavePermissions = (newPermissions: string[]) => {
-    dispatch({ type: 'userDetail/updateDirectPermissions', payload: newPermissions });
+    localDispatch({ type: 'userDetail/updateDirectPermissions', payload: newPermissions });
     showSuccess('Direct permissions updated successfully.');
   };
 
   // ── Inline-edit commit handlers ────────────────────────────────────────────
 
   const handleSaveEmployee = (updated: EmployeeDetails) => {
-    dispatch({ type: 'userDetail/updateEmployee', payload: updated });
+    localDispatch({ type: 'userDetail/updateEmployee', payload: updated });
   };
 
   const handleSaveVendor = (updated: VendorDetails) => {
-    dispatch({ type: 'userDetail/updateVendor', payload: updated });
+    localDispatch({ type: 'userDetail/updateVendor', payload: updated });
   };
 
   const handleSaveProfile = (updated: { fullName: string; email: string }) => {
-    dispatch({ type: 'userDetail/updateProfile', payload: updated });
+    localDispatch({ type: 'userDetail/updateProfile', payload: updated });
   };
 
   const showSuccess = (message: string) => {
@@ -1751,7 +1714,7 @@ function UserDetailPage({ userId = 'USR-0042' }: UserDetailPageProps) {
                     size="small"
                     color={ROLE_COLOR[role.label]}
                     variant="outlined"
-                    onDelete={() => dispatch({ type: 'userDetail/removeRole', payload: role.id })}
+                    onDelete={() => localDispatch({ type: 'userDetail/removeRole', payload: role.id })}
                     deleteIcon={<CloseIcon sx={{ fontSize: '12px !important' }} />}
                     sx={{ fontSize: 12, height: 26, fontWeight: 600 }}
                   />
@@ -1965,7 +1928,7 @@ function UserDetailPage({ userId = 'USR-0042' }: UserDetailPageProps) {
                     size="small"
                     color="error"
                     onClick={() =>
-                      dispatch({ type: 'userDetail/removeRole', payload: role.id })
+                      localDispatch({ type: 'userDetail/removeRole', payload: role.id })
                     }
                   >
                     <DeleteOutlineIcon sx={{ fontSize: 16 }} />
@@ -2008,7 +1971,7 @@ function UserDetailPage({ userId = 'USR-0042' }: UserDetailPageProps) {
                 size="small"
                 variant="outlined"
                 onDelete={() => {
-                  dispatch({
+                  localDispatch({
                     type: 'userDetail/updateDirectPermissions',
                     payload: data.directPermissions.filter((p) => p !== perm),
                   });

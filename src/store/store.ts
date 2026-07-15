@@ -11,6 +11,7 @@ import purchaseRequestStepperReducer from './slices/PurchaseRequests/PRStepperFo
 import quotationsReducer from './slices/Quotation/Quotation'
 import rfqReducer from './slices/Rfq/RfqSlice'
 import vendorReducer from './slices/vendor/VendorSlice'
+import userManagementReducer from './slices/UserManagement/UserManagementSlice'
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
          quotations:quotationsReducer,
          goodsReceipt:goodsReceiptReducer,
     contract: contractReducer,
+    userManagement: userManagementReducer
   },
 });
 

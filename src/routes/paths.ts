@@ -90,7 +90,7 @@ export const paths = {
   userManagement: {
     root: ROOTS.USER,
     addUser: `${ROOTS.USER}/add-user`,  
-    details: `${ROOTS.USER}/details`
+    details: (userId: string) => `${ROOTS.USER}/details/details?userId=${userId}`
   },
   tenantManagement: {
     root: ROOTS.TENANT,
