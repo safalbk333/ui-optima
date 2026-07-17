@@ -48,31 +48,29 @@ const commonTextFieldProps = {
 
 export default function PurchaseRequestForm() {
   const dispatch = useAppDispatch();
-const [formData, setFormData] = React.useState({
-  title: '',
-  description: '',
-  priorityId: 'HIGH',
-  estimatedValue: 0,
-  currency: 'USD',
-  departmentId: '',
-  strCategoryId: '',
-});
-React.useEffect(() => {
-  dispatch(setBasicInfo(formData));
-}, [formData, dispatch]);
-const { data: categories, loading } = useAppSelector(
-  (state: RootState) => state.categories
-);
-console.log(categories,'categories')
-const { data: departments, loading: deptLoading } = useAppSelector(
-  (state: RootState) => state.departments
-);
-React.useEffect(() => {
-  dispatch(fetchCategories());
-}, [dispatch]);
-React.useEffect(() => {
-  dispatch(fetchDepartments());
-}, [dispatch]);
+  const [formData, setFormData] = React.useState({
+    title: '',
+    description: '',
+    priorityId: 'HIGH',
+    estimatedValue: 0,
+    currency: 'USD',
+    departmentId: '',
+    strCategoryId: '',
+  });
+  React.useEffect(() => {
+    dispatch(setBasicInfo(formData));
+  }, [formData, dispatch]);
+  const { data: categories, loading } = useAppSelector((state: RootState) => state.categories);
+  console.log(categories, 'categories');
+  const { data: departments, loading: deptLoading } = useAppSelector(
+    (state: RootState) => state.departments
+  );
+  React.useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+  React.useEffect(() => {
+    dispatch(fetchDepartments());
+  }, [dispatch]);
 
   return (
     <Box sx={{ py: 2 }}>
@@ -105,119 +103,104 @@ React.useEffect(() => {
         </Box>
         {/* PR Title */}
         <Grid size={{ xs: 12 }}>
-<TextField
-  label="PR TITLE"
-  value={formData.title}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      title: e.target.value,
-    })
-  }
-  {...commonTextFieldProps}
-/>
+          <TextField
+            label="PR TITLE"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                title: e.target.value,
+              })
+            }
+            {...commonTextFieldProps}
+          />
         </Grid>
 
         {/* Department */}
         <Grid size={{ xs: 12, md: 6 }}>
-  <Autocomplete
-  fullWidth
-    options={departments || []}
-    loading={deptLoading}
-    size="small"
-    value={
-      departments?.find(
-        (d) => d.pk_chr_department_id === formData.departmentId
-      ) || null
-    }
-    getOptionLabel={(option) => option?.chr_department_name || ''}
-    isOptionEqualToValue={(option, value) =>
-      option.pk_chr_department_id === value.pk_chr_department_id
-    }
-    onChange={(_, value) =>
-      setFormData({
-        ...formData,
-        departmentId: value?.pk_chr_department_id || '',
-      })
-    }
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        label="DEPARTMENT *"
-        {...commonTextFieldProps}
-      />
-    )}
-  />
-</Grid>
+          <Autocomplete
+            fullWidth
+            options={departments || []}
+            loading={deptLoading}
+            size="small"
+            value={
+              departments?.find((d) => d.pk_chr_department_id === formData.departmentId) || null
+            }
+            getOptionLabel={(option) => option?.chr_department_name || ''}
+            isOptionEqualToValue={(option, value) =>
+              option.pk_chr_department_id === value.pk_chr_department_id
+            }
+            onChange={(_, value) =>
+              setFormData({
+                ...formData,
+                departmentId: value?.pk_chr_department_id || '',
+              })
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="DEPARTMENT *" {...commonTextFieldProps} />
+            )}
+          />
+        </Grid>
         {/* Currency */}
-                <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             select
-            label='Priority'
-value={formData.priorityId}
-onChange={(e) =>
-  setFormData({
-    ...formData,
-    priorityId: e.target.value,
-  })
-}            {...commonTextFieldProps}
+            label="Priority"
+            value={formData.priorityId}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                priorityId: e.target.value,
+              })
+            }
+            {...commonTextFieldProps}
           >
-            <MenuItem value="ca5a78c8-6d50-445d-ab78-1628426c0a3f">Low</MenuItem>
-
-            <MenuItem value="fb316a20-946b-44b8-bb54-d113e2fc3de9">Medium</MenuItem>
-                        <MenuItem value="6da6e09f-e999-490d-947a-d29b65d0e0fe">Hign</MenuItem>
-
+            <MenuItem value="fb316a20-946b-44b8-bb54-d113e2fc3de9">Low</MenuItem>
+            <MenuItem value="8f8e7d6c-5b4a-4321-9876-abcdef123455">Medium</MenuItem>
+            <MenuItem value="ca5a78c8-6d50-445d-ab78-1628426c0a3f">High</MenuItem>
           </TextField>
         </Grid>
-<Grid size={{ xs: 12, md: 6 }}>
-<Autocomplete
-  options={categories || []}
-  loading={loading}
-  size="small"
-value={
-  categories?.find(
-    (c) => c.pk_chr_category_id === formData.strCategoryId
-  ) || null
-}  getOptionLabel={(option) => option?.chr_category_name || ''}
-  isOptionEqualToValue={(option, value) =>
-    option.pk_chr_category_id === value.pk_chr_category_id
-  }
-onChange={(_, value) => {
-  setFormData((prev) => ({
-    ...prev,
-    strCategoryId: value?.pk_chr_category_id || '',
-  }));
-}}
-  renderInput={(params) => (
-    <TextField {...params} label="CATEGORY" {...commonTextFieldProps} />
-  )}
-/>
-</Grid>
-<Grid size={{ xs: 12, md: 6 }}>
-  <TextField
-    label="CURRENCY"
-    value="USD"
-    disabled
-    {...commonTextFieldProps}
-  />
-</Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Autocomplete
+            options={categories || []}
+            loading={loading}
+            size="small"
+            value={categories?.find((c) => c.pk_chr_category_id === formData.strCategoryId) || null}
+            getOptionLabel={(option) => option?.chr_category_name || ''}
+            isOptionEqualToValue={(option, value) =>
+              option.pk_chr_category_id === value.pk_chr_category_id
+            }
+            onChange={(_, value) => {
+              setFormData((prev) => ({
+                ...prev,
+                strCategoryId: value?.pk_chr_category_id || '',
+              }));
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="CATEGORY" {...commonTextFieldProps} />
+            )}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField label="CURRENCY" value="USD" disabled {...commonTextFieldProps} />
+        </Grid>
 
-{/* Estimated Value */}
-<Grid size={{ xs: 12, md: 6 }}>
-<TextField
-  label="ESTIMATED VALUE"
-  type="number"
-  value={formData.estimatedValue}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      estimatedValue: Number(e.target.value),
-    })
-  }
-  placeholder="0.00"
-  {...commonTextFieldProps}
-/>
-</Grid>
+        {/* Estimated Value */}
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            label="ESTIMATED VALUE"
+            type="number"
+            value={formData.estimatedValue}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                estimatedValue: Number(e.target.value),
+              })
+            }
+            placeholder="0.00"
+            {...commonTextFieldProps}
+          />
+        </Grid>
 
         {/* Required By */}
         {/* <Grid size={{ xs: 12, md: 6 }}>
@@ -228,21 +211,19 @@ onChange={(_, value) => {
           />
         </Grid> */}
 
-
         {/* Cost Centre */}
-
 
         <Grid size={{ xs: 12 }}>
           <TextField
             label="DESCRIPTION"
             multiline
-              value={formData.description}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      description: e.target.value,
-    })
-  }
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                description: e.target.value,
+              })
+            }
             rows={3}
             {...commonTextFieldProps}
             sx={{
