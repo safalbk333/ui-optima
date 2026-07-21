@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -7,6 +8,7 @@ import {
   IconButton,
   LinearProgress,
   Paper,
+  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -29,6 +31,7 @@ import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutl
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NoteAltOutlinedIcon from "@mui/icons-material/NoteAltOutlined";
+import { useRouter } from "next/navigation";
 
 // ─── Theme ───────────────────────────────────────────────────────────────────
 const theme = createTheme({
@@ -58,6 +61,10 @@ const theme = createTheme({
     MuiLinearProgress: { styleOverrides: { root: { borderRadius: 4, height: 4 } } },
   },
 });
+
+// ─── Constants ─────────────────────────────────────────────────────────────
+const TOAST_AUTO_HIDE_DURATION_MS = 3000;
+const REDIRECT_DELAY_MS = 3000;
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 const lineItems = [
@@ -249,6 +256,15 @@ function KVRow({ label, children, last }:any) {
 export default function QuotationViewer() {
   const [confidence, setConfidence] = useState(0);
 
+  // Toast/snackbar state — tracks visibility, message, and severity (success/error)
+  const [toast, setToast] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const router = useRouter()
+
   useEffect(() => {
     let v = 0;
     const interval = setInterval(() => {
@@ -258,6 +274,29 @@ export default function QuotationViewer() {
     }, 30);
     return () => clearInterval(interval);
   }, []);
+
+  /** Shows the toast, then redirects back to the previous page after a delay */
+  const handleDecision = (decision: "accepted" | "rejected") => {
+    // TODO: call API to persist the accept/reject decision for this quotation
+
+    setToast({
+      open: true,
+      message: decision === "accepted" ? "Quotation accepted successfully." : "Quotation rejected.",
+      severity: decision === "accepted" ? "success" : "error",
+    });
+
+    setTimeout(() => {
+      router.back();
+    }, REDIRECT_DELAY_MS);
+  };
+
+  const handleAccept = () => handleDecision("accepted");
+  const handleReject = () => handleDecision("rejected");
+
+  const handleToastClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") return;
+    setToast((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -468,6 +507,7 @@ export default function QuotationViewer() {
                 variant="outlined"
                 size="small"
                 fullWidth
+                onClick={handleAccept}
                 sx={{ borderColor: "divider", color: "text.primary", "&:hover": { bgcolor: "background.default" } }}
               >
                 Accept
@@ -478,6 +518,7 @@ export default function QuotationViewer() {
                 size="small"
                 fullWidth
                 disableElevation
+                onClick={handleReject}
                 sx={{ bgcolor: "primary.main", "&:hover": { bgcolor: "#0C447C" } }}
               >
                 Reject
@@ -485,6 +526,18 @@ export default function QuotationViewer() {
             </Box>
           </Box>
         </Paper>
+
+        {/* Toast notification — top right, auto-dismisses and redirects after REDIRECT_DELAY_MS */}
+        <Snackbar
+          open={toast.open}
+          autoHideDuration={TOAST_AUTO_HIDE_DURATION_MS}
+          onClose={handleToastClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <Alert onClose={handleToastClose} severity={toast.severity} variant="filled" sx={{ width: "100%" }}>
+            {toast.message}
+          </Alert>
+        </Snackbar>
       </Box>
     </ThemeProvider>
   );

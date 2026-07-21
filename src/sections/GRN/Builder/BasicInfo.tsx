@@ -128,7 +128,7 @@ strVendorId: selectedVendor?.id,    strStatus: 'PENDING',
     strNotes: notes,
     strCreatedId: '120ecf54-e333-475f-bd25-3bc1621b7bbd',
     arrItems: items.map((item) => ({
-      strItemId: '981026b0-3ca3-48e1-89c5-2b352df2c602',
+      strItemId: item.strItemId,
       intQuantityOrdered: item.intQuantityOrdered,
       intQuantityReceived: item.intQuantityReceived,
       intQuantityRejected: item.intQuantityRejected,
